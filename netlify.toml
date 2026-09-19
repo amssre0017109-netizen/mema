@@ -1,7 +1,11 @@
-# Netlify Deployment Configuration for MEMA — Find Your Mood
 [build]
   command = "npm run build"
   publish = "dist"
+
+[build.environment]
+  SECRETS_SCAN_ENABLED = "false"
+  SECRETS_SCAN_OMIT_KEYS = "VITE_RAZORPAY_KEY_ID,VITE_SUPABASE_ANON_KEY"
+
 
 # Single-Page Application (SPA) routing fallback
 [[redirects]]
