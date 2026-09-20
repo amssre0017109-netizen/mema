@@ -15,7 +15,8 @@ import {
   FileText,
   X,
   Sparkles,
-  Check
+  Check,
+  Search
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
@@ -43,6 +44,15 @@ export const MessagesScreen: React.FC = () => {
   const [selectedTime, setSelectedTime] = useState('Today @ 5:30 PM');
   const [customTime, setCustomTime] = useState('');
 
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredConversations = conversations.filter(c =>
+    c.partner.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    c.partner.college?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    c.activityContext?.requestTitle?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    c.lastMessage?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const activeConv = conversations.find(c => c.id === activeConversationId);
@@ -57,6 +67,7 @@ export const MessagesScreen: React.FC = () => {
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputMessage.trim() || !activeConversationId) return;
+
     sendMessage(activeConversationId, inputMessage.trim());
     setInputMessage('');
   };
@@ -123,20 +134,44 @@ export const MessagesScreen: React.FC = () => {
         <div className="bg-white border border-[#DCE8F7] rounded-3xl overflow-hidden shadow-xs grid grid-cols-1 md:grid-cols-3 h-[75vh] min-h-[580px]">
           {/* Conversation List Sidebar */}
           <div className={`border-r border-[#DCE8F7] flex flex-col ${activeConv ? 'hidden md:flex' : 'flex'}`}>
-            <div className="p-4 border-b border-[#DCE8F7] flex items-center justify-between">
-              <div>
-                <h2 className="font-extrabold text-base text-[#172033]">Campus Chats</h2>
-                <span className="text-xs text-[#64748B]">{conversations.length} active conversations</span>
+            <div className="p-4 border-b border-[#DCE8F7] space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="font-extrabold text-base text-[#172033]">Campus Chats</h2>
+                  <span className="text-xs text-[#64748B]">{conversations.length} active conversations</span>
+                </div>
+              </div>
+
+              {/* Chat Search Column */}
+              <div className="relative">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <Search className="w-3.5 h-3.5 text-[#2563EB]" />
+                </div>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  placeholder="Search students or activities..."
+                  className="w-full bg-[#F8FBFF] border border-[#DCE8F7] focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] rounded-full pl-8 pr-7 py-1.5 text-xs text-[#172033] placeholder-[#64748B] focus:outline-none transition-all"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#172033]"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                )}
               </div>
             </div>
 
             <div className="flex-1 overflow-y-auto divide-y divide-[#DCE8F7]">
-              {conversations.length === 0 ? (
+              {filteredConversations.length === 0 ? (
                 <div className="p-6 text-center text-xs text-[#64748B]">
-                  No conversations yet. Tap "Interested" on any request to chat with the host!
+                  {searchQuery ? 'No matching conversations found.' : 'No conversations yet. Tap "Interested" on any request to chat with the host!'}
                 </div>
               ) : (
-                conversations.map(conv => {
+                filteredConversations.map(conv => {
                   const isSelected = conv.id === activeConversationId;
                   return (
                     <button

@@ -95,7 +95,7 @@ export const DiscoverScreen: React.FC = () => {
         <div className="space-y-3">
           <div className="relative">
             <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5 pointer-events-none">
-              <Sparkles className="w-4 h-4 text-[#2563EB]" />
+              <Search className="w-4 h-4 text-[#2563EB]" />
             </div>
 
             <input
