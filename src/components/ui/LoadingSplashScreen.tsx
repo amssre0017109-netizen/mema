@@ -40,50 +40,69 @@ export const LoadingSplashScreen: React.FC<LoadingSplashScreenProps> = ({
 
       {/* Center Hero: MEMA Logo & Tagline only */}
       <div className="relative z-10 flex flex-col items-center text-center space-y-6 animate-in zoom-in-95 duration-700">
-        {/* Clean Boundary-Free Stylized Gradient "M" Emblem */}
-        <div className="relative w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center">
-          <svg
-            viewBox="0 0 48 48"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-full h-full drop-shadow-md"
-          >
-            <defs>
-              <linearGradient id="splashMemaGrad1" x1="10" y1="38" x2="38" y2="10" gradientUnits="userSpaceOnUse">
-                <stop stopColor="#1D4ED8" />
-                <stop offset="0.5" stopColor="#2563EB" />
-                <stop offset="1" stopColor="#3B82F6" />
-              </linearGradient>
-              <linearGradient id="splashMemaGrad2" x1="16" y1="14" x2="32" y2="34" gradientUnits="userSpaceOnUse">
-                <stop stopColor="#2563EB" />
-                <stop offset="1" stopColor="#1D4ED8" />
-              </linearGradient>
-            </defs>
+        {/* Stylized Gradient "M" Emblem */}
+        <div className="relative group">
+          {/* Pulsing Outer Rings */}
+          <div className="absolute -inset-3 rounded-[2.5rem] bg-gradient-to-tr from-[#1E40AF] via-[#2563EB] to-[#609AFA] opacity-30 blur-lg animate-pulse" />
+          
+          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-[2rem] bg-gradient-to-tr from-[#1E40AF] via-[#2563EB] to-[#609AFA] p-1 shadow-2xl shadow-blue-600/30 flex items-center justify-center relative overflow-hidden ring-4 ring-white/80 dark:ring-slate-800/80">
+            {/* Inner Glass Shimmer */}
+            <div className="absolute inset-0 bg-gradient-to-b from-white/35 via-transparent to-black/15 pointer-events-none" />
 
-            {/* Left Pillar */}
-            <path
-              d="M10 38V14C10 11.7909 11.7909 10 14 10C16.2091 10 18 11.7909 18 14V34C18 36.2091 16.2091 38 14 38C11.7909 38 10 38 10 38Z"
-              fill="url(#splashMemaGrad1)"
-            />
+            {/* SVG Stylized "M" with Pulse Beacon */}
+            <svg
+              viewBox="0 0 48 48"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-full h-full p-2.5 drop-shadow-md"
+            >
+              <defs>
+                <linearGradient id="splashMemaGrad1" x1="6" y1="42" x2="42" y2="6" gradientUnits="userSpaceOnUse">
+                  <stop stopColor="#FFFFFF" />
+                  <stop offset="1" stopColor="#E0EAFF" />
+                </linearGradient>
+                <linearGradient id="splashMemaGrad2" x1="16" y1="12" x2="32" y2="36" gradientUnits="userSpaceOnUse">
+                  <stop stopColor="#C7D7FE" />
+                  <stop offset="1" stopColor="#FFFFFF" />
+                </linearGradient>
+                <filter id="splashMemaGlow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="2" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+              </defs>
 
-            {/* Central Chevron Bridge */}
-            <path
-              d="M16 16L24 28L32 16"
-              stroke="url(#splashMemaGrad2)"
-              strokeWidth="5.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+              {/* Left Pillar */}
+              <path
+                d="M10 38V14C10 11.7909 11.7909 10 14 10C16.2091 10 18 11.7909 18 14V34C18 36.2091 16.2091 38 14 38C11.7909 38 10 38 10 38Z"
+                fill="url(#splashMemaGrad1)"
+              />
 
-            {/* Right Pillar */}
-            <path
-              d="M38 38V14C38 11.7909 36.2091 10 34 10C31.7909 10 30 11.7909 30 14V34C30 36.2091 31.7909 38 34 38C36.2091 38 38 38 38 38Z"
-              fill="url(#splashMemaGrad1)"
-            />
+              {/* Central Chevron Bridge */}
+              <path
+                d="M16 16L24 28L32 16"
+                stroke="url(#splashMemaGrad2)"
+                strokeWidth="5.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
 
-            {/* Top Pulse Activity Beacon */}
-            <circle cx="24" cy="11" r="3.5" fill="#2563EB" />
-          </svg>
+              {/* Right Pillar */}
+              <path
+                d="M38 38V14C38 11.7909 36.2091 10 34 10C31.7909 10 30 11.7909 30 14V34C30 36.2091 31.7909 38 34 38C36.2091 38 38 38 38 38Z"
+                fill="url(#splashMemaGrad1)"
+              />
+
+              {/* Top Pulse Activity Beacon */}
+              <circle cx="24" cy="11" r="3.5" fill="#FFFFFF" filter="url(#splashMemaGlow)" />
+              <circle cx="24" cy="11" r="2" fill="#1D4ED8" />
+            </svg>
+          </div>
+
+          {/* Active Radar Ping Beacon */}
+          <span className="absolute -top-1 -right-1 flex h-4 w-4">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-80" />
+            <span className="relative inline-flex rounded-full h-4 w-4 bg-[#1D4ED8] ring-2 ring-white" />
+          </span>
         </div>
 
         {/* Wordmark & Tagline: MEMA - find your mood */}

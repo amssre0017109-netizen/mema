@@ -48,18 +48,18 @@ export const Navbar: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-2xl border-b border-[#DCE8F7] text-[#172033] shadow-xs transition-colors">
-      <div className="max-w-6xl mx-auto px-4 sm:px-8">
-        <div className="flex items-center justify-between h-18 sm:h-22">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+        <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Left: Brand Logo + User Greeting */}
-          <div className="flex items-center gap-3 sm:gap-5">
+          <div className="flex items-center gap-3 sm:gap-4">
             {/* MEMA Logo */}
             <Logo onClick={() => setCurrentView('home')} size="md" />
 
             {/* Vertical separator */}
-            <div className="h-8 w-[1px] bg-[#DCE8F7] hidden sm:block" />
+            <div className="h-7 w-[1px] bg-[#DCE8F7] hidden sm:block" />
 
             {/* User Avatar & Greeting */}
-            <div className="hidden sm:flex items-center gap-3">
+            <div className="hidden sm:flex items-center gap-2.5">
               <button
                 onClick={() => setCurrentView('profile')}
                 className="relative shrink-0 group"
@@ -69,21 +69,21 @@ export const Navbar: React.FC = () => {
                   <img
                     src={currentUser.avatar}
                     alt={currentUser.name}
-                    className="w-9 h-9 rounded-full object-cover ring-2 ring-white"
+                    className="w-8 h-8 rounded-full object-cover ring-2 ring-white"
                   />
                 </div>
               </button>
 
               <div className="flex flex-col text-left">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-extrabold text-xs sm:text-sm text-[#172033] tracking-tight">
+                <div className="flex items-center gap-1">
+                  <span className="font-extrabold text-xs text-[#172033] tracking-tight">
                     Hi, {currentUser.name.split(' ')[0]}
                   </span>
                   <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] animate-pulse" />
                 </div>
-                <div className="flex items-center gap-1 text-[11px] font-semibold text-[#64748B]">
-                  <MapPin className="w-3 h-3 text-[#2563EB]" />
-                  <span className="max-w-[140px] truncate">
+                <div className="flex items-center gap-1 text-[10px] font-semibold text-[#64748B]">
+                  <MapPin className="w-2.5 h-2.5 text-[#2563EB]" />
+                  <span className="max-w-[120px] truncate">
                     {currentUser.location?.split(',')[0] || 'Nearby'}
                   </span>
                 </div>
@@ -92,14 +92,14 @@ export const Navbar: React.FC = () => {
           </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1.5 bg-[#F8FBFF] p-1.5 rounded-full border border-[#DCE8F7]">
+          <nav className="hidden md:flex items-center gap-1 bg-[#F8FBFF] p-1.5 rounded-full border border-[#DCE8F7]">
             {navItems.map(item => {
               const isActive = currentView === item.id;
               return (
                 <button
                   key={item.id}
                   onClick={() => setCurrentView(item.id)}
-                  className={`px-4.5 py-2 rounded-full text-xs font-bold flex items-center gap-2 transition-all ${
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all ${
                     isActive
                       ? 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white shadow-md shadow-blue-500/20'
                       : 'text-[#64748B] hover:text-[#172033] hover:bg-white'
