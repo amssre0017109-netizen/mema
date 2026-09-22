@@ -45,62 +45,62 @@ export const ExpressInterestModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
-      <div className="bg-white border border-[#DCE8F7] rounded-[2.5rem] max-w-md w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-4 text-[#172033]">
+      <div className="bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-[2.5rem] max-w-md w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-4 text-[#172033] dark:text-white">
         <button
           onClick={() => setActiveInterestTargetRequest(null)}
-          className="absolute top-5 right-5 p-2 rounded-full bg-[#F8FBFF] text-[#64748B] hover:text-[#172033] hover:bg-[#F0F6FF] border border-[#DCE8F7] transition-colors"
+          className="absolute top-5 right-5 p-2 rounded-full bg-[#F8FBFF] dark:bg-slate-800 text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white hover:bg-[#F0F6FF] dark:hover:bg-slate-700 border border-[#DCE8F7] dark:border-slate-700 transition-colors"
         >
           <X className="w-4 h-4" />
         </button>
 
         {/* Header */}
         <div className="space-y-1">
-          <div className="flex items-center gap-1.5 text-xs font-black text-[#2563EB] uppercase tracking-wider">
-            <Zap className="w-3.5 h-3.5 fill-[#2563EB]" />
+          <div className="flex items-center gap-1.5 text-xs font-black text-[#2563EB] dark:text-blue-400 uppercase tracking-wider">
+            <Zap className="w-3.5 h-3.5 fill-[#2563EB] dark:fill-blue-400" />
             <span>Join / Express Interest</span>
           </div>
-          <h2 className="text-xl font-black text-[#172033] font-display">
+          <h2 className="text-xl font-black text-[#172033] dark:text-white font-display">
             {target.title}
           </h2>
         </div>
 
         {/* Requester & Spot Preview */}
-        <div className="bg-[#F8FBFF] border border-[#DCE8F7] p-3.5 rounded-2xl space-y-2 text-xs">
+        <div className="bg-[#F8FBFF] dark:bg-slate-800/70 border border-[#DCE8F7] dark:border-slate-700 p-3.5 rounded-2xl space-y-2 text-xs">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <img
                 src={target.creator.avatar}
                 alt={target.creator.name}
-                className="w-9 h-9 rounded-full object-cover ring-2 ring-white"
+                className="w-9 h-9 rounded-full object-cover ring-2 ring-white dark:ring-slate-700"
               />
               <div>
-                <h4 className="font-bold text-[#172033]">{target.creator.name}</h4>
-                <p className="text-[11px] text-[#64748B]">{target.location} • {target.creator.degree || 'Member'}</p>
+                <h4 className="font-bold text-[#172033] dark:text-white">{target.creator.name}</h4>
+                <p className="text-[11px] text-[#64748B] dark:text-slate-400">{target.location} • {target.creator.degree || 'Member'}</p>
               </div>
             </div>
-            <span className="px-2.5 py-0.5 rounded-full bg-[#F0F6FF] text-[#2563EB] border border-[#DCE8F7] text-[11px] font-bold">
+            <span className="px-2.5 py-0.5 rounded-full bg-[#F0F6FF] dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-700 text-[11px] font-bold">
               Need {target.peopleNeeded}
             </span>
           </div>
 
-          <div className="flex items-center gap-3 text-[#64748B] pt-1 border-t border-[#DCE8F7]">
-            <span className="flex items-center gap-1 font-semibold text-[#172033]">
-              <Clock className="w-3.5 h-3.5 text-[#2563EB]" /> {target.date} • {target.time}
+          <div className="flex items-center gap-3 text-[#64748B] dark:text-slate-400 pt-1 border-t border-[#DCE8F7] dark:border-slate-700">
+            <span className="flex items-center gap-1 font-semibold text-[#172033] dark:text-slate-200">
+              <Clock className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" /> {target.date} • {target.time}
             </span>
             <span>•</span>
             <span className="flex items-center gap-1">
-              <MapPin className="w-3.5 h-3.5 text-[#2563EB]" /> {target.location}
+              <MapPin className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" /> {target.location}
             </span>
           </div>
         </div>
 
         {/* Skill Match Highlight */}
         {matchingSkills.length > 0 && (
-          <div className="p-3 rounded-2xl bg-[#F0F6FF] border border-[#DCE8F7] flex items-center gap-2 text-xs text-[#2563EB]">
-            <CheckCircle2 className="w-4 h-4 text-[#2563EB] shrink-0" />
+          <div className="p-3 rounded-2xl bg-[#F0F6FF] dark:bg-blue-950/40 border border-[#DCE8F7] dark:border-blue-900/60 flex items-center gap-2 text-xs text-[#2563EB] dark:text-blue-400">
+            <CheckCircle2 className="w-4 h-4 text-[#2563EB] dark:text-blue-400 shrink-0" />
             <div>
-              <span className="font-bold block text-[#172033]">⚡ Skill Match Detected:</span>
-              <span className="text-[11px] text-[#64748B]">
+              <span className="font-bold block text-[#172033] dark:text-white">⚡ Skill Match Detected:</span>
+              <span className="text-[11px] text-[#64748B] dark:text-slate-400">
                 You have {matchingSkills.map(s => `"${s}"`).join(', ')} in your profile!
               </span>
             </div>
@@ -109,14 +109,14 @@ export const ExpressInterestModal: React.FC = () => {
 
         {/* Quick Note Options */}
         <div className="space-y-1.5 text-xs">
-          <span className="font-bold text-[#172033] block">Quick Note (Tap to autofill):</span>
+          <span className="font-bold text-[#172033] dark:text-slate-200 block">Quick Note (Tap to autofill):</span>
           <div className="space-y-1">
             {quickNotes.map((qn, i) => (
               <button
                 key={i}
                 type="button"
                 onClick={() => setNote(qn)}
-                className="w-full text-left p-2 rounded-xl bg-[#F8FBFF] hover:bg-[#F0F6FF] border border-[#DCE8F7] text-[#172033] text-xs transition-colors"
+                className="w-full text-left p-2 rounded-xl bg-[#F8FBFF] dark:bg-slate-800 hover:bg-[#F0F6FF] dark:hover:bg-slate-750 border border-[#DCE8F7] dark:border-slate-700 text-[#172033] dark:text-slate-200 text-xs transition-colors"
               >
                 "{qn}"
               </button>
@@ -127,21 +127,21 @@ export const ExpressInterestModal: React.FC = () => {
         {/* Note Input */}
         <form onSubmit={handleSend} className="space-y-3 pt-1 text-xs">
           <div>
-            <label className="block font-bold text-[#172033] mb-1">Your Message:</label>
+            <label className="block font-bold text-[#172033] dark:text-slate-200 mb-1">Your Message:</label>
             <textarea
               rows={2}
               value={note}
               onChange={e => setNote(e.target.value)}
               placeholder="e.g. Hey! I play midfield, free today at 6 PM."
-              className="w-full bg-[#F8FBFF] border border-[#DCE8F7] focus:border-[#2563EB] rounded-2xl p-3 text-xs text-[#172033] focus:outline-none shadow-xs"
+              className="w-full bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 focus:border-[#2563EB] dark:focus:border-blue-400 rounded-2xl p-3 text-xs text-[#172033] dark:text-white focus:outline-none shadow-xs"
             />
           </div>
 
-          <div className="flex justify-end gap-2 pt-2 border-t border-[#DCE8F7]">
+          <div className="flex justify-end gap-2 pt-2 border-t border-[#DCE8F7] dark:border-slate-800">
             <button
               type="button"
               onClick={() => setActiveInterestTargetRequest(null)}
-              className="px-4 py-2 bg-[#F8FBFF] text-[#64748B] font-bold rounded-full hover:bg-[#F0F6FF] border border-[#DCE8F7] transition-colors"
+              className="px-4 py-2 bg-[#F8FBFF] dark:bg-slate-800 text-[#64748B] dark:text-slate-300 font-bold rounded-full hover:bg-[#F0F6FF] dark:hover:bg-slate-700 border border-[#DCE8F7] dark:border-slate-700 transition-colors"
             >
               Cancel
             </button>

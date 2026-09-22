@@ -90,40 +90,40 @@ export const CheckoutModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-md animate-in fade-in duration-150">
-      <div className="bg-white border border-[#DCE8F7] rounded-[2.5rem] max-w-md w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-5 text-[#172033]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 dark:bg-black/80 backdrop-blur-md animate-in fade-in duration-150">
+      <div className="bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-[2.5rem] max-w-md w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-5 text-[#172033] dark:text-slate-100">
         <button
           onClick={() => setIsCheckoutModalOpen(false)}
-          className="absolute top-5 right-5 p-2 rounded-full bg-[#F8FBFF] text-[#64748B] hover:text-[#172033] border border-[#DCE8F7] transition-colors"
+          className="absolute top-5 right-5 p-2 rounded-full bg-[#F8FBFF] dark:bg-slate-800 text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white border border-[#DCE8F7] dark:border-slate-700 transition-colors"
         >
           <X className="w-4 h-4" />
         </button>
 
         <div>
-          <div className="flex items-center gap-1.5 text-xs font-bold text-[#2563EB] uppercase tracking-wider mb-1">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[#2563EB] dark:text-blue-400 uppercase tracking-wider mb-1">
             <Lock className="w-3.5 h-3.5" />
             <span>Secure Student Checkout</span>
           </div>
-          <h2 className="text-xl font-black text-[#172033] font-display">
+          <h2 className="text-xl font-black text-[#172033] dark:text-white font-display">
             {plan.name}
           </h2>
-          <p className="text-xs text-[#64748B]">
+          <p className="text-xs text-[#64748B] dark:text-slate-400">
             {isTrial ? '₹0 today • 1 Month Free Trial' : `₹${plan.priceInr} billed quarterly`}
           </p>
         </div>
 
         {/* Plan summary */}
-        <div className="bg-[#F8FBFF] border border-[#DCE8F7] p-4 rounded-2xl space-y-2 text-xs">
-          <div className="flex justify-between font-bold text-[#172033]">
+        <div className="bg-[#F8FBFF] dark:bg-slate-850 border border-[#DCE8F7] dark:border-slate-800 p-4 rounded-2xl space-y-2 text-xs">
+          <div className="flex justify-between font-bold text-[#172033] dark:text-white">
             <span>Amount Due Today</span>
-            <span className="text-base text-[#2563EB]">{isTrial ? '₹0.00 (Free)' : `₹${plan.priceInr}.00`}</span>
+            <span className="text-base text-[#2563EB] dark:text-blue-400">{isTrial ? '₹0.00 (Free)' : `₹${plan.priceInr}.00`}</span>
           </div>
           {isTrial ? (
-            <p className="text-[11px] text-emerald-700 font-medium">
+            <p className="text-[11px] text-emerald-700 dark:text-emerald-400 font-medium">
               ✓ Free trial for 30 days. Cancel anytime before renewal with 1 tap.
             </p>
           ) : (
-            <div className="flex items-center gap-1.5 text-[11px] text-[#2563EB] font-bold">
+            <div className="flex items-center gap-1.5 text-[11px] text-[#2563EB] dark:text-blue-400 font-bold">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>Secured by Razorpay • 100% Student Verified</span>
             </div>
@@ -132,7 +132,7 @@ export const CheckoutModal: React.FC = () => {
 
         {/* Payment Method Selector */}
         <div className="space-y-2 text-xs">
-          <label className="block font-bold text-[#172033]">Select Payment Option:</label>
+          <label className="block font-bold text-[#172033] dark:text-slate-200">Select Payment Option:</label>
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
@@ -140,14 +140,14 @@ export const CheckoutModal: React.FC = () => {
               className={`p-3 rounded-2xl border text-left font-bold transition-all ${
                 paymentMethod === 'UPI'
                   ? 'bg-[#2563EB] border-[#2563EB] text-white shadow-md'
-                  : 'bg-white border-[#DCE8F7] text-[#172033] hover:bg-[#F8FBFF]'
+                  : 'bg-white dark:bg-slate-800 border-[#DCE8F7] dark:border-slate-700 text-[#172033] dark:text-slate-200 hover:bg-[#F8FBFF] dark:hover:bg-slate-750'
               }`}
             >
               <div className="flex items-center gap-1.5 mb-1">
                 <Smartphone className="w-4 h-4" />
                 <span>UPI / GPay</span>
               </div>
-              <span className={`text-[10px] block ${paymentMethod === 'UPI' ? 'text-blue-100' : 'text-[#64748B]'}`}>
+              <span className={`text-[10px] block ${paymentMethod === 'UPI' ? 'text-blue-100' : 'text-[#64748B] dark:text-slate-400'}`}>
                 PhonePe, Paytm, QR
               </span>
             </button>
@@ -158,25 +158,25 @@ export const CheckoutModal: React.FC = () => {
               className={`p-3 rounded-2xl border text-left font-bold transition-all ${
                 paymentMethod === 'CARD'
                   ? 'bg-[#2563EB] border-[#2563EB] text-white shadow-md'
-                  : 'bg-white border-[#DCE8F7] text-[#172033] hover:bg-[#F8FBFF]'
+                  : 'bg-white dark:bg-slate-800 border-[#DCE8F7] dark:border-slate-700 text-[#172033] dark:text-slate-200 hover:bg-[#F8FBFF] dark:hover:bg-slate-750'
               }`}
             >
               <div className="flex items-center gap-1.5 mb-1">
                 <CreditCard className="w-4 h-4" />
                 <span>Debit / Card</span>
               </div>
-              <span className={`text-[10px] block ${paymentMethod === 'CARD' ? 'text-blue-100' : 'text-[#64748B]'}`}>
+              <span className={`text-[10px] block ${paymentMethod === 'CARD' ? 'text-blue-100' : 'text-[#64748B] dark:text-slate-400'}`}>
                 Visa, MasterCard, Rupay
               </span>
             </button>
           </div>
         </div>
 
-        <form onSubmit={handlePay} className="pt-2 border-t border-[#DCE8F7] flex items-center justify-end gap-2">
+        <form onSubmit={handlePay} className="pt-2 border-t border-[#DCE8F7] dark:border-slate-800 flex items-center justify-end gap-2">
           <button
             type="button"
             onClick={() => setIsCheckoutModalOpen(false)}
-            className="px-4 py-2 rounded-full bg-[#F8FBFF] text-[#64748B] font-bold text-xs hover:bg-[#F0F6FF] border border-[#DCE8F7] transition-colors"
+            className="px-4 py-2 rounded-full bg-[#F8FBFF] dark:bg-slate-800 text-[#64748B] dark:text-slate-400 font-bold text-xs hover:bg-[#F0F6FF] dark:hover:bg-slate-700 border border-[#DCE8F7] dark:border-slate-700 transition-colors"
           >
             Cancel
           </button>

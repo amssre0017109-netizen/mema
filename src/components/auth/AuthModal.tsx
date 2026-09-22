@@ -210,24 +210,24 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-md bg-white rounded-3xl border border-[#DCE8F7] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-[#DCE8F7] dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Top Header */}
-        <div className="p-6 bg-gradient-to-b from-[#F0F6FF] to-white border-b border-[#DCE8F7] flex items-center justify-between">
+        <div className="p-6 bg-gradient-to-b from-[#F0F6FF] to-white dark:from-slate-850 dark:to-slate-900 border-b border-[#DCE8F7] dark:border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-10 h-10 rounded-2xl bg-[#2563EB] flex items-center justify-center text-white font-black text-lg shadow-md shadow-blue-500/20">
               M
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-base text-[#172033] tracking-tight">
+                <span className="font-extrabold text-base text-[#172033] dark:text-white tracking-tight">
                   MEMA Auth
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-[#F0F6FF] border border-[#DCE8F7] text-[#2563EB] font-bold text-[10px]">
+                <span className="px-2 py-0.5 rounded-full bg-[#F0F6FF] dark:bg-blue-950/60 border border-[#DCE8F7] dark:border-blue-900 text-[#2563EB] dark:text-blue-400 font-bold text-[10px]">
                   {isSupabaseConfigured ? 'Supabase Live' : 'Demo Mode'}
                 </span>
               </div>
-              <p className="text-xs text-[#64748B]">
+              <p className="text-xs text-[#64748B] dark:text-slate-400">
                 Campus & Skill Network Authentication
               </p>
             </div>
@@ -235,20 +235,20 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full bg-[#F8FBFF] hover:bg-[#F0F6FF] text-[#64748B] hover:text-[#172033] border border-[#DCE8F7] transition-colors"
+            className="p-2 rounded-full bg-[#F8FBFF] dark:bg-slate-800 hover:bg-[#F0F6FF] dark:hover:bg-slate-700 text-[#64748B] dark:text-slate-300 hover:text-[#172033] dark:hover:text-white border border-[#DCE8F7] dark:border-slate-700 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Tab Switcher */}
-        <div className="grid grid-cols-3 p-2 bg-[#F8FBFF] border-b border-[#DCE8F7] gap-1">
+        <div className="grid grid-cols-3 p-2 bg-[#F8FBFF] dark:bg-slate-850 border-b border-[#DCE8F7] dark:border-slate-800 gap-1">
           <button
             onClick={() => { setMode('signin'); setErrorMessage(null); }}
             className={`py-2 rounded-xl text-xs font-bold transition-all ${
               mode === 'signin'
-                ? 'bg-white text-[#2563EB] shadow-xs border border-[#DCE8F7]'
-                : 'text-[#64748B] hover:text-[#172033]'
+                ? 'bg-white dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 shadow-xs border border-[#DCE8F7] dark:border-slate-700'
+                : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
             }`}
           >
             Sign In
@@ -257,8 +257,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             onClick={() => { setMode('signup'); setErrorMessage(null); }}
             className={`py-2 rounded-xl text-xs font-bold transition-all ${
               mode === 'signup'
-                ? 'bg-white text-[#2563EB] shadow-xs border border-[#DCE8F7]'
-                : 'text-[#64748B] hover:text-[#172033]'
+                ? 'bg-white dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 shadow-xs border border-[#DCE8F7] dark:border-slate-700'
+                : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
             }`}
           >
             Sign Up
@@ -267,8 +267,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             onClick={() => { setMode('demo'); setErrorMessage(null); }}
             className={`py-2 rounded-xl text-xs font-bold transition-all ${
               mode === 'demo'
-                ? 'bg-white text-[#2563EB] shadow-xs border border-[#DCE8F7]'
-                : 'text-[#64748B] hover:text-[#172033]'
+                ? 'bg-white dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 shadow-xs border border-[#DCE8F7] dark:border-slate-700'
+                : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
             }`}
           >
             Demo Users
@@ -277,8 +277,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
         {/* Error Alert */}
         {errorMessage && (
-          <div className="mx-6 mt-4 p-3 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2 text-xs text-red-700">
-            <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+          <div className="mx-6 mt-4 p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 rounded-xl flex items-center gap-2 text-xs text-red-700 dark:text-red-300">
+            <AlertCircle className="w-4 h-4 shrink-0 text-red-600 dark:text-red-400" />
             <span>{errorMessage}</span>
           </div>
         )}
@@ -288,43 +288,43 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           {mode === 'signin' && (
             <form onSubmit={handleSignIn} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-[#172033] mb-1.5">
+                <label className="block text-xs font-bold text-[#172033] dark:text-slate-200 mb-1.5">
                   Student / Campus Email
                 </label>
                 <div className="relative">
-                  <Mail className="w-4 h-4 text-[#64748B] absolute left-3.5 top-3.5" />
+                  <Mail className="w-4 h-4 text-[#64748B] dark:text-slate-400 absolute left-3.5 top-3.5" />
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     placeholder="you@campus.ac.in or student@gmail.com"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#F8FBFF] border border-[#DCE8F7] text-xs text-[#172033] focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB]"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-xs text-[#172033] dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-[#2563EB] dark:focus:border-blue-500 focus:ring-1 focus:ring-[#2563EB]"
                   />
                 </div>
               </div>
 
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-xs font-bold text-[#172033]">
+                  <label className="block text-xs font-bold text-[#172033] dark:text-slate-200">
                     Password
                   </label>
-                  <span className="text-[10px] text-[#64748B]">Min 6 characters</span>
+                  <span className="text-[10px] text-[#64748B] dark:text-slate-400">Min 6 characters</span>
                 </div>
                 <div className="relative">
-                  <Lock className="w-4 h-4 text-[#64748B] absolute left-3.5 top-3.5" />
+                  <Lock className="w-4 h-4 text-[#64748B] dark:text-slate-400 absolute left-3.5 top-3.5" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     required
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-[#F8FBFF] border border-[#DCE8F7] text-xs text-[#172033] focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB]"
+                    className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-xs text-[#172033] dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-[#2563EB] dark:focus:border-blue-500 focus:ring-1 focus:ring-[#2563EB]"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-[#64748B] hover:text-[#172033]"
+                    className="absolute right-3 top-3 text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -350,7 +350,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setMode('demo')}
-                  className="text-xs font-semibold text-[#2563EB] hover:underline"
+                  className="text-xs font-semibold text-[#2563EB] dark:text-blue-400 hover:underline"
                 >
                   ⚡ Want to test without sign-in? Switch to Demo Persona
                 </button>
@@ -361,42 +361,42 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           {mode === 'signup' && (
             <form onSubmit={handleSignUp} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-[#172033] mb-1.5">
+                <label className="block text-xs font-bold text-[#172033] dark:text-slate-200 mb-1.5">
                   Full Name
                 </label>
                 <div className="relative">
-                  <User className="w-4 h-4 text-[#64748B] absolute left-3.5 top-3.5" />
+                  <User className="w-4 h-4 text-[#64748B] dark:text-slate-400 absolute left-3.5 top-3.5" />
                   <input
                     type="text"
                     required
                     value={fullName}
                     onChange={e => setFullName(e.target.value)}
                     placeholder="e.g. Tanya Sharma or Rohan Gupta"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#F8FBFF] border border-[#DCE8F7] text-xs text-[#172033] focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB]"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-xs text-[#172033] dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-[#2563EB] dark:focus:border-blue-500 focus:ring-1 focus:ring-[#2563EB]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#172033] mb-1.5">
+                <label className="block text-xs font-bold text-[#172033] dark:text-slate-200 mb-1.5">
                   Campus / College
                 </label>
                 <div className="relative">
-                  <Building className="w-4 h-4 text-[#64748B] absolute left-3.5 top-3.5" />
+                  <Building className="w-4 h-4 text-[#64748B] dark:text-slate-400 absolute left-3.5 top-3.5" />
                   <select
                     value={college}
                     onChange={e => setCollege(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#F8FBFF] border border-[#DCE8F7] text-xs text-[#172033] focus:outline-none focus:border-[#2563EB]"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-xs text-[#172033] dark:text-white focus:outline-none focus:border-[#2563EB] dark:focus:border-blue-500"
                   >
                     {CAMPUS_OPTIONS.map(c => (
-                      <option key={c} value={c}>{c}</option>
+                      <option key={c} value={c} className="dark:bg-slate-800">{c}</option>
                     ))}
                   </select>
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#172033] mb-1.5">
+                <label className="block text-xs font-bold text-[#172033] dark:text-slate-200 mb-1.5">
                   Campus Role / Category
                 </label>
                 <div className="grid grid-cols-3 gap-1.5">
@@ -412,7 +412,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       className={`py-2 rounded-xl text-[11px] font-bold border transition-all ${
                         occupationType === r.id
                           ? 'bg-[#2563EB] text-white border-[#2563EB]'
-                          : 'bg-[#F8FBFF] text-[#64748B] border-[#DCE8F7] hover:bg-white'
+                          : 'bg-[#F8FBFF] dark:bg-slate-800 text-[#64748B] dark:text-slate-300 border-[#DCE8F7] dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700'
                       }`}
                     >
                       {r.label}
@@ -422,40 +422,40 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#172033] mb-1.5">
+                <label className="block text-xs font-bold text-[#172033] dark:text-slate-200 mb-1.5">
                   Email Address
                 </label>
                 <div className="relative">
-                  <Mail className="w-4 h-4 text-[#64748B] absolute left-3.5 top-3.5" />
+                  <Mail className="w-4 h-4 text-[#64748B] dark:text-slate-400 absolute left-3.5 top-3.5" />
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     placeholder="student@college.edu or name@gmail.com"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#F8FBFF] border border-[#DCE8F7] text-xs text-[#172033] focus:outline-none focus:border-[#2563EB]"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-xs text-[#172033] dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-[#2563EB] dark:focus:border-blue-500"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#172033] mb-1.5">
+                <label className="block text-xs font-bold text-[#172033] dark:text-slate-200 mb-1.5">
                   Create Password
                 </label>
                 <div className="relative">
-                  <Lock className="w-4 h-4 text-[#64748B] absolute left-3.5 top-3.5" />
+                  <Lock className="w-4 h-4 text-[#64748B] dark:text-slate-400 absolute left-3.5 top-3.5" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     required
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     placeholder="At least 6 characters"
-                    className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-[#F8FBFF] border border-[#DCE8F7] text-xs text-[#172033] focus:outline-none focus:border-[#2563EB]"
+                    className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-xs text-[#172033] dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-[#2563EB] dark:focus:border-blue-500"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-[#64748B] hover:text-[#172033]"
+                    className="absolute right-3 top-3 text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -481,7 +481,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
           {mode === 'demo' && (
             <div className="space-y-3">
-              <p className="text-xs text-[#64748B]">
+              <p className="text-xs text-[#64748B] dark:text-slate-400">
                 Click any campus profile to instantly log in as that student without needing credentials:
               </p>
 
@@ -490,30 +490,30 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <button
                     key={student.id}
                     onClick={() => handleSelectDemoPersona(student)}
-                    className="w-full p-3 rounded-2xl border border-[#DCE8F7] hover:border-[#2563EB] bg-[#F8FBFF] hover:bg-white transition-all text-left flex items-center justify-between group"
+                    className="w-full p-3 rounded-2xl border border-[#DCE8F7] dark:border-slate-800 hover:border-[#2563EB] dark:hover:border-blue-500 bg-[#F8FBFF] dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-800 transition-all text-left flex items-center justify-between group"
                   >
                     <div className="flex items-center gap-3">
                       <img
                         src={student.avatar}
                         alt={student.name}
-                        className="w-10 h-10 rounded-full object-cover ring-2 ring-[#DCE8F7] group-hover:ring-[#2563EB]"
+                        className="w-10 h-10 rounded-full object-cover ring-2 ring-[#DCE8F7] dark:ring-slate-700 group-hover:ring-[#2563EB] dark:group-hover:ring-blue-500"
                       />
                       <div>
                         <div className="flex items-center gap-1.5">
-                          <span className="font-extrabold text-xs text-[#172033]">
+                          <span className="font-extrabold text-xs text-[#172033] dark:text-white">
                             {student.name}
                           </span>
-                          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#F0F6FF] text-[#2563EB] font-bold">
+                          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#F0F6FF] dark:bg-blue-950/60 text-[#2563EB] dark:text-blue-400 font-bold border border-transparent dark:border-blue-900">
                             {student.degree}
                           </span>
                         </div>
-                        <p className="text-[10px] text-[#64748B] truncate max-w-[200px]">
+                        <p className="text-[10px] text-[#64748B] dark:text-slate-400 truncate max-w-[200px]">
                           {student.college} • {student.skills.slice(0, 2).join(', ')}
                         </p>
                       </div>
                     </div>
 
-                    <div className="px-3 py-1 rounded-full bg-white border border-[#DCE8F7] text-[10px] font-extrabold text-[#2563EB] group-hover:bg-[#2563EB] group-hover:text-white transition-colors">
+                    <div className="px-3 py-1 rounded-full bg-white dark:bg-slate-700 border border-[#DCE8F7] dark:border-slate-600 text-[10px] font-extrabold text-[#2563EB] dark:text-blue-400 group-hover:bg-[#2563EB] dark:group-hover:bg-blue-600 group-hover:text-white transition-colors">
                       Switch
                     </div>
                   </button>
@@ -524,8 +524,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         </div>
 
         {/* Footer info */}
-        <div className="p-4 bg-[#F8FBFF] border-t border-[#DCE8F7] text-center text-[10px] text-[#64748B] flex items-center justify-center gap-1.5">
-          <ShieldCheck className="w-3.5 h-3.5 text-[#2563EB]" />
+        <div className="p-4 bg-[#F8FBFF] dark:bg-slate-850 border-t border-[#DCE8F7] dark:border-slate-800 text-center text-[10px] text-[#64748B] dark:text-slate-400 flex items-center justify-center gap-1.5">
+          <ShieldCheck className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
           <span>Encrypted Supabase PostgreSQL Auth • 100% Student Privacy</span>
         </div>
       </div>

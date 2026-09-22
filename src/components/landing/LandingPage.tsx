@@ -96,25 +96,25 @@ export const LandingPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F0F6FF] text-[#172033] pb-20">
+    <div className="min-h-screen bg-[#F0F6FF] dark:bg-[#0A0F1D] text-[#172033] dark:text-[#F1F5F9] pb-20">
       {/* Hero Section */}
       <section className="relative pt-12 pb-16 sm:pt-20 sm:pb-24 px-4 sm:px-6 max-w-5xl mx-auto text-center space-y-6">
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#DCE8F7] text-xs font-bold text-[#2563EB] shadow-sm">
-          <Sparkles className="w-3.5 h-3.5 text-[#2563EB]" />
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 text-xs font-bold text-[#2563EB] dark:text-blue-400 shadow-sm">
+          <Sparkles className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
           <span>Activity, Plan & Skill Network</span>
-          <span className="text-[#64748B] font-normal">• Find Partners Nearby</span>
+          <span className="text-[#64748B] dark:text-slate-400 font-normal">• Find Partners Nearby</span>
         </div>
 
         {/* Headline */}
-        <h1 className="text-4xl sm:text-6xl font-black font-display tracking-tight text-[#172033] leading-[1.08]">
+        <h1 className="text-4xl sm:text-6xl font-black font-display tracking-tight text-[#172033] dark:text-white leading-[1.08]">
           Post What You Need. <br />
-          <span className="text-[#2563EB]">
+          <span className="text-[#2563EB] dark:text-blue-400">
             Find The Right Person Nearby.
           </span>
         </h1>
 
-        <p className="text-base sm:text-lg text-[#64748B] max-w-xl mx-auto leading-relaxed">
+        <p className="text-base sm:text-lg text-[#64748B] dark:text-slate-400 max-w-xl mx-auto leading-relaxed">
           Need a football player at 6 PM? A dance partner for rehearsal? A study buddy or hackathon coder? Connect with verified people in your area in seconds.
         </p>
 
@@ -131,7 +131,7 @@ export const LandingPage: React.FC = () => {
 
           <button
             onClick={() => setIsCreateRequestModalOpen(true)}
-            className="w-full sm:w-auto px-6 py-4 rounded-full bg-white hover:bg-[#F8FBFF] border border-[#DCE8F7] text-[#172033] font-bold text-sm shadow-xs transition-colors flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-6 py-4 rounded-full bg-white dark:bg-slate-900 hover:bg-[#F8FBFF] dark:hover:bg-slate-800 border border-[#DCE8F7] dark:border-slate-800 text-[#172033] dark:text-white font-bold text-sm shadow-xs transition-colors flex items-center justify-center gap-2"
           >
             <span>+ Post a Request (30 Sec)</span>
           </button>
@@ -140,10 +140,10 @@ export const LandingPage: React.FC = () => {
         {/* Live Needs Showcase Grid */}
         <div className="mt-14 max-w-5xl mx-auto space-y-6 text-left">
           <div className="text-center">
-            <span className="text-xs font-extrabold uppercase tracking-widest text-[#2563EB]">
+            <span className="text-xs font-extrabold uppercase tracking-widest text-[#2563EB] dark:text-blue-400">
               Live Campus Requests Feed
             </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-[#172033] font-display mt-1">
+            <h2 className="text-2xl sm:text-3xl font-black text-[#172033] dark:text-white font-display mt-1">
               Real Needs Happening Right Now
             </h2>
           </div>
@@ -156,9 +156,9 @@ export const LandingPage: React.FC = () => {
                   setSelectedCategory(item.category as any);
                   setCurrentView('home');
                 }}
-                className="rounded-3xl border border-[#DCE8F7] bg-white overflow-hidden transition-all duration-200 hover:border-[#2563EB] hover:scale-102 cursor-pointer flex flex-col justify-between shadow-xs"
+                className="rounded-3xl border border-[#DCE8F7] dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden transition-all duration-200 hover:border-[#2563EB] dark:hover:border-blue-500 hover:scale-102 cursor-pointer flex flex-col justify-between shadow-xs"
               >
-                <div className="relative aspect-video bg-[#F0F6FF]">
+                <div className="relative aspect-video bg-[#F0F6FF] dark:bg-slate-800">
                   <img
                     src={item.image}
                     alt={item.title}
@@ -172,24 +172,24 @@ export const LandingPage: React.FC = () => {
                 </div>
 
                 <div className="p-4 space-y-3">
-                  <h3 className="font-extrabold text-sm text-[#172033] leading-snug">
+                  <h3 className="font-extrabold text-sm text-[#172033] dark:text-white leading-snug">
                     {item.title}
                   </h3>
 
-                  <div className="text-xs text-[#64748B] space-y-1 pt-1 border-t border-[#F0F6FF]">
-                    <div className="flex items-center gap-1 font-semibold text-[#172033]">
-                      <Clock className="w-3 h-3 text-[#2563EB]" />
+                  <div className="text-xs text-[#64748B] dark:text-slate-400 space-y-1 pt-1 border-t border-[#F0F6FF] dark:border-slate-800">
+                    <div className="flex items-center gap-1 font-semibold text-[#172033] dark:text-slate-200">
+                      <Clock className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
                       <span>{item.time}</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <MapPin className="w-3 h-3 text-[#2563EB]" />
+                      <MapPin className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
                       <span className="truncate">{item.location}</span>
                     </div>
                   </div>
 
                   <button
                     type="button"
-                    className="w-full py-2 rounded-full bg-[#F8FBFF] hover:bg-[#2563EB] text-[#172033] hover:text-white font-bold text-xs border border-[#DCE8F7] transition-colors"
+                    className="w-full py-2 rounded-full bg-[#F8FBFF] dark:bg-slate-800 hover:bg-[#2563EB] dark:hover:bg-blue-600 text-[#172033] dark:text-slate-200 hover:text-white font-bold text-xs border border-[#DCE8F7] dark:border-slate-700 transition-colors"
                   >
                     View Need
                   </button>
@@ -201,9 +201,9 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* FAQs */}
-      <section className="py-16 px-4 sm:px-6 max-w-4xl mx-auto border-t border-[#DCE8F7]">
+      <section className="py-16 px-4 sm:px-6 max-w-4xl mx-auto border-t border-[#DCE8F7] dark:border-slate-800">
         <div className="text-center mb-10">
-          <h2 className="text-2xl sm:text-3xl font-black text-[#172033] font-display">
+          <h2 className="text-2xl sm:text-3xl font-black text-[#172033] dark:text-white font-display">
             Frequently Asked Questions
           </h2>
         </div>
@@ -214,17 +214,17 @@ export const LandingPage: React.FC = () => {
             return (
               <div
                 key={i}
-                className="bg-white border border-[#DCE8F7] rounded-2xl overflow-hidden shadow-xs"
+                className="bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-2xl overflow-hidden shadow-xs"
               >
                 <button
                   onClick={() => setOpenFaq(isOpen ? null : i)}
-                  className="w-full p-4 text-left font-bold text-xs sm:text-sm text-[#172033] flex items-center justify-between gap-3"
+                  className="w-full p-4 text-left font-bold text-xs sm:text-sm text-[#172033] dark:text-white flex items-center justify-between gap-3"
                 >
                   <span>{faq.q}</span>
-                  <ChevronDown className={`w-4 h-4 text-[#64748B] shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-4 h-4 text-[#64748B] dark:text-slate-400 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
                 </button>
                 {isOpen && (
-                  <div className="px-4 pb-4 text-xs text-[#64748B] leading-relaxed border-t border-[#F0F6FF] pt-2.5">
+                  <div className="px-4 pb-4 text-xs text-[#64748B] dark:text-slate-400 leading-relaxed border-t border-[#F0F6FF] dark:border-slate-800 pt-2.5">
                     {faq.a}
                   </div>
                 )}

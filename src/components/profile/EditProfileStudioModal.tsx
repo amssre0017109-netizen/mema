@@ -225,22 +225,22 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
-      <div className="bg-white border border-[#DCE8F7] rounded-[2.5rem] max-w-xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-6 text-[#172033]">
+      <div className="bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-[2.5rem] max-w-xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-6 text-[#172033] dark:text-white">
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-[#DCE8F7]">
+        <div className="flex items-center justify-between pb-3 border-b border-[#DCE8F7] dark:border-slate-800">
           <div>
-            <div className="flex items-center gap-1.5 text-xs font-black text-[#2563EB] uppercase tracking-wider">
+            <div className="flex items-center gap-1.5 text-xs font-black text-[#2563EB] dark:text-blue-400 uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Profile Settings Studio</span>
             </div>
-            <h2 className="text-xl font-black text-[#172033] font-display">
+            <h2 className="text-xl font-black text-[#172033] dark:text-white font-display">
               Edit Profile & Photo
             </h2>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full bg-[#F8FBFF] text-[#64748B] hover:text-[#172033] hover:bg-[#F0F6FF] border border-[#DCE8F7] transition-colors"
+            className="p-2 rounded-full bg-[#F8FBFF] dark:bg-slate-800 text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white hover:bg-[#F0F6FF] dark:hover:bg-slate-700 border border-[#DCE8F7] dark:border-slate-700 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -250,12 +250,12 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
           {/* =========================================================================
               0. CUSTOM PROFILE PICTURE UPLOAD FROM DEVICE
              ========================================================================= */}
-          <div className="bg-[#F8FBFF] p-4 sm:p-5 rounded-3xl border border-[#DCE8F7] space-y-3">
+          <div className="bg-[#F8FBFF] dark:bg-slate-850 dark:bg-slate-800/60 p-4 sm:p-5 rounded-3xl border border-[#DCE8F7] dark:border-slate-800 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-[#172033] text-xs">
+              <span className="font-bold text-[#172033] dark:text-white text-xs">
                 Profile Picture (From Personal Device):
               </span>
-              <span className="text-[10px] text-[#2563EB] font-bold">
+              <span className="text-[10px] text-[#2563EB] dark:text-blue-400 font-bold">
                 Supports JPG, PNG, WEBP
               </span>
             </div>
@@ -280,7 +280,7 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
                   <img
                     src={avatar}
                     alt="Preview"
-                    className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover ring-4 ring-white"
+                    className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover ring-4 ring-white dark:ring-slate-800"
                   />
                 </div>
                 <div className="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -298,7 +298,7 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
                   <Upload className="w-4 h-4" />
                   <span>Choose Photo from Device</span>
                 </button>
-                <p className="text-[11px] text-[#64748B] leading-relaxed">
+                <p className="text-[11px] text-[#64748B] dark:text-slate-400 leading-relaxed">
                   Select any image from your phone or computer. It will update your profile picture instantly.
                 </p>
               </div>
@@ -310,31 +310,31 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
              ========================================================================= */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block font-bold text-[#172033] mb-1">Display Name (Serif Title):</label>
+              <label className="block font-bold text-[#172033] dark:text-slate-200 mb-1">Display Name (Serif Title):</label>
               <input
                 type="text"
                 required
                 value={name}
                 onChange={e => setName(e.target.value)}
                 placeholder="e.g. Jamal Knox"
-                className="w-full bg-[#F8FBFF] border border-[#DCE8F7] focus:border-[#2563EB] rounded-2xl p-2.5 text-xs text-[#172033] focus:outline-none shadow-xs"
+                className="w-full bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 focus:border-[#2563EB] dark:focus:border-blue-400 rounded-2xl p-2.5 text-xs text-[#172033] dark:text-white focus:outline-none shadow-xs"
               />
             </div>
 
             <div>
-              <label className="block font-bold text-[#172033] mb-1">Approximate Area / Campus Zone:</label>
+              <label className="block font-bold text-[#172033] dark:text-slate-200 mb-1">Approximate Area / Campus Zone:</label>
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#2563EB]" />
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
                 <input
                   type="text"
                   required
                   value={location}
                   onChange={e => setLocation(e.target.value)}
                   placeholder="e.g. North Delhi Area, Campus Grounds"
-                  className="w-full bg-[#F8FBFF] border border-[#DCE8F7] focus:border-[#2563EB] rounded-2xl pl-9 pr-3 py-2.5 text-xs text-[#172033] focus:outline-none shadow-xs"
+                  className="w-full bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 focus:border-[#2563EB] dark:focus:border-blue-400 rounded-2xl pl-9 pr-3 py-2.5 text-xs text-[#172033] dark:text-white focus:outline-none shadow-xs"
                 />
               </div>
-              <span className="text-[10px] text-[#64748B] mt-1 block">
+              <span className="text-[10px] text-[#64748B] dark:text-slate-400 mt-1 block">
                 🔒 Exact live address is never exposed. Only approximate area/radius is visible.
               </span>
             </div>
@@ -343,20 +343,20 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
           {/* =========================================================================
               2. OCCUPATION / STATUS (School Student / Working Professional / Creator)
              ========================================================================= */}
-          <div className="space-y-3 bg-[#F8FBFF] p-4 rounded-3xl border border-[#DCE8F7]">
-            <label className="block font-bold text-[#172033] text-xs">
+          <div className="space-y-3 bg-[#F8FBFF] dark:bg-slate-800/60 p-4 rounded-3xl border border-[#DCE8F7] dark:border-slate-800">
+            <label className="block font-bold text-[#172033] dark:text-white text-xs">
               Status / Occupation Type:
             </label>
 
             {/* 3-Way Segmented Control */}
-            <div className="grid grid-cols-3 gap-1.5 p-1 bg-white rounded-2xl border border-[#DCE8F7] shadow-xs">
+            <div className="grid grid-cols-3 gap-1.5 p-1 bg-white dark:bg-slate-800 rounded-2xl border border-[#DCE8F7] dark:border-slate-700 shadow-xs">
               <button
                 type="button"
                 onClick={() => setOccupationType('school_student')}
                 className={`py-2 px-1 rounded-xl text-[11px] font-bold transition-all flex items-center justify-center gap-1.5 ${
                   occupationType === 'school_student'
                     ? 'bg-[#2563EB] text-white shadow-sm'
-                    : 'text-[#64748B] hover:text-[#172033]'
+                    : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
                 }`}
               >
                 <School className="w-3.5 h-3.5" />
@@ -369,7 +369,7 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
                 className={`py-2 px-1 rounded-xl text-[11px] font-bold transition-all flex items-center justify-center gap-1.5 ${
                   occupationType === 'working_professional' || occupationType === 'college_student'
                     ? 'bg-[#2563EB] text-white shadow-sm'
-                    : 'text-[#64748B] hover:text-[#172033]'
+                    : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
                 }`}
               >
                 <Briefcase className="w-3.5 h-3.5" />
@@ -382,7 +382,7 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
                 className={`py-2 px-1 rounded-xl text-[11px] font-bold transition-all flex items-center justify-center gap-1.5 ${
                   occupationType === 'creator_freelancer'
                     ? 'bg-[#2563EB] text-white shadow-sm'
-                    : 'text-[#64748B] hover:text-[#172033]'
+                    : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
                 }`}
               >
                 <Sparkles className="w-3.5 h-3.5" />
@@ -394,33 +394,33 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
             {occupationType === 'creator_freelancer' && (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
                 <div>
-                  <label className="block text-[10px] text-[#64748B] mb-1">Studio / Brand / Freelance:</label>
+                  <label className="block text-[10px] text-[#64748B] dark:text-slate-400 mb-1">Studio / Brand / Freelance:</label>
                   <input
                     type="text"
                     value={collegeOrOrg}
                     onChange={e => setCollegeOrOrg(e.target.value)}
                     placeholder="e.g. Independent / Creative Studio"
-                    className="w-full bg-white border border-[#DCE8F7] rounded-xl p-2 text-xs text-[#172033] focus:outline-none"
+                    className="w-full bg-white dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 rounded-xl p-2 text-xs text-[#172033] dark:text-white focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] text-[#64748B] mb-1">Niche / Specialty:</label>
+                  <label className="block text-[10px] text-[#64748B] dark:text-slate-400 mb-1">Niche / Specialty:</label>
                   <input
                     type="text"
                     value={degreeOrRole}
                     onChange={e => setDegreeOrRole(e.target.value)}
                     placeholder="e.g. UI/UX & Motion Design"
-                    className="w-full bg-white border border-[#DCE8F7] rounded-xl p-2 text-xs text-[#172033] focus:outline-none"
+                    className="w-full bg-white dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 rounded-xl p-2 text-xs text-[#172033] dark:text-white focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] text-[#64748B] mb-1">Focus Level:</label>
+                  <label className="block text-[10px] text-[#64748B] dark:text-slate-400 mb-1">Focus Level:</label>
                   <input
                     type="text"
                     value={yearOrLevel}
                     onChange={e => setYearOrLevel(e.target.value)}
                     placeholder="e.g. Full-time Creator"
-                    className="w-full bg-white border border-[#DCE8F7] rounded-xl p-2 text-xs text-[#172033] focus:outline-none"
+                    className="w-full bg-white dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 rounded-xl p-2 text-xs text-[#172033] dark:text-white focus:outline-none"
                   />
                 </div>
               </div>
@@ -429,21 +429,21 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
             {occupationType === 'school_student' && (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
                 <div>
-                  <label className="block text-[10px] text-[#64748B] mb-1">School Name:</label>
+                  <label className="block text-[10px] text-[#64748B] dark:text-slate-400 mb-1">School Name:</label>
                   <input
                     type="text"
                     value={collegeOrOrg}
                     onChange={e => setCollegeOrOrg(e.target.value)}
                     placeholder="e.g. Delhi Public School"
-                    className="w-full bg-white border border-[#DCE8F7] rounded-xl p-2 text-xs text-[#172033] focus:outline-none"
+                    className="w-full bg-white dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 rounded-xl p-2 text-xs text-[#172033] dark:text-white focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] text-[#64748B] mb-1">Class / Grade:</label>
+                  <label className="block text-[10px] text-[#64748B] dark:text-slate-400 mb-1">Class / Grade:</label>
                   <select
                     value={yearOrLevel}
                     onChange={e => setYearOrLevel(e.target.value)}
-                    className="w-full bg-white border border-[#DCE8F7] rounded-xl p-2 text-xs text-[#172033] focus:outline-none"
+                    className="w-full bg-white dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 rounded-xl p-2 text-xs text-[#172033] dark:text-white focus:outline-none"
                   >
                     <option value="Class 12th">Class 12th</option>
                     <option value="Class 11th">Class 11th</option>
@@ -452,13 +452,13 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
                   </select>
                 </div>
                 <div>
-                  <label className="block text-[10px] text-[#64748B] mb-1">Stream / Subjects:</label>
+                  <label className="block text-[10px] text-[#64748B] dark:text-slate-400 mb-1">Stream / Subjects:</label>
                   <input
                     type="text"
                     value={degreeOrRole}
                     onChange={e => setDegreeOrRole(e.target.value)}
                     placeholder="e.g. Science (PCM) / Commerce"
-                    className="w-full bg-white border border-[#DCE8F7] rounded-xl p-2 text-xs text-[#172033] focus:outline-none"
+                    className="w-full bg-white dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 rounded-xl p-2 text-xs text-[#172033] dark:text-white focus:outline-none"
                   />
                 </div>
               </div>
@@ -467,33 +467,33 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
             {occupationType === 'working_professional' && (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
                 <div>
-                  <label className="block text-[10px] text-[#64748B] mb-1">Company / Studio:</label>
+                  <label className="block text-[10px] text-[#64748B] dark:text-slate-400 mb-1">Company / Studio:</label>
                   <input
                     type="text"
                     value={collegeOrOrg}
                     onChange={e => setCollegeOrOrg(e.target.value)}
                     placeholder="e.g. Tech Studio / Google / Freelance"
-                    className="w-full bg-white border border-[#DCE8F7] rounded-xl p-2 text-xs text-[#172033] focus:outline-none"
+                    className="w-full bg-white dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 rounded-xl p-2 text-xs text-[#172033] dark:text-white focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] text-[#64748B] mb-1">Job Title / Role:</label>
+                  <label className="block text-[10px] text-[#64748B] dark:text-slate-400 mb-1">Job Title / Role:</label>
                   <input
                     type="text"
                     value={degreeOrRole}
                     onChange={e => setDegreeOrRole(e.target.value)}
                     placeholder="e.g. Product Designer / Software Engineer"
-                    className="w-full bg-white border border-[#DCE8F7] rounded-xl p-2 text-xs text-[#172033] focus:outline-none"
+                    className="w-full bg-white dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 rounded-xl p-2 text-xs text-[#172033] dark:text-white focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] text-[#64748B] mb-1">Experience Level:</label>
+                  <label className="block text-[10px] text-[#64748B] dark:text-slate-400 mb-1">Experience Level:</label>
                   <input
                     type="text"
                     value={yearOrLevel}
                     onChange={e => setYearOrLevel(e.target.value)}
                     placeholder="e.g. 2+ Yrs Experience"
-                    className="w-full bg-white border border-[#DCE8F7] rounded-xl p-2 text-xs text-[#172033] focus:outline-none"
+                    className="w-full bg-white dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 rounded-xl p-2 text-xs text-[#172033] dark:text-white focus:outline-none"
                   />
                 </div>
               </div>
@@ -504,13 +504,13 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
               3. BIO
              ========================================================================= */}
           <div>
-            <label className="block font-bold text-[#172033] mb-1">Bio / About Me:</label>
+            <label className="block font-bold text-[#172033] dark:text-slate-200 mb-1">Bio / About Me:</label>
             <textarea
               rows={2}
               value={bio}
               onChange={e => setBio(e.target.value)}
               placeholder="What are your goals, interests, and what kind of activity partners are you looking for?"
-              className="w-full bg-[#F8FBFF] border border-[#DCE8F7] focus:border-[#2563EB] rounded-2xl p-2.5 text-xs text-[#172033] focus:outline-none shadow-xs"
+              className="w-full bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 focus:border-[#2563EB] dark:focus:border-blue-400 rounded-2xl p-2.5 text-xs text-[#172033] dark:text-white focus:outline-none shadow-xs"
             />
           </div>
 
@@ -519,16 +519,16 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
              ========================================================================= */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label className="block font-bold text-[#172033]">
+              <label className="block font-bold text-[#172033] dark:text-white">
                 Skills & Talents:
               </label>
-              <span className="text-[11px] text-[#2563EB] font-bold">{skills.length} selected</span>
+              <span className="text-[11px] text-[#2563EB] dark:text-blue-400 font-bold">{skills.length} selected</span>
             </div>
 
-            <div className="p-3 bg-white rounded-2xl border border-[#DCE8F7] max-h-40 overflow-y-auto space-y-2.5">
+            <div className="p-3 bg-white dark:bg-slate-800/80 rounded-2xl border border-[#DCE8F7] dark:border-slate-700 max-h-40 overflow-y-auto space-y-2.5">
               {SKILL_CATEGORIES.map(cat => (
                 <div key={cat.id} className="space-y-1">
-                  <span className="text-[10px] font-bold text-[#64748B] flex items-center gap-1">
+                  <span className="text-[10px] font-bold text-[#64748B] dark:text-slate-400 flex items-center gap-1">
                     <span>{cat.icon}</span>
                     <span>{cat.name}</span>
                   </span>
@@ -543,7 +543,7 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
                           className={`px-2 py-0.5 rounded-full text-[10px] font-semibold transition-all ${
                             isSelected
                               ? 'bg-[#2563EB] text-white shadow-xs font-bold'
-                              : 'bg-[#F0F6FF] border border-[#DCE8F7] text-[#172033] hover:bg-[#E0EAFF]'
+                              : 'bg-[#F0F6FF] dark:bg-slate-700/80 border border-[#DCE8F7] dark:border-slate-600 text-[#172033] dark:text-slate-200 hover:bg-[#E0EAFF] dark:hover:bg-slate-600'
                           }`}
                         >
                           {isSelected ? '✓ ' : '+ '}{tag}
@@ -561,7 +561,7 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
                 value={newSkillInput}
                 onChange={e => setNewSkillInput(e.target.value)}
                 placeholder="Add custom skill (e.g. Video Editing, Chess)..."
-                className="flex-1 bg-[#F8FBFF] border border-[#DCE8F7] rounded-full px-3.5 py-1.5 text-xs text-[#172033] focus:outline-none shadow-xs"
+                className="flex-1 bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 rounded-full px-3.5 py-1.5 text-xs text-[#172033] dark:text-white focus:outline-none shadow-xs"
               />
               <button
                 type="button"
@@ -577,18 +577,18 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
               5. INTERESTS
              ========================================================================= */}
           <div className="space-y-1.5">
-            <label className="block font-bold text-[#172033]">Interests & Campus Societies:</label>
+            <label className="block font-bold text-[#172033] dark:text-white">Interests & Campus Societies:</label>
             <div className="flex flex-wrap gap-1.5">
               {interests.map(int => (
                 <span
                   key={int}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#F0F6FF] border border-[#DCE8F7] text-xs font-semibold text-[#172033]"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#F0F6FF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-xs font-semibold text-[#172033] dark:text-slate-200"
                 >
                   <span>{int}</span>
                   <button
                     type="button"
                     onClick={() => handleRemoveInterest(int)}
-                    className="hover:text-rose-500 ml-1 text-[#64748B]"
+                    className="hover:text-rose-500 ml-1 text-[#64748B] dark:text-slate-400"
                   >
                     ×
                   </button>
@@ -602,7 +602,7 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
                 value={newInterestInput}
                 onChange={e => setNewInterestInput(e.target.value)}
                 placeholder="Add interest e.g. College Fests, Anime, Robotics..."
-                className="flex-1 bg-[#F8FBFF] border border-[#DCE8F7] rounded-full px-3.5 py-1.5 text-xs text-[#172033] focus:outline-none shadow-xs"
+                className="flex-1 bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 rounded-full px-3.5 py-1.5 text-xs text-[#172033] dark:text-white focus:outline-none shadow-xs"
               />
               <button
                 type="button"
@@ -617,8 +617,8 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
           {/* =========================================================================
               6. ACTIVITIES
              ========================================================================= */}
-          <div className="space-y-2 bg-[#F8FBFF] p-4 rounded-3xl border border-[#DCE8F7]">
-            <label className="block font-bold text-[#172033] text-xs">
+          <div className="space-y-2 bg-[#F8FBFF] dark:bg-slate-800/60 p-4 rounded-3xl border border-[#DCE8F7] dark:border-slate-800">
+            <label className="block font-bold text-[#172033] dark:text-white text-xs">
               Activities & Meetup Highlights ({activities.length}):
             </label>
 
@@ -626,16 +626,16 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
               {activities.map(act => (
                 <div
                   key={act.id}
-                  className="bg-white p-2 rounded-xl border border-[#DCE8F7] flex items-center justify-between text-[11px]"
+                  className="bg-white dark:bg-slate-800 p-2 rounded-xl border border-[#DCE8F7] dark:border-slate-700 flex items-center justify-between text-[11px]"
                 >
                   <div>
-                    <span className="font-bold text-[#172033] block">{act.title}</span>
-                    <span className="text-[#64748B] text-[10px]">{act.location} • {act.date}</span>
+                    <span className="font-bold text-[#172033] dark:text-white block">{act.title}</span>
+                    <span className="text-[#64748B] dark:text-slate-400 text-[10px]">{act.location} • {act.date}</span>
                   </div>
                   <button
                     type="button"
                     onClick={() => handleRemoveActivity(act.id)}
-                    className="text-[#64748B] hover:text-rose-500 px-2 font-bold"
+                    className="text-[#64748B] dark:text-slate-400 hover:text-rose-500 px-2 font-bold"
                   >
                     ×
                   </button>
@@ -649,7 +649,7 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
                 value={newActTitle}
                 onChange={e => setNewActTitle(e.target.value)}
                 placeholder="New activity e.g. 🏏 Weekend Box Cricket"
-                className="flex-1 bg-white border border-[#DCE8F7] rounded-xl px-3 py-1.5 text-xs text-[#172033] focus:outline-none shadow-xs"
+                className="flex-1 bg-white dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-[#172033] dark:text-white focus:outline-none shadow-xs"
               />
               <button
                 type="button"
@@ -664,21 +664,21 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
           {/* =========================================================================
               7. ROLE BADGES (✺) & STATS
              ========================================================================= */}
-          <div className="space-y-2 pt-2 border-t border-[#DCE8F7]">
-            <label className="block font-bold text-[#172033]">
+          <div className="space-y-2 pt-2 border-t border-[#DCE8F7] dark:border-slate-800">
+            <label className="block font-bold text-[#172033] dark:text-white">
               Role Badges (✺):
             </label>
             <div className="flex flex-wrap gap-1.5">
               {roleTags.map(tag => (
                 <span
                   key={tag}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F0F6FF] border border-[#DCE8F7] text-xs font-semibold text-[#172033]"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F0F6FF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-xs font-semibold text-[#172033] dark:text-slate-200"
                 >
                   <span>✺ {tag}</span>
                   <button
                     type="button"
                     onClick={() => handleRemoveTag(tag)}
-                    className="hover:text-rose-500 ml-1 text-[#64748B]"
+                    className="hover:text-rose-500 ml-1 text-[#64748B] dark:text-slate-400"
                   >
                     ×
                   </button>
@@ -692,7 +692,7 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
                 value={newTagInput}
                 onChange={e => setNewTagInput(e.target.value)}
                 placeholder="Add role tag (e.g. Creative Designer, Footballer)..."
-                className="flex-1 bg-[#F8FBFF] border border-[#DCE8F7] rounded-full px-3.5 py-1.5 text-xs text-[#172033] focus:outline-none shadow-xs"
+                className="flex-1 bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 rounded-full px-3.5 py-1.5 text-xs text-[#172033] dark:text-white focus:outline-none shadow-xs"
               />
               <button
                 type="button"
@@ -705,11 +705,11 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
           </div>
 
           {/* Footer */}
-          <div className="pt-3 border-t border-[#DCE8F7] flex items-center justify-end gap-2">
+          <div className="pt-3 border-t border-[#DCE8F7] dark:border-slate-800 flex items-center justify-end gap-2">
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 rounded-full bg-[#F8FBFF] text-[#64748B] font-bold hover:bg-[#F0F6FF] border border-[#DCE8F7] transition-colors"
+              className="px-5 py-2.5 rounded-full bg-[#F8FBFF] dark:bg-slate-800 text-[#64748B] dark:text-slate-300 font-bold hover:bg-[#F0F6FF] dark:hover:bg-slate-700 border border-[#DCE8F7] dark:border-slate-700 transition-colors"
             >
               Cancel
             </button>

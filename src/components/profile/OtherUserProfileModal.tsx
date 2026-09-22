@@ -108,23 +108,23 @@ export const OtherUserProfileModal: React.FC = () => {
   const renderOccupationBadge = () => {
     if (user.occupationType === 'school_student') {
       return (
-        <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/40 backdrop-blur-md border border-white/60 text-xs font-bold text-slate-900 shadow-xs">
-          <School className="w-3.5 h-3.5 text-amber-600" />
+        <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/40 dark:bg-slate-800/60 backdrop-blur-md border border-white/60 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-slate-200 shadow-xs">
+          <School className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
           <span>School Student • {user.degree || user.year || 'Student'}</span>
         </div>
       );
     }
     if (user.occupationType === 'creator_freelancer') {
       return (
-        <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/40 backdrop-blur-md border border-white/60 text-xs font-bold text-slate-900 shadow-xs">
-          <Sparkles className="w-3.5 h-3.5 text-[#2563EB]" />
+        <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/40 dark:bg-slate-800/60 backdrop-blur-md border border-white/60 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-slate-200 shadow-xs">
+          <Sparkles className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
           <span>Creator / Freelance • {user.degree || 'Creative Tech'}</span>
         </div>
       );
     }
     return (
-      <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/40 backdrop-blur-md border border-white/60 text-xs font-bold text-slate-900 shadow-xs">
-        <Briefcase className="w-3.5 h-3.5 text-emerald-600" />
+      <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/40 dark:bg-slate-800/60 backdrop-blur-md border border-white/60 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-slate-200 shadow-xs">
+        <Briefcase className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
         <span>Working Professional • {user.degree || 'Professional'}</span>
       </div>
     );
@@ -147,10 +147,10 @@ export const OtherUserProfileModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-150">
-      <div className="bg-white border border-[#DCE8F7] rounded-[2.5rem] max-w-md w-full p-5 sm:p-6 shadow-2xl relative max-h-[92vh] overflow-y-auto space-y-4 text-[#172033]">
+      <div className="bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-[2.5rem] max-w-md w-full p-5 sm:p-6 shadow-2xl relative max-h-[92vh] overflow-y-auto space-y-4 text-[#172033] dark:text-white">
         {/* Top Floating Controls */}
-        <div className="flex items-center justify-between pb-1 border-b border-[#DCE8F7]">
-          <div className="flex items-center gap-1.5 text-xs font-black text-[#2563EB] uppercase tracking-wider">
+        <div className="flex items-center justify-between pb-1 border-b border-[#DCE8F7] dark:border-slate-800">
+          <div className="flex items-center gap-1.5 text-xs font-black text-[#2563EB] dark:text-blue-400 uppercase tracking-wider">
             <FileText className="w-3.5 h-3.5" />
             <span>Member Profile File</span>
           </div>
@@ -158,15 +158,15 @@ export const OtherUserProfileModal: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={handleShare}
-              className="p-2 rounded-full bg-[#F8FBFF] hover:bg-white text-[#64748B] border border-[#DCE8F7] transition-colors"
+              className="p-2 rounded-full bg-[#F8FBFF] dark:bg-slate-800 hover:bg-white dark:hover:bg-slate-700 text-[#64748B] dark:text-slate-400 border border-[#DCE8F7] dark:border-slate-700 transition-colors"
               title="Share Profile"
             >
-              <Share2 className="w-3.5 h-3.5 text-[#2563EB]" />
+              <Share2 className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
             </button>
 
             <button
               onClick={closeUserProfileModal}
-              className="p-2 rounded-full bg-[#F8FBFF] hover:bg-white text-[#64748B] hover:text-[#172033] border border-[#DCE8F7] transition-colors"
+              className="p-2 rounded-full bg-[#F8FBFF] dark:bg-slate-800 hover:bg-white dark:hover:bg-slate-700 text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white border border-[#DCE8F7] dark:border-slate-700 transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -174,18 +174,18 @@ export const OtherUserProfileModal: React.FC = () => {
         </div>
 
         {/* Hero Card Top */}
-        <div className="relative rounded-3xl overflow-hidden p-6 bg-gradient-to-br from-[#E0EAFF] via-[#C7D7FE] to-[#BFDBFE] border border-[#DCE8F7] shadow-md text-[#172033] text-center space-y-3">
+        <div className="relative rounded-3xl overflow-hidden p-6 bg-gradient-to-br from-[#E0EAFF] via-[#C7D7FE] to-[#BFDBFE] dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 border border-[#DCE8F7] dark:border-slate-800 shadow-md text-[#172033] dark:text-white text-center space-y-3">
           {/* Avatar Ring */}
           <div className="relative inline-block mx-auto">
-            <div className="p-1 rounded-full bg-white shadow-xl">
+            <div className="p-1 rounded-full bg-white dark:bg-slate-800 shadow-xl">
               <img
                 src={user.avatar}
                 alt={user.name}
-                className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover ring-2 ring-[#DCE8F7]"
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover ring-2 ring-[#DCE8F7] dark:ring-slate-700"
               />
             </div>
             {user.verifiedCollege && (
-              <span className="absolute bottom-0 right-0 bg-[#2563EB] text-white p-1 rounded-full ring-2 ring-white" title="Verified Profile">
+              <span className="absolute bottom-0 right-0 bg-[#2563EB] text-white p-1 rounded-full ring-2 ring-white dark:ring-slate-800" title="Verified Profile">
                 <CheckCircle2 className="w-3.5 h-3.5" />
               </span>
             )}
@@ -193,24 +193,24 @@ export const OtherUserProfileModal: React.FC = () => {
 
           {/* Name & Followers */}
           <div className="space-y-0.5 px-2">
-            <h2 className="font-editorial text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#172033] break-words leading-tight">
+            <h2 className="font-editorial text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#172033] dark:text-white break-words leading-tight">
               {user.name}
             </h2>
-            <p className="text-xs font-semibold text-[#172033]">
-              {((user.followersCount || 1240) + (isFollowing ? 1 : 0)).toLocaleString()} <span className="font-medium text-[#64748B]">Followers</span>
+            <p className="text-xs font-semibold text-[#172033] dark:text-slate-200">
+              {((user.followersCount || 1240) + (isFollowing ? 1 : 0)).toLocaleString()} <span className="font-medium text-[#64748B] dark:text-slate-400">Followers</span>
             </p>
           </div>
 
           {/* Occupation Badge & Location */}
           <div className="space-y-1.5 pt-1">
             <div>{renderOccupationBadge()}</div>
-            <div className="flex items-center justify-center gap-2 text-xs text-[#172033] font-semibold flex-wrap">
+            <div className="flex items-center justify-center gap-2 text-xs text-[#172033] dark:text-slate-200 font-semibold flex-wrap">
               <span className="flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5 text-[#2563EB]" />
+                <MapPin className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
                 <span>{user.location || user.locationZone || 'Nearby Area'}</span>
               </span>
               {user.distanceDisplay && (
-                <span className="bg-white/90 border border-[#DCE8F7] text-[#2563EB] text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-2xs">
+                <span className="bg-white/90 dark:bg-slate-800/90 border border-[#DCE8F7] dark:border-slate-700 text-[#2563EB] dark:text-blue-400 text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-2xs">
                   📍 {user.distanceDisplay}
                 </span>
               )}
@@ -223,7 +223,7 @@ export const OtherUserProfileModal: React.FC = () => {
               onClick={() => toggleFollowUser(user.id)}
               className={`py-2.5 px-4 rounded-full text-xs font-black transition-all flex items-center justify-center gap-1.5 shadow-sm active:scale-95 ${
                 isFollowing
-                  ? 'bg-white text-[#2563EB] border border-[#DCE8F7]'
+                  ? 'bg-white dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-700'
                   : 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white shadow-md shadow-blue-500/20'
               }`}
             >
@@ -242,7 +242,7 @@ export const OtherUserProfileModal: React.FC = () => {
 
             <button
               onClick={handleStartChat}
-              className="py-2.5 px-4 rounded-full bg-[#172033] hover:bg-[#1D4ED8] text-white text-xs font-black shadow-sm flex items-center justify-center gap-1.5 transition-all active:scale-95"
+              className="py-2.5 px-4 rounded-full bg-[#172033] dark:bg-slate-800 hover:bg-[#1D4ED8] dark:hover:bg-[#1D4ED8] text-white text-xs font-black shadow-sm flex items-center justify-center gap-1.5 transition-all active:scale-95"
             >
               <MessageSquare className="w-3.5 h-3.5" />
               <span>Message</span>
@@ -254,9 +254,9 @@ export const OtherUserProfileModal: React.FC = () => {
             {(user.roleTags || ['Creative Designer', 'Visual Artist']).map((tag, idx) => (
               <span
                 key={idx}
-                className="px-2.5 py-0.5 rounded-full bg-white/60 backdrop-blur-md border border-white/80 text-[#172033] text-[10px] font-bold flex items-center gap-1"
+                className="px-2.5 py-0.5 rounded-full bg-white/60 dark:bg-slate-800/70 backdrop-blur-md border border-white/80 dark:border-slate-700 text-[#172033] dark:text-slate-200 text-[10px] font-bold flex items-center gap-1"
               >
-                <span className="text-[#2563EB]">✺</span>
+                <span className="text-[#2563EB] dark:text-blue-400">✺</span>
                 <span>{tag}</span>
               </span>
             ))}
@@ -265,41 +265,41 @@ export const OtherUserProfileModal: React.FC = () => {
 
         {/* Horizontal Metric Stats */}
         <div className="grid grid-cols-4 gap-1.5 text-center">
-          <div className="p-2 rounded-2xl bg-[#F8FBFF] border border-[#DCE8F7]">
-            <span className="text-[9px] text-[#64748B] font-bold block">Sessions</span>
-            <span className="text-xs font-black text-[#172033] block mt-0.5">
+          <div className="p-2 rounded-2xl bg-[#F8FBFF] dark:bg-slate-800/60 border border-[#DCE8F7] dark:border-slate-800">
+            <span className="text-[9px] text-[#64748B] dark:text-slate-400 font-bold block">Sessions</span>
+            <span className="text-xs font-black text-[#172033] dark:text-white block mt-0.5">
               {(user.sessionsCount || 4280).toLocaleString()}
             </span>
           </div>
 
-          <div className="p-2 rounded-2xl bg-[#F8FBFF] border border-[#DCE8F7]">
-            <span className="text-[9px] text-[#64748B] font-bold block">Age</span>
-            <span className="text-xs font-black text-[#172033] block mt-0.5">
+          <div className="p-2 rounded-2xl bg-[#F8FBFF] dark:bg-slate-800/60 border border-[#DCE8F7] dark:border-slate-800">
+            <span className="text-[9px] text-[#64748B] dark:text-slate-400 font-bold block">Age</span>
+            <span className="text-xs font-black text-[#172033] dark:text-white block mt-0.5">
               {user.age || 22} y.o
             </span>
           </div>
 
-          <div className="p-2 rounded-2xl bg-[#F8FBFF] border border-[#DCE8F7]">
-            <span className="text-[9px] text-[#64748B] font-bold block">Works</span>
-            <span className="text-xs font-black text-[#172033] block mt-0.5">
+          <div className="p-2 rounded-2xl bg-[#F8FBFF] dark:bg-slate-800/60 border border-[#DCE8F7] dark:border-slate-800">
+            <span className="text-[9px] text-[#64748B] dark:text-slate-400 font-bold block">Works</span>
+            <span className="text-xs font-black text-[#172033] dark:text-white block mt-0.5">
               {(user.worksCount || 640).toLocaleString()}
             </span>
           </div>
 
-          <div className="p-2 rounded-2xl bg-[#F8FBFF] border border-[#DCE8F7]">
-            <span className="text-[9px] text-[#64748B] font-bold block">Activities</span>
-            <span className="text-xs font-black text-[#172033] block mt-0.5">
+          <div className="p-2 rounded-2xl bg-[#F8FBFF] dark:bg-slate-800/60 border border-[#DCE8F7] dark:border-slate-800">
+            <span className="text-[9px] text-[#64748B] dark:text-slate-400 font-bold block">Activities</span>
+            <span className="text-xs font-black text-[#172033] dark:text-white block mt-0.5">
               {user.activitiesCompleted || 18}
             </span>
           </div>
         </div>
 
         {/* Tab Switcher */}
-        <div className="grid grid-cols-4 gap-1 p-1 bg-[#F8FBFF] rounded-2xl border border-[#DCE8F7] text-[11px] font-bold">
+        <div className="grid grid-cols-4 gap-1 p-1 bg-[#F8FBFF] dark:bg-slate-800/80 rounded-2xl border border-[#DCE8F7] dark:border-slate-800 text-[11px] font-bold">
           <button
             onClick={() => setActiveTab('files')}
             className={`py-1.5 rounded-xl transition-all ${
-              activeTab === 'files' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-[#64748B] hover:text-[#172033]'
+              activeTab === 'files' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
             }`}
           >
             Portfolio & Files
@@ -307,7 +307,7 @@ export const OtherUserProfileModal: React.FC = () => {
           <button
             onClick={() => setActiveTab('activities')}
             className={`py-1.5 rounded-xl transition-all ${
-              activeTab === 'activities' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-[#64748B] hover:text-[#172033]'
+              activeTab === 'activities' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
             }`}
           >
             Activities
@@ -315,7 +315,7 @@ export const OtherUserProfileModal: React.FC = () => {
           <button
             onClick={() => setActiveTab('skills')}
             className={`py-1.5 rounded-xl transition-all ${
-              activeTab === 'skills' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-[#64748B] hover:text-[#172033]'
+              activeTab === 'skills' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
             }`}
           >
             Skills
@@ -323,7 +323,7 @@ export const OtherUserProfileModal: React.FC = () => {
           <button
             onClick={() => setActiveTab('bio')}
             className={`py-1.5 rounded-xl transition-all ${
-              activeTab === 'bio' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-[#64748B] hover:text-[#172033]'
+              activeTab === 'bio' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
             }`}
           >
             Bio & About
@@ -336,15 +336,15 @@ export const OtherUserProfileModal: React.FC = () => {
           {activeTab === 'files' && (
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-extrabold text-[#172033]">Uploaded Works & File Gallery</span>
-                <span className="text-[10px] text-[#64748B]">{moodboards.length} items</span>
+                <span className="text-xs font-extrabold text-[#172033] dark:text-white">Uploaded Works & File Gallery</span>
+                <span className="text-[10px] text-[#64748B] dark:text-slate-400">{moodboards.length} items</span>
               </div>
               <div className="grid grid-cols-2 gap-2.5">
                 {moodboards.map(item => (
                   <div
                     key={item.id}
                     onClick={() => setActivePoster(item)}
-                    className="relative aspect-3/4 rounded-2xl overflow-hidden border border-[#DCE8F7] shadow-xs cursor-pointer group transform hover:scale-102 transition-all bg-[#F0F6FF]"
+                    className="relative aspect-3/4 rounded-2xl overflow-hidden border border-[#DCE8F7] dark:border-slate-800 shadow-xs cursor-pointer group transform hover:scale-102 transition-all bg-[#F0F6FF] dark:bg-slate-800"
                   >
                     <img
                       src={item.image}
@@ -368,13 +368,13 @@ export const OtherUserProfileModal: React.FC = () => {
               {activities.map(act => (
                 <div
                   key={act.id}
-                  className="p-3 rounded-2xl bg-white border border-[#DCE8F7] shadow-xs flex items-center justify-between"
+                  className="p-3 rounded-2xl bg-white dark:bg-slate-800/80 border border-[#DCE8F7] dark:border-slate-700 shadow-xs flex items-center justify-between"
                 >
                   <div className="space-y-0.5">
-                    <h4 className="font-extrabold text-xs text-[#172033]">{act.title}</h4>
-                    <p className="text-[10px] text-[#64748B]">{act.location} • {act.date}</p>
+                    <h4 className="font-extrabold text-xs text-[#172033] dark:text-white">{act.title}</h4>
+                    <p className="text-[10px] text-[#64748B] dark:text-slate-400">{act.location} • {act.date}</p>
                   </div>
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[9px] font-extrabold uppercase">
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 text-[9px] font-extrabold uppercase">
                     {act.status}
                   </span>
                 </div>
@@ -386,12 +386,12 @@ export const OtherUserProfileModal: React.FC = () => {
           {activeTab === 'skills' && (
             <div className="space-y-3">
               <div>
-                <span className="text-xs font-bold text-[#172033] block mb-1.5">Skills & Talents:</span>
+                <span className="text-xs font-bold text-[#172033] dark:text-slate-200 block mb-1.5">Skills & Talents:</span>
                 <div className="flex flex-wrap gap-1.5">
                   {user.skills.map(sk => (
                     <span
                       key={sk}
-                      className="px-2.5 py-1 rounded-full bg-[#F0F6FF] border border-[#DCE8F7] text-[#2563EB] text-xs font-bold"
+                      className="px-2.5 py-1 rounded-full bg-[#F0F6FF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-[#2563EB] dark:text-blue-400 text-xs font-bold"
                     >
                       #{sk}
                     </span>
@@ -400,12 +400,12 @@ export const OtherUserProfileModal: React.FC = () => {
               </div>
 
               <div>
-                <span className="text-xs font-bold text-[#172033] block mb-1.5">Interests & Hobbies:</span>
+                <span className="text-xs font-bold text-[#172033] dark:text-slate-200 block mb-1.5">Interests & Hobbies:</span>
                 <div className="flex flex-wrap gap-1.5">
                   {user.interests.map(intr => (
                     <span
                       key={intr}
-                      className="px-2.5 py-1 rounded-full bg-[#F8FBFF] border border-[#DCE8F7] text-[#172033] text-xs font-bold"
+                      className="px-2.5 py-1 rounded-full bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-[#172033] dark:text-slate-200 text-xs font-bold"
                     >
                       {intr}
                     </span>
@@ -417,9 +417,9 @@ export const OtherUserProfileModal: React.FC = () => {
 
           {/* 4. Bio & About */}
           {activeTab === 'bio' && (
-            <div className="p-4 rounded-2xl bg-[#F8FBFF] border border-[#DCE8F7] space-y-2">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#2563EB]">About Statement</span>
-              <p className="text-xs text-[#172033] leading-relaxed italic">
+            <div className="p-4 rounded-2xl bg-[#F8FBFF] dark:bg-slate-800/80 border border-[#DCE8F7] dark:border-slate-700 space-y-2">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#2563EB] dark:text-blue-400">About Statement</span>
+              <p className="text-xs text-[#172033] dark:text-slate-200 leading-relaxed italic">
                 "{user.bio || 'Active member on MEMA finding partners for sports, skills, and creative plans.'}"
               </p>
             </div>
@@ -427,10 +427,10 @@ export const OtherUserProfileModal: React.FC = () => {
         </div>
 
         {/* Bottom Close Action */}
-        <div className="pt-2 border-t border-[#DCE8F7] flex justify-end">
+        <div className="pt-2 border-t border-[#DCE8F7] dark:border-slate-800 flex justify-end">
           <button
             onClick={closeUserProfileModal}
-            className="px-5 py-2 rounded-full bg-[#F8FBFF] hover:bg-white text-[#64748B] hover:text-[#172033] border border-[#DCE8F7] font-bold text-xs transition-colors"
+            className="px-5 py-2 rounded-full bg-[#F8FBFF] dark:bg-slate-800 hover:bg-white dark:hover:bg-slate-700 text-[#64748B] dark:text-slate-300 hover:text-[#172033] dark:hover:text-white border border-[#DCE8F7] dark:border-slate-700 font-bold text-xs transition-colors"
           >
             Close File
           </button>

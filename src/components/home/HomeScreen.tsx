@@ -119,7 +119,7 @@ export const HomeScreen: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F0F6FF] text-[#172033] pb-36 pt-3 sm:pt-5">
+    <div className="min-h-screen bg-[#F0F6FF] dark:bg-[#0A0F1D] text-[#172033] dark:text-slate-100 pb-36 pt-3 sm:pt-5 transition-colors">
       <div className="max-w-xl mx-auto px-4 space-y-5">
         {/* =========================================================================
             1. INTELLIGENT 'ASK MEMA' SEARCH BAR
@@ -127,7 +127,7 @@ export const HomeScreen: React.FC = () => {
         <div className="space-y-2">
           <div className="relative">
             <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5 pointer-events-none">
-              <Search className="w-4 h-4 text-[#2563EB]" />
+              <Search className="w-4 h-4 text-[#2563EB] dark:text-blue-400" />
             </div>
 
             <input
@@ -135,14 +135,14 @@ export const HomeScreen: React.FC = () => {
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder='Ask MEMA: "football match today" or search plans...'
-              className="w-full bg-white border border-[#DCE8F7] focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/10 rounded-full pl-11 pr-10 py-3 text-xs sm:text-sm text-[#172033] placeholder-[#64748B] focus:outline-none shadow-xs transition-all"
+              className="w-full bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 focus:border-[#2563EB] dark:focus:border-blue-500 focus:ring-2 focus:ring-[#2563EB]/10 rounded-full pl-11 pr-10 py-3 text-xs sm:text-sm text-[#172033] dark:text-white placeholder-[#64748B] dark:placeholder-slate-500 focus:outline-none shadow-xs transition-all"
             />
 
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 rounded-full text-[#64748B] hover:text-[#172033] hover:bg-[#F8FBFF] transition-colors"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 rounded-full text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white hover:bg-[#F8FBFF] dark:hover:bg-slate-800 transition-colors"
                 title="Clear search"
               >
                 <X className="w-4 h-4" />
@@ -152,14 +152,14 @@ export const HomeScreen: React.FC = () => {
 
           {/* ⚡ Ask MEMA Intelligent Interpretation Pill */}
           {parsedIntent.isNaturalLanguage && parsedIntent.summaryText && (
-            <div className="p-2.5 rounded-2xl bg-[#F8FBFF] border border-[#DCE8F7] text-xs flex items-center justify-between gap-2 shadow-2xs animate-in fade-in slide-in-from-top-1 duration-150">
-              <div className="flex items-center gap-1.5 text-[#2563EB] font-bold min-w-0">
+            <div className="p-2.5 rounded-2xl bg-[#F8FBFF] dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 text-xs flex items-center justify-between gap-2 shadow-2xs animate-in fade-in slide-in-from-top-1 duration-150">
+              <div className="flex items-center gap-1.5 text-[#2563EB] dark:text-blue-400 font-bold min-w-0">
                 <Target className="w-3.5 h-3.5 shrink-0" />
-                <span className="truncate text-[11px] sm:text-xs">
-                  <strong>Ask MEMA:</strong> {parsedIntent.summaryText}
+                <span className="truncate text-[11px] sm:text-xs text-[#172033] dark:text-slate-200">
+                  <strong className="text-[#2563EB] dark:text-blue-400">Ask MEMA:</strong> {parsedIntent.summaryText}
                 </span>
               </div>
-              <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-[#F0F6FF] text-[#2563EB] border border-[#DCE8F7] shrink-0">
+              <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-[#F0F6FF] dark:bg-blue-950/60 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-800 shrink-0">
                 {searchFilteredRequests.length} {searchFilteredRequests.length === 1 ? 'activity' : 'activities'}
               </span>
             </div>
@@ -171,10 +171,10 @@ export const HomeScreen: React.FC = () => {
            ========================================================================= */}
         <div className="space-y-1">
           <div className="flex items-center justify-between px-1">
-            <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#64748B]">
+            <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#64748B] dark:text-slate-400">
               Following Stories ({followedStudents.length})
             </span>
-            <span className="text-[10px] text-[#2563EB] font-bold">Tap to view</span>
+            <span className="text-[10px] text-[#2563EB] dark:text-blue-400 font-bold">Tap to view</span>
           </div>
 
           <div className="flex items-center gap-3.5 overflow-x-auto pb-1.5 pt-1 scrollbar-none">
@@ -184,19 +184,19 @@ export const HomeScreen: React.FC = () => {
               className="w-[76px] sm:w-[80px] flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group"
             >
               <div className="relative w-16 h-16 flex items-center justify-center">
-                <div className="w-16 h-16 rounded-full p-[2.5px] bg-[#F8FBFF] border-2 border-[#DCE8F7] flex items-center justify-center group-hover:scale-105 transition-transform">
+                <div className="w-16 h-16 rounded-full p-[2.5px] bg-[#F8FBFF] dark:bg-slate-900 border-2 border-[#DCE8F7] dark:border-slate-800 flex items-center justify-center group-hover:scale-105 transition-transform">
                   <img
                     src={currentUser.avatar}
                     alt="You"
-                    className="w-[52px] h-[52px] rounded-full object-cover ring-2 ring-white"
+                    className="w-[52px] h-[52px] rounded-full object-cover ring-2 ring-white dark:ring-slate-900"
                   />
                 </div>
-                <span className="absolute bottom-0 right-0 bg-[#2563EB] text-white w-5 h-5 rounded-full flex items-center justify-center text-xs font-black shadow-xs ring-2 ring-white">
+                <span className="absolute bottom-0 right-0 bg-[#2563EB] text-white w-5 h-5 rounded-full flex items-center justify-center text-xs font-black shadow-xs ring-2 ring-white dark:ring-slate-900">
                   +
                 </span>
               </div>
               <div className="h-5 flex items-center justify-center w-full">
-                <span className="text-[11px] font-semibold text-[#64748B] truncate text-center px-0.5">Your Story</span>
+                <span className="text-[11px] font-semibold text-[#64748B] dark:text-slate-400 truncate text-center px-0.5">Your Story</span>
               </div>
             </div>
 
@@ -213,13 +213,13 @@ export const HomeScreen: React.FC = () => {
                     <img
                       src={student.avatar}
                       alt={student.name}
-                      className="w-[52px] h-[52px] rounded-full object-cover ring-2 ring-white"
+                      className="w-[52px] h-[52px] rounded-full object-cover ring-2 ring-white dark:ring-slate-900"
                     />
                   </div>
-                  <span className="absolute top-0 right-0 w-3.5 h-3.5 bg-[#2563EB] rounded-full ring-2 ring-white animate-pulse" />
+                  <span className="absolute top-0 right-0 w-3.5 h-3.5 bg-[#2563EB] rounded-full ring-2 ring-white dark:ring-slate-900 animate-pulse" />
                 </div>
                 <div className="h-5 flex items-center justify-center w-full">
-                  <span className="text-[11px] font-bold text-[#172033] truncate text-center px-0.5">
+                  <span className="text-[11px] font-bold text-[#172033] dark:text-white truncate text-center px-0.5">
                     {student.name.split(' ')[0]}
                   </span>
                 </div>
@@ -237,11 +237,11 @@ export const HomeScreen: React.FC = () => {
                   className="relative w-16 h-16 flex items-center justify-center cursor-pointer"
                   title={`View ${student.name}'s Profile File`}
                 >
-                  <div className="w-16 h-16 rounded-full p-[2.5px] border-2 border-dashed border-[#DCE8F7] group-hover:border-[#2563EB] flex items-center justify-center group-hover:scale-105 transition-all bg-white">
+                  <div className="w-16 h-16 rounded-full p-[2.5px] border-2 border-dashed border-[#DCE8F7] dark:border-slate-800 group-hover:border-[#2563EB] flex items-center justify-center group-hover:scale-105 transition-all bg-white dark:bg-slate-900">
                     <img
                       src={student.avatar}
                       alt={student.name}
-                      className="w-[52px] h-[52px] rounded-full object-cover ring-2 ring-white opacity-95 group-hover:opacity-100"
+                      className="w-[52px] h-[52px] rounded-full object-cover ring-2 ring-white dark:ring-slate-900 opacity-95 group-hover:opacity-100"
                     />
                   </div>
                 </div>
@@ -249,7 +249,7 @@ export const HomeScreen: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => toggleFollowUser(student.id)}
-                    className="w-full py-0.5 rounded-full bg-[#F8FBFF] hover:bg-[#2563EB] text-[#2563EB] hover:text-white border border-[#DCE8F7] text-[10px] font-black tracking-tight transition-colors shadow-2xs text-center truncate"
+                    className="w-full py-0.5 rounded-full bg-[#F8FBFF] dark:bg-slate-800 hover:bg-[#2563EB] text-[#2563EB] dark:text-blue-400 hover:text-white border border-[#DCE8F7] dark:border-slate-700 text-[10px] font-black tracking-tight transition-colors shadow-2xs text-center truncate"
                   >
                     + Follow
                   </button>
@@ -263,22 +263,22 @@ export const HomeScreen: React.FC = () => {
             2.5. NEARBY PROFILE SUGGESTIONS (People Near You)
            ========================================================================= */}
         {nearbySuggestions.length > 0 && (
-          <div className="bg-white border border-[#DCE8F7] rounded-3xl p-4 sm:p-5 shadow-xs space-y-3.5">
+          <div className="bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xs space-y-3.5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-[#F0F6FF] border border-[#DCE8F7] flex items-center justify-center text-[#2563EB]">
+                <div className="w-8 h-8 rounded-full bg-[#F0F6FF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 flex items-center justify-center text-[#2563EB] dark:text-blue-400">
                   <MapPin className="w-4 h-4" />
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <h2 className="text-sm font-extrabold text-[#172033] font-display">
+                    <h2 className="text-sm font-extrabold text-[#172033] dark:text-white font-display">
                       People Near You
                     </h2>
                     <span className="bg-[#2563EB] text-white text-[9px] font-black uppercase px-2 py-0.5 rounded-full tracking-wider shadow-2xs">
                       Radar
                     </span>
                   </div>
-                  <p className="text-[11px] text-[#64748B]">
+                  <p className="text-[11px] text-[#64748B] dark:text-slate-400">
                     Discover talent & peers around your location
                   </p>
                 </div>
@@ -287,7 +287,7 @@ export const HomeScreen: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setCurrentView('discover')}
-                className="text-xs font-bold text-[#2563EB] hover:text-[#1D4ED8] flex items-center gap-0.5 hover:underline"
+                className="text-xs font-bold text-[#2563EB] dark:text-blue-400 hover:text-[#1D4ED8] flex items-center gap-0.5 hover:underline"
               >
                 <span>View Directory</span>
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -301,11 +301,11 @@ export const HomeScreen: React.FC = () => {
                 return (
                   <div
                     key={student.id}
-                    className="w-[225px] sm:w-[245px] shrink-0 bg-white border border-[#DCE8F7] hover:border-[#2563EB] rounded-2xl p-3.5 sm:p-4 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between relative group"
+                    className="w-[225px] sm:w-[245px] shrink-0 bg-white dark:bg-slate-800/90 border border-[#DCE8F7] dark:border-slate-700 hover:border-[#2563EB] rounded-2xl p-3.5 sm:p-4 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between relative group"
                   >
                     {/* Top row: Proximity chip & Dismiss (X) */}
                     <div className="flex items-center justify-between mb-2">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#F0F6FF] border border-[#DCE8F7] text-[#2563EB] text-[10px] font-extrabold">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#F0F6FF] dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-700 text-[#2563EB] dark:text-blue-400 text-[10px] font-extrabold">
                         <MapPin className="w-2.5 h-2.5" />
                         <span>{student.distanceDisplay || (student.distanceKm ? (student.distanceKm <= 0.5 ? 'Nearby (~500m)' : student.distanceKm <= 1 ? '~Within 1 km' : `~${Math.round(student.distanceKm)} km away`) : 'Nearby Area')}</span>
                       </span>
@@ -314,7 +314,7 @@ export const HomeScreen: React.FC = () => {
                         type="button"
                         onClick={(e) => dismissSuggestion(student.id, e)}
                         title="Hide suggestion"
-                        className="text-[#64748B] hover:text-[#172033] p-1 rounded-full hover:bg-[#F8FBFF] transition-colors"
+                        className="text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white p-1 rounded-full hover:bg-[#F8FBFF] dark:hover:bg-slate-700 transition-colors"
                       >
                         <X className="w-3 h-3" />
                       </button>
@@ -330,27 +330,27 @@ export const HomeScreen: React.FC = () => {
                           <img
                             src={student.avatar}
                             alt={student.name}
-                            className="w-full h-full rounded-full object-cover ring-2 ring-white"
+                            className="w-full h-full rounded-full object-cover ring-2 ring-white dark:ring-slate-900"
                           />
                         </div>
                         {student.onlineStatus === 'active_now' && (
-                          <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 rounded-full ring-2 ring-white" title="Active Now" />
+                          <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 rounded-full ring-2 ring-white dark:ring-slate-900" title="Active Now" />
                         )}
                       </div>
 
                       <div className="flex items-center gap-1 max-w-full justify-center px-1">
-                        <h4 className="font-extrabold text-sm text-[#172033] leading-snug group-hover/card:text-[#2563EB] transition-colors truncate">
+                        <h4 className="font-extrabold text-sm text-[#172033] dark:text-white leading-snug group-hover/card:text-[#2563EB] transition-colors truncate">
                           {student.name}
                         </h4>
                         {student.verifiedCollege && (
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB] shrink-0" />
+                          <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400 shrink-0" />
                         )}
                       </div>
 
-                      <p className="text-[11px] font-medium text-[#64748B] truncate w-full px-1 mt-0.5">
+                      <p className="text-[11px] font-medium text-[#64748B] dark:text-slate-400 truncate w-full px-1 mt-0.5">
                         {student.degree || student.college}
                       </p>
-                      <p className="text-[10px] text-[#64748B] truncate w-full px-1 mt-0.5">
+                      <p className="text-[10px] text-[#64748B] dark:text-slate-400 truncate w-full px-1 mt-0.5">
                         {student.locationZone || student.location}
                       </p>
                     </div>
@@ -360,7 +360,7 @@ export const HomeScreen: React.FC = () => {
                       {student.skills.slice(0, 2).map(skill => (
                         <span
                           key={skill}
-                          className="px-2 py-0.5 rounded-md bg-[#F8FBFF] text-[#2563EB] border border-[#DCE8F7] text-[10px] font-bold truncate max-w-[105px]"
+                          className="px-2 py-0.5 rounded-md bg-[#F8FBFF] dark:bg-slate-900 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-700 text-[10px] font-bold truncate max-w-[105px]"
                         >
                           #{skill}
                         </span>
@@ -368,13 +368,13 @@ export const HomeScreen: React.FC = () => {
                     </div>
 
                     {/* Action buttons: Follow + Chat */}
-                    <div className="grid grid-cols-2 gap-1.5 pt-2 border-t border-[#DCE8F7]">
+                    <div className="grid grid-cols-2 gap-1.5 pt-2 border-t border-[#DCE8F7] dark:border-slate-700">
                       <button
                         type="button"
                         onClick={() => toggleFollowUser(student.id)}
                         className={`py-1.5 px-2 rounded-xl text-[11px] font-extrabold transition-all flex items-center justify-center gap-1 ${
                           isFollowing
-                            ? 'bg-[#F8FBFF] text-[#2563EB] border border-[#DCE8F7]'
+                            ? 'bg-[#F8FBFF] dark:bg-slate-900 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-700'
                             : 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white shadow-xs'
                         }`}
                       >
@@ -394,9 +394,9 @@ export const HomeScreen: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => startConversationWithStudent(student, 'Nearby Connection')}
-                        className="py-1.5 px-2 rounded-xl text-[11px] font-bold bg-white hover:bg-[#F8FBFF] border border-[#DCE8F7] text-[#172033] hover:text-[#2563EB] transition-colors flex items-center justify-center gap-1"
+                        className="py-1.5 px-2 rounded-xl text-[11px] font-bold bg-white dark:bg-slate-900 hover:bg-[#F8FBFF] dark:hover:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-[#172033] dark:text-slate-200 hover:text-[#2563EB] transition-colors flex items-center justify-center gap-1"
                       >
-                        <MessageCircle className="w-3 h-3 text-[#2563EB]" />
+                        <MessageCircle className="w-3 h-3 text-[#2563EB] dark:text-blue-400" />
                         <span>Chat</span>
                       </button>
                     </div>
@@ -410,7 +410,7 @@ export const HomeScreen: React.FC = () => {
         {/* =========================================================================
             3. TOP TAB SWITCHER ("All Needs | Nearby (5 km)")
            ========================================================================= */}
-        <div className="flex items-center justify-between border-b border-[#DCE8F7] pb-2">
+        <div className="flex items-center justify-between border-b border-[#DCE8F7] dark:border-slate-800 pb-2">
           <div className="flex items-center gap-6">
             <button
               onClick={() => {
@@ -419,8 +419,8 @@ export const HomeScreen: React.FC = () => {
               }}
               className={`text-sm font-extrabold transition-all relative pb-2 ${
                 activeTab === 'all'
-                  ? 'text-[#172033]'
-                  : 'text-[#64748B] hover:text-[#172033]'
+                  ? 'text-[#172033] dark:text-white'
+                  : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
               }`}
             >
               <span>All Needs</span>
@@ -436,8 +436,8 @@ export const HomeScreen: React.FC = () => {
               }}
               className={`text-sm font-extrabold transition-all relative pb-2 ${
                 activeTab === 'campus'
-                  ? 'text-[#172033]'
-                  : 'text-[#64748B] hover:text-[#172033]'
+                  ? 'text-[#172033] dark:text-white'
+                  : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
               }`}
             >
               <span>Nearby (5 km)</span>
@@ -449,7 +449,7 @@ export const HomeScreen: React.FC = () => {
 
           <button
             onClick={() => setIsCreateRequestModalOpen(true)}
-            className="text-xs font-bold text-[#2563EB] hover:text-[#1D4ED8] hover:underline flex items-center gap-1"
+            className="text-xs font-bold text-[#2563EB] dark:text-blue-400 hover:text-[#1D4ED8] hover:underline flex items-center gap-1"
           >
             <span>+ Post Need</span>
           </button>
@@ -460,14 +460,14 @@ export const HomeScreen: React.FC = () => {
            ========================================================================= */}
         <div className="space-y-5">
           {searchFilteredRequests.length === 0 ? (
-            <div className="bg-white border border-[#DCE8F7] rounded-3xl p-8 text-center space-y-3 shadow-xs">
-              <div className="w-12 h-12 rounded-full bg-[#F0F6FF] border border-[#DCE8F7] flex items-center justify-center mx-auto text-[#2563EB]">
+            <div className="bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-3xl p-8 text-center space-y-3 shadow-xs">
+              <div className="w-12 h-12 rounded-full bg-[#F0F6FF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 flex items-center justify-center mx-auto text-[#2563EB] dark:text-blue-400">
                 <Search className="w-6 h-6" />
               </div>
-              <h3 className="font-extrabold text-base text-[#172033]">
+              <h3 className="font-extrabold text-base text-[#172033] dark:text-white">
                 {searchQuery ? `No needs found for "${searchQuery}"` : 'No campus needs found'}
               </h3>
-              <p className="text-xs text-[#64748B] max-w-sm mx-auto">
+              <p className="text-xs text-[#64748B] dark:text-slate-400 max-w-sm mx-auto">
                 Try searching for activities like "football", "badminton", "dance", "physics", "gym", or reset your filters.
               </p>
               <button
@@ -518,7 +518,7 @@ export const HomeScreen: React.FC = () => {
             return (
               <div
                 key={req.id}
-                className="bg-white border border-[#DCE8F7] rounded-3xl overflow-hidden shadow-xs hover:shadow-md card-light-hover space-y-3"
+                className="bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-3xl overflow-hidden shadow-xs hover:shadow-md card-light-hover space-y-3 transition-colors"
               >
                 {/* 1. Header Row (Avatar, Name, Timestamp, More Options) */}
                 <div className="p-4 sm:p-5 pb-0 flex items-center justify-between gap-2">
@@ -530,18 +530,18 @@ export const HomeScreen: React.FC = () => {
                     <img
                       src={req.creator.avatar}
                       alt={req.creator.name}
-                      className="w-10 h-10 rounded-full object-cover ring-2 ring-[#DCE8F7] group-hover/creator:ring-[#2563EB] transition-all shrink-0"
+                      className="w-10 h-10 rounded-full object-cover ring-2 ring-[#DCE8F7] dark:ring-slate-700 group-hover/creator:ring-[#2563EB] transition-all shrink-0"
                     />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <h4 className="font-extrabold text-sm sm:text-base text-[#172033] group-hover/creator:text-[#2563EB] transition-colors truncate">
+                        <h4 className="font-extrabold text-sm sm:text-base text-[#172033] dark:text-white group-hover/creator:text-[#2563EB] dark:group-hover/creator:text-blue-400 transition-colors truncate">
                           {req.creator.name}
                         </h4>
                         {req.creator.verifiedCollege && (
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB] shrink-0" />
+                          <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400 shrink-0" />
                         )}
                       </div>
-                      <p className="text-[11px] text-[#64748B] truncate">
+                      <p className="text-[11px] text-[#64748B] dark:text-slate-400 truncate">
                         {req.location} • {req.createdAt}
                       </p>
                     </div>
@@ -549,27 +549,27 @@ export const HomeScreen: React.FC = () => {
 
                   <div className="flex items-center gap-2 relative shrink-0">
                     {req.isUrgent && (
-                      <span className="px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-600 border border-rose-200 text-[10px] font-extrabold uppercase">
+                      <span className="px-2.5 py-0.5 rounded-full bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-900 text-[10px] font-extrabold uppercase">
                         Urgent
                       </span>
                     )}
 
                     <button
                       onClick={() => setActiveMenuRequestId(isMenuOpen ? null : req.id)}
-                      className="p-1.5 rounded-full text-[#64748B] hover:text-[#172033] hover:bg-[#F8FBFF]"
+                      className="p-1.5 rounded-full text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white hover:bg-[#F8FBFF] dark:hover:bg-slate-800"
                     >
                       <MoreHorizontal className="w-4 h-4" />
                     </button>
 
                     {/* Menu Dropdown */}
                     {isMenuOpen && (
-                      <div className="absolute right-0 top-8 w-44 bg-white border border-[#DCE8F7] rounded-2xl p-1.5 shadow-xl shadow-blue-500/10 z-30 space-y-1 text-xs">
+                      <div className="absolute right-0 top-8 w-44 bg-white dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 rounded-2xl p-1.5 shadow-xl shadow-blue-500/10 z-30 space-y-1 text-xs">
                         <button
                           onClick={() => {
                             openReportModal('request', req.id, req.title);
                             setActiveMenuRequestId(null);
                           }}
-                          className="w-full text-left px-3 py-1.5 rounded-xl hover:bg-[#F8FBFF] text-[#172033] font-semibold flex items-center gap-2"
+                          className="w-full text-left px-3 py-1.5 rounded-xl hover:bg-[#F8FBFF] dark:hover:bg-slate-700 text-[#172033] dark:text-slate-200 font-semibold flex items-center gap-2"
                         >
                           <Flag className="w-3.5 h-3.5 text-rose-500" />
                           <span>Report Request</span>
@@ -579,7 +579,7 @@ export const HomeScreen: React.FC = () => {
                             openReportModal('user', req.creator.id, req.creator.name);
                             setActiveMenuRequestId(null);
                           }}
-                          className="w-full text-left px-3 py-1.5 rounded-xl hover:bg-rose-50 text-rose-600 font-semibold flex items-center gap-2"
+                          className="w-full text-left px-3 py-1.5 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-950/50 text-rose-600 dark:text-rose-400 font-semibold flex items-center gap-2"
                         >
                           <UserX className="w-3.5 h-3.5" />
                           <span>Block User</span>
@@ -591,14 +591,14 @@ export const HomeScreen: React.FC = () => {
 
                 {/* 2. Visual Media Card Banner with Overlay Meta */}
                 <div className="px-4 sm:px-5">
-                  <div className="relative rounded-2xl overflow-hidden aspect-video bg-[#F0F6FF] border border-[#DCE8F7] group">
+                  <div className="relative rounded-2xl overflow-hidden aspect-video bg-[#F0F6FF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-800 group">
                     <img
                       src={cardImage}
                       alt={req.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-900/25 to-transparent flex flex-col justify-end p-4">
-                      <span className="px-2.5 py-0.5 rounded-full bg-white/95 backdrop-blur-md text-[#2563EB] text-[10px] font-black uppercase tracking-wider self-start mb-1 shadow-xs border border-[#DCE8F7]">
+                      <span className="px-2.5 py-0.5 rounded-full bg-white/95 dark:bg-slate-900/90 backdrop-blur-md text-[#2563EB] dark:text-blue-400 text-[10px] font-black uppercase tracking-wider self-start mb-1 shadow-xs border border-[#DCE8F7] dark:border-slate-700">
                         {req.category}
                       </span>
                       <h3 className="text-base sm:text-lg font-black text-white leading-tight drop-shadow-md">
@@ -610,45 +610,45 @@ export const HomeScreen: React.FC = () => {
 
                 {/* 3. Key Meta & Details Row */}
                 <div className="px-4 sm:px-5 space-y-2 text-xs">
-                  <div className="flex items-center justify-between bg-[#F8FBFF] p-3 rounded-2xl border border-[#DCE8F7] text-[#172033]">
-                    <span className="flex items-center gap-1.5 font-semibold text-[#172033]">
-                      <Clock className="w-3.5 h-3.5 text-[#2563EB]" />
+                  <div className="flex items-center justify-between bg-[#F8FBFF] dark:bg-slate-800/80 p-3 rounded-2xl border border-[#DCE8F7] dark:border-slate-700 text-[#172033] dark:text-slate-200">
+                    <span className="flex items-center gap-1.5 font-semibold text-[#172033] dark:text-slate-200">
+                      <Clock className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
                       <span>{req.date} • {req.time}</span>
                     </span>
 
                     <span className="flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-[#2563EB]" />
+                      <MapPin className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
                       <span>{req.location}</span>
                     </span>
 
-                    <span className="flex items-center gap-1.5 text-[#64748B]">
-                      <Users className="w-3.5 h-3.5 text-[#64748B]" />
+                    <span className="flex items-center gap-1.5 text-[#64748B] dark:text-slate-400">
+                      <Users className="w-3.5 h-3.5 text-[#64748B] dark:text-slate-400" />
                       <span>Need {req.peopleNeeded}</span>
                     </span>
                   </div>
 
                   {/* Skill match highlight banner */}
                   {matchingSkills.length > 0 && !isCreator && (
-                    <div className="px-3 py-1.5 rounded-xl bg-[#F0F6FF] border border-[#DCE8F7] text-[#2563EB] text-[11px] font-bold flex items-center gap-1.5">
-                      <Zap className="w-3.5 h-3.5 fill-[#2563EB] text-[#2563EB]" />
+                    <div className="px-3 py-1.5 rounded-xl bg-[#F0F6FF] dark:bg-blue-950/50 border border-[#DCE8F7] dark:border-blue-900/60 text-[#2563EB] dark:text-blue-300 text-[11px] font-bold flex items-center gap-1.5">
+                      <Zap className="w-3.5 h-3.5 fill-[#2563EB] text-[#2563EB] dark:fill-blue-400 dark:text-blue-400" />
                       <span>Skill Match: You have <strong>"{matchingSkills[0]}"</strong> in your profile!</span>
                     </div>
                   )}
 
                   {/* Caption */}
-                  <p className="text-[#172033] leading-relaxed text-xs">
+                  <p className="text-[#172033] dark:text-slate-300 leading-relaxed text-xs">
                     {req.description}
                   </p>
                 </div>
 
                 {/* 4. Interactive Reactions & Action Row */}
-                <div className="p-4 sm:p-5 pt-1 border-t border-[#DCE8F7] flex items-center justify-between">
+                <div className="p-4 sm:p-5 pt-1 border-t border-[#DCE8F7] dark:border-slate-800 flex items-center justify-between">
                   {/* Left Reactions Icons */}
-                  <div className="flex items-center gap-4 text-[#64748B] text-xs">
+                  <div className="flex items-center gap-4 text-[#64748B] dark:text-slate-400 text-xs">
                     <button
                       onClick={() => toggleLikeRequest(req.id)}
                       className={`flex items-center gap-1.5 transition-colors ${
-                        req.likedByMe ? 'text-rose-500' : 'hover:text-[#172033]'
+                        req.likedByMe ? 'text-rose-500' : 'hover:text-[#172033] dark:hover:text-white'
                       }`}
                     >
                       <Heart className={`w-5 h-5 ${req.likedByMe ? 'fill-rose-500' : ''}`} />
@@ -677,7 +677,7 @@ export const HomeScreen: React.FC = () => {
                         };
                         startConversationWithStudent(partner, req.title);
                       }}
-                      className="flex items-center gap-1.5 hover:text-[#172033] transition-colors"
+                      className="flex items-center gap-1.5 hover:text-[#172033] dark:hover:text-white transition-colors"
                     >
                       <MessageCircle className="w-5 h-5" />
                       <span className="font-bold">{req.commentsCount || 0}</span>
@@ -685,16 +685,16 @@ export const HomeScreen: React.FC = () => {
 
                     <button
                       onClick={() => handleShare(req)}
-                      className="hover:text-[#172033] transition-colors"
+                      className="hover:text-[#172033] dark:hover:text-white transition-colors"
                     >
                       <Share2 className="w-5 h-5" />
                     </button>
 
                     <button
                       onClick={() => toggleBookmark(req.id)}
-                      className={`transition-colors ${isBookmarked ? 'text-[#2563EB]' : 'hover:text-[#172033]'}`}
+                      className={`transition-colors ${isBookmarked ? 'text-[#2563EB] dark:text-blue-400' : 'hover:text-[#172033] dark:hover:text-white'}`}
                     >
-                      <Bookmark className={`w-5 h-5 ${isBookmarked ? 'fill-[#2563EB]' : ''}`} />
+                      <Bookmark className={`w-5 h-5 ${isBookmarked ? 'fill-[#2563EB] dark:fill-blue-400' : ''}`} />
                     </button>
                   </div>
 
@@ -703,12 +703,12 @@ export const HomeScreen: React.FC = () => {
                     {isCreator ? (
                       <button
                         onClick={() => setCurrentView('activities')}
-                        className="px-4 py-2 rounded-full bg-[#F8FBFF] hover:bg-white text-[#2563EB] border border-[#DCE8F7] text-xs font-bold transition-all"
+                        className="px-4 py-2 rounded-full bg-[#F8FBFF] dark:bg-slate-800 hover:bg-white dark:hover:bg-slate-700 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-700 text-xs font-bold transition-all"
                       >
                         Manage ({req.interestedUsers.length})
                       </button>
                     ) : alreadyExpressed ? (
-                      <span className="px-4 py-2 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold">
+                      <span className="px-4 py-2 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 text-xs font-bold">
                         ✓ Interested
                       </span>
                     ) : (

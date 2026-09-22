@@ -70,18 +70,18 @@ export const DiscoverScreen: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F0F6FF] text-[#172033] pb-36 pt-4 sm:pt-6">
+    <div className="min-h-screen bg-[#F0F6FF] dark:bg-[#0A0F1D] text-[#172033] dark:text-slate-100 pb-36 pt-4 sm:pt-6 transition-colors">
       <div className="max-w-xl mx-auto px-4 space-y-5">
         {/* Header */}
         <div className="space-y-1">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-[#2563EB] uppercase tracking-wider">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[#2563EB] dark:text-blue-400 uppercase tracking-wider">
             <Users className="w-3.5 h-3.5" />
             <span>Talent & Activity Directory</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black font-display text-[#172033]">
+          <h1 className="text-2xl sm:text-3xl font-black font-display text-[#172033] dark:text-white">
             Find People by Skill
           </h1>
-          <p className="text-xs text-[#64748B]">
+          <p className="text-xs text-[#64748B] dark:text-slate-400">
             Connect with peers nearby for sports, music, coding, and activities.
           </p>
         </div>
@@ -95,7 +95,7 @@ export const DiscoverScreen: React.FC = () => {
         <div className="space-y-3">
           <div className="relative">
             <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5 pointer-events-none">
-              <Search className="w-4 h-4 text-[#2563EB]" />
+              <Search className="w-4 h-4 text-[#2563EB] dark:text-blue-400" />
             </div>
 
             <input
@@ -103,14 +103,14 @@ export const DiscoverScreen: React.FC = () => {
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder='Ask MEMA: "find me 2 badminton partners near me"...'
-              className="w-full bg-white border border-[#DCE8F7] focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/10 rounded-full pl-11 pr-10 py-3 text-xs sm:text-sm text-[#172033] placeholder-[#64748B] focus:outline-none shadow-xs transition-all"
+              className="w-full bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 focus:border-[#2563EB] dark:focus:border-blue-500 focus:ring-2 focus:ring-[#2563EB]/10 rounded-full pl-11 pr-10 py-3 text-xs sm:text-sm text-[#172033] dark:text-white placeholder-[#64748B] dark:placeholder-slate-500 focus:outline-none shadow-xs transition-all"
             />
 
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 rounded-full text-[#64748B] hover:text-[#172033] hover:bg-[#F8FBFF] transition-colors"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 rounded-full text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white hover:bg-[#F8FBFF] dark:hover:bg-slate-800 transition-colors"
                 title="Clear search"
               >
                 <X className="w-4 h-4" />
@@ -120,14 +120,14 @@ export const DiscoverScreen: React.FC = () => {
 
           {/* ⚡ Ask MEMA Intelligent Interpretation Pill */}
           {parsedIntent.isNaturalLanguage && parsedIntent.summaryText && (
-            <div className="p-2.5 rounded-2xl bg-[#F8FBFF] border border-[#DCE8F7] text-xs flex items-center justify-between gap-2 shadow-2xs animate-in fade-in slide-in-from-top-1 duration-150">
-              <div className="flex items-center gap-1.5 text-[#2563EB] font-bold min-w-0">
+            <div className="p-2.5 rounded-2xl bg-[#F8FBFF] dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 text-xs flex items-center justify-between gap-2 shadow-2xs animate-in fade-in slide-in-from-top-1 duration-150">
+              <div className="flex items-center gap-1.5 text-[#2563EB] dark:text-blue-400 font-bold min-w-0">
                 <Target className="w-3.5 h-3.5 shrink-0" />
-                <span className="truncate text-[11px] sm:text-xs">
-                  <strong>Ask MEMA:</strong> {parsedIntent.summaryText}
+                <span className="truncate text-[11px] sm:text-xs text-[#172033] dark:text-slate-200">
+                  <strong className="text-[#2563EB] dark:text-blue-400">Ask MEMA:</strong> {parsedIntent.summaryText}
                 </span>
               </div>
-              <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-[#F0F6FF] text-[#2563EB] border border-[#DCE8F7] shrink-0">
+              <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-[#F0F6FF] dark:bg-blue-950/60 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-800 shrink-0">
                 {rankedResults.length} {rankedResults.length === 1 ? 'match' : 'matches'}
               </span>
             </div>
@@ -136,15 +136,15 @@ export const DiscoverScreen: React.FC = () => {
           {/* Natural Language Suggestion Prompts */}
           {!searchQuery && (
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-              <span className="text-[11px] font-bold text-[#64748B] shrink-0 flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-[#2563EB]" /> Try:
+              <span className="text-[11px] font-bold text-[#64748B] dark:text-slate-400 shrink-0 flex items-center gap-1">
+                <Sparkles className="w-3 h-3 text-[#2563EB] dark:text-blue-400" /> Try:
               </span>
               {samplePrompts.map((p, i) => (
                 <button
                   key={i}
                   type="button"
                   onClick={() => setSearchQuery(p.query)}
-                  className="px-3 py-1 rounded-full bg-white hover:bg-[#F0F6FF] text-[#172033] hover:text-[#2563EB] border border-[#DCE8F7] text-[11px] font-semibold whitespace-nowrap transition-all shadow-2xs shrink-0 active:scale-95"
+                  className="px-3 py-1 rounded-full bg-white dark:bg-slate-900 hover:bg-[#F0F6FF] dark:hover:bg-slate-800 text-[#172033] dark:text-slate-200 hover:text-[#2563EB] dark:hover:text-blue-400 border border-[#DCE8F7] dark:border-slate-800 text-[11px] font-semibold whitespace-nowrap transition-all shadow-2xs shrink-0 active:scale-95"
                 >
                   {p.label}
                 </button>
@@ -162,7 +162,7 @@ export const DiscoverScreen: React.FC = () => {
               className={`px-3.5 py-1.5 rounded-full text-xs font-bold shrink-0 transition-all ${
                 !nearbyOnly && selectedSkillFilter === 'all'
                   ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/20'
-                  : 'bg-white text-[#64748B] hover:text-[#172033] hover:bg-[#F8FBFF] border border-[#DCE8F7] shadow-xs'
+                  : 'bg-white dark:bg-slate-900 text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white hover:bg-[#F8FBFF] dark:hover:bg-slate-800 border border-[#DCE8F7] dark:border-slate-800 shadow-xs'
               }`}
             >
               ⚡ All Talent
@@ -173,7 +173,7 @@ export const DiscoverScreen: React.FC = () => {
               className={`px-3.5 py-1.5 rounded-full text-xs font-bold shrink-0 transition-all flex items-center gap-1 ${
                 nearbyOnly
                   ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/20'
-                  : 'bg-white text-[#64748B] hover:text-[#172033] hover:bg-[#F8FBFF] border border-[#DCE8F7] shadow-xs'
+                  : 'bg-white dark:bg-slate-900 text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white hover:bg-[#F8FBFF] dark:hover:bg-slate-800 border border-[#DCE8F7] dark:border-slate-800 shadow-xs'
               }`}
             >
               <MapPin className="w-3 h-3" />
@@ -187,7 +187,7 @@ export const DiscoverScreen: React.FC = () => {
                 className={`px-3.5 py-1.5 rounded-full text-xs font-bold shrink-0 transition-all ${
                   selectedSkillFilter === sk
                     ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/20'
-                    : 'bg-white text-[#64748B] hover:text-[#172033] hover:bg-[#F8FBFF] border border-[#DCE8F7] shadow-xs'
+                    : 'bg-white dark:bg-slate-900 text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white hover:bg-[#F8FBFF] dark:hover:bg-slate-800 border border-[#DCE8F7] dark:border-slate-800 shadow-xs'
                 }`}
               >
                 #{sk}
@@ -201,14 +201,14 @@ export const DiscoverScreen: React.FC = () => {
            ========================================================================= */}
         <div className="space-y-4">
           {rankedResults.length === 0 ? (
-            <div className="bg-white border border-[#DCE8F7] rounded-3xl p-8 text-center space-y-3 shadow-xs">
-              <div className="w-12 h-12 rounded-full bg-[#F0F6FF] border border-[#DCE8F7] flex items-center justify-center mx-auto text-[#2563EB]">
+            <div className="bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-3xl p-8 text-center space-y-3 shadow-xs">
+              <div className="w-12 h-12 rounded-full bg-[#F0F6FF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 flex items-center justify-center mx-auto text-[#2563EB] dark:text-blue-400">
                 <Search className="w-6 h-6" />
               </div>
-              <h3 className="font-extrabold text-base text-[#172033]">
+              <h3 className="font-extrabold text-base text-[#172033] dark:text-white">
                 No exact talent matches found
               </h3>
-              <p className="text-xs text-[#64748B] max-w-sm mx-auto">
+              <p className="text-xs text-[#64748B] dark:text-slate-400 max-w-sm mx-auto">
                 Ask MEMA for a broader skill (e.g. "badminton players nearby" or "coding partner") or reset your filters.
               </p>
               <button
@@ -230,19 +230,19 @@ export const DiscoverScreen: React.FC = () => {
               return (
                 <div
                   key={student.id}
-                  className={`bg-white border rounded-3xl p-5 shadow-xs hover:shadow-md card-light-hover space-y-3 transition-all ${
+                  className={`bg-white dark:bg-slate-900 border rounded-3xl p-5 shadow-xs hover:shadow-md card-light-hover space-y-3 transition-all ${
                     isTopChoice && searchQuery
-                      ? 'border-[#2563EB] ring-1 ring-[#2563EB]/20'
-                      : 'border-[#DCE8F7]'
+                      ? 'border-[#2563EB] dark:border-blue-500 ring-1 ring-[#2563EB]/20'
+                      : 'border-[#DCE8F7] dark:border-slate-800'
                   }`}
                 >
                   {/* Top Choice & Match Badge */}
                   {searchQuery && (
-                    <div className="flex items-center justify-between gap-2 pb-1 border-b border-[#DCE8F7]/80 text-[11px]">
-                      <div className="flex items-center gap-1.5 font-extrabold text-[#2563EB]">
+                    <div className="flex items-center justify-between gap-2 pb-1 border-b border-[#DCE8F7]/80 dark:border-slate-800 text-[11px]">
+                      <div className="flex items-center gap-1.5 font-extrabold text-[#2563EB] dark:text-blue-400">
                         <Sparkles className="w-3.5 h-3.5" />
                         <span>{matchPercentage}% Match</span>
-                        <span className="text-[#64748B] font-medium hidden sm:inline">• {matchReason}</span>
+                        <span className="text-[#64748B] dark:text-slate-400 font-medium hidden sm:inline">• {matchReason}</span>
                       </div>
 
                       {isTopChoice && (
@@ -259,29 +259,29 @@ export const DiscoverScreen: React.FC = () => {
                       className="flex items-center gap-3 cursor-pointer group/user flex-1 min-w-0"
                       title={`Open ${student.name}'s Profile File`}
                     >
-                      <div className="story-ring-light p-0.5 shrink-0 group-hover:scale-105 transition-transform">
+                      <div className="story-ring-light dark:story-ring-dark p-0.5 shrink-0 group-hover:scale-105 transition-transform">
                         <img
                           src={student.avatar}
                           alt={student.name}
-                          className="w-12 h-12 rounded-full object-cover ring-2 ring-white"
+                          className="w-12 h-12 rounded-full object-cover ring-2 ring-white dark:ring-slate-900"
                         />
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5 flex-wrap">
-                          <h3 className="font-extrabold text-sm sm:text-base text-[#172033] group-hover/user:text-[#2563EB] transition-colors">
+                          <h3 className="font-extrabold text-sm sm:text-base text-[#172033] dark:text-white group-hover/user:text-[#2563EB] dark:group-hover/user:text-blue-400 transition-colors">
                             {student.name}
                           </h3>
                           {student.verifiedCollege && (
-                            <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB] shrink-0" />
+                            <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400 shrink-0" />
                           )}
                           {student.distanceDisplay && (
-                            <span className="bg-[#F0F6FF] text-[#2563EB] text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-[#DCE8F7] shrink-0">
+                            <span className="bg-[#F0F6FF] dark:bg-blue-950/60 text-[#2563EB] dark:text-blue-400 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-[#DCE8F7] dark:border-slate-800 shrink-0">
                               📍 {student.distanceDisplay}
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-[#64748B] truncate">{student.location || 'Nearby Area'}</p>
-                        <p className="text-[11px] text-[#64748B] truncate">{student.degree} {student.year ? `• ${student.year}` : ''}</p>
+                        <p className="text-xs text-[#64748B] dark:text-slate-400 truncate">{student.location || 'Nearby Area'}</p>
+                        <p className="text-[11px] text-[#64748B] dark:text-slate-400 truncate">{student.degree} {student.year ? `• ${student.year}` : ''}</p>
                       </div>
                     </div>
 
@@ -291,8 +291,8 @@ export const DiscoverScreen: React.FC = () => {
                         onClick={() => toggleFollowUser(student.id)}
                         className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all shadow-xs flex items-center gap-1 ${
                           isFollowing
-                            ? 'bg-[#F8FBFF] text-[#2563EB] border border-[#DCE8F7]'
-                            : 'bg-white hover:bg-[#F8FBFF] text-[#64748B] hover:text-[#172033] border border-[#DCE8F7]'
+                            ? 'bg-[#F8FBFF] dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-700'
+                            : 'bg-white dark:bg-slate-900 hover:bg-[#F8FBFF] dark:hover:bg-slate-800 text-[#64748B] dark:text-slate-300 hover:text-[#172033] dark:hover:text-white border border-[#DCE8F7] dark:border-slate-700'
                         }`}
                       >
                         {isFollowing ? (
@@ -310,7 +310,7 @@ export const DiscoverScreen: React.FC = () => {
 
                       <button
                         onClick={() => startConversationWithStudent(student, 'Talent Directory')}
-                        className="p-2 bg-[#F8FBFF] hover:bg-[#F0F6FF] text-[#2563EB] rounded-full border border-[#DCE8F7] transition-colors"
+                        className="p-2 bg-[#F8FBFF] dark:bg-slate-800 hover:bg-[#F0F6FF] dark:hover:bg-slate-700 text-[#2563EB] dark:text-blue-400 rounded-full border border-[#DCE8F7] dark:border-slate-700 transition-colors"
                         title={`Message ${student.name}`}
                       >
                         <MessageCircle className="w-3.5 h-3.5" />
@@ -325,7 +325,7 @@ export const DiscoverScreen: React.FC = () => {
                     </div>
                   </div>
 
-                  <p className="text-xs text-[#172033] leading-relaxed italic bg-[#F8FBFF] p-3 rounded-2xl border border-[#DCE8F7]">
+                  <p className="text-xs text-[#172033] dark:text-slate-300 leading-relaxed italic bg-[#F8FBFF] dark:bg-slate-800/80 p-3 rounded-2xl border border-[#DCE8F7] dark:border-slate-700">
                     "{student.bio}"
                   </p>
 
@@ -340,7 +340,7 @@ export const DiscoverScreen: React.FC = () => {
                           className={`px-2.5 py-0.5 rounded-full border text-[11px] font-bold transition-all ${
                             isHighlighted
                               ? 'bg-[#2563EB] text-white border-[#2563EB] shadow-2xs'
-                              : 'bg-[#F0F6FF] border-[#DCE8F7] text-[#2563EB]'
+                              : 'bg-[#F0F6FF] dark:bg-blue-950/60 border-[#DCE8F7] dark:border-slate-700 text-[#2563EB] dark:text-blue-300'
                           }`}
                         >
                           #{sk}

@@ -97,23 +97,23 @@ export const ProfileScreen: React.FC = () => {
   const renderOccupationBadge = () => {
     if (occupationType === 'school_student') {
       return (
-        <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/40 backdrop-blur-md border border-white/60 text-xs font-bold text-slate-900 shadow-xs">
-          <School className="w-3.5 h-3.5 text-amber-600" />
+        <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/40 dark:bg-slate-800/60 backdrop-blur-md border border-white/60 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-slate-200 shadow-xs">
+          <School className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
           <span>School Student • {currentUser.degree || currentUser.year || 'Student'}</span>
         </div>
       );
     }
     if (occupationType === 'creator_freelancer') {
       return (
-        <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/40 backdrop-blur-md border border-white/60 text-xs font-bold text-slate-900 shadow-xs">
-          <Sparkles className="w-3.5 h-3.5 text-[#2563EB]" />
+        <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/40 dark:bg-slate-800/60 backdrop-blur-md border border-white/60 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-slate-200 shadow-xs">
+          <Sparkles className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
           <span>Creator / Freelance • {currentUser.degree || 'Design & Tech'}</span>
         </div>
       );
     }
     return (
-      <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/40 backdrop-blur-md border border-white/60 text-xs font-bold text-slate-900 shadow-xs">
-        <Briefcase className="w-3.5 h-3.5 text-emerald-600" />
+      <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/40 dark:bg-slate-800/60 backdrop-blur-md border border-white/60 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-slate-200 shadow-xs">
+        <Briefcase className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
         <span>Working Professional • {currentUser.degree || 'Professional'}</span>
       </div>
     );
@@ -183,12 +183,12 @@ export const ProfileScreen: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F0F6FF] text-[#172033] pb-36 pt-2 sm:pt-4">
+    <div className="min-h-screen bg-[#F0F6FF] dark:bg-[#0A0F1D] text-[#172033] dark:text-[#F1F5F9] pb-36 pt-2 sm:pt-4 transition-colors">
       <div className="max-w-xl mx-auto px-4 space-y-4">
         {/* =========================================================================
             1. HERO PROFILE CARD (Modern Clean Glass Aesthetic)
            ========================================================================= */}
-        <div className="relative rounded-[2.5rem] overflow-hidden shadow-xl border border-[#DCE8F7] bg-gradient-to-b from-[#E0EAFF] via-[#C7D7FE] to-[#BFDBFE] p-5 sm:p-6 text-[#172033] space-y-5">
+        <div className="relative rounded-[2.5rem] overflow-hidden shadow-xl border border-[#DCE8F7] dark:border-slate-800 bg-gradient-to-b from-[#E0EAFF] via-[#C7D7FE] to-[#BFDBFE] dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-5 sm:p-6 text-[#172033] dark:text-white space-y-5">
           {/* Subtle artistic glow in background */}
           <div className="absolute top-0 left-0 right-0 h-80 pointer-events-none opacity-30 overflow-hidden">
             <img
@@ -211,25 +211,25 @@ export const ProfileScreen: React.FC = () => {
           <div className="relative z-10 flex items-center justify-between">
             <button
               onClick={() => setIsStudioOpen(true)}
-              className="px-4 py-1.5 rounded-full bg-white/60 backdrop-blur-md hover:bg-white border border-white/80 text-[#172033] text-xs font-bold transition-all active:scale-95 shadow-xs flex items-center gap-1.5"
+              className="px-4 py-1.5 rounded-full bg-white/60 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-700 border border-white/80 dark:border-slate-700 text-[#172033] dark:text-white text-xs font-bold transition-all active:scale-95 shadow-xs flex items-center gap-1.5"
             >
-              <Edit3 className="w-3.5 h-3.5 text-[#2563EB]" />
+              <Edit3 className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
               <span>Edit profile</span>
             </button>
 
             <div className="flex items-center gap-2">
               <button
                 onClick={() => openSettingsModal('appearance')}
-                className="px-3.5 py-1.5 rounded-full bg-white/60 backdrop-blur-md hover:bg-white border border-white/80 text-[#172033] text-xs font-bold transition-all active:scale-95 shadow-xs flex items-center gap-1.5"
+                className="px-3.5 py-1.5 rounded-full bg-white/60 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-700 border border-white/80 dark:border-slate-700 text-[#172033] dark:text-white text-xs font-bold transition-all active:scale-95 shadow-xs flex items-center gap-1.5"
                 title="Settings & Preferences"
               >
-                <Settings className="w-3.5 h-3.5 text-[#2563EB]" />
+                <Settings className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
                 <span className="hidden sm:inline">Settings</span>
               </button>
 
               <button
                 onClick={() => setCurrentView('home')}
-                className="w-8 h-8 rounded-full bg-white/60 backdrop-blur-md hover:bg-white border border-white/80 text-[#172033] flex items-center justify-center transition-all active:scale-95"
+                className="w-8 h-8 rounded-full bg-white/60 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-700 border border-white/80 dark:border-slate-700 text-[#172033] dark:text-white flex items-center justify-center transition-all active:scale-95"
                 title="Close"
               >
                 <X className="w-4 h-4" />
@@ -248,7 +248,7 @@ export const ProfileScreen: React.FC = () => {
                 <img
                   src={currentUser.avatar}
                   alt={currentUser.name}
-                  className="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover ring-4 ring-white"
+                  className="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover ring-4 ring-white dark:ring-slate-800"
                 />
               </div>
 
@@ -266,14 +266,14 @@ export const ProfileScreen: React.FC = () => {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="absolute bottom-0 left-0 bg-white/90 backdrop-blur-md hover:bg-white border border-[#DCE8F7] text-[#2563EB] p-1.5 rounded-full ring-2 ring-white shadow-md transition-all active:scale-95"
+                className="absolute bottom-0 left-0 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md hover:bg-white dark:hover:bg-slate-700 border border-[#DCE8F7] dark:border-slate-700 text-[#2563EB] dark:text-blue-400 p-1.5 rounded-full ring-2 ring-white dark:ring-slate-800 shadow-md transition-all active:scale-95"
                 title="Change Photo from Device"
               >
                 <Camera className="w-3.5 h-3.5" />
               </button>
 
               {currentUser.verifiedCollege && (
-                <span className="absolute bottom-0 right-0 bg-[#2563EB] text-white p-1 rounded-full ring-2 ring-white" title="Verified Profile">
+                <span className="absolute bottom-0 right-0 bg-[#2563EB] text-white p-1 rounded-full ring-2 ring-white dark:ring-slate-800" title="Verified Profile">
                   <CheckCircle2 className="w-4 h-4" />
                 </span>
               )}
@@ -281,14 +281,14 @@ export const ProfileScreen: React.FC = () => {
 
             {/* Followers Count */}
             <div>
-              <p className="text-xs font-bold text-[#172033] tracking-wide">
-                {(currentUser.followersCount || 21348).toLocaleString()} <span className="font-medium text-[#64748B]">Followers</span>
+              <p className="text-xs font-bold text-[#172033] dark:text-slate-200 tracking-wide">
+                {(currentUser.followersCount || 21348).toLocaleString()} <span className="font-medium text-[#64748B] dark:text-slate-400">Followers</span>
               </p>
             </div>
 
             {/* 3. Name (Serif Title) */}
             <div className="px-2">
-              <h1 className="font-editorial text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-wide text-[#172033] drop-shadow-xs break-words leading-tight">
+              <h1 className="font-editorial text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-wide text-[#172033] dark:text-white drop-shadow-xs break-words leading-tight">
                 {currentUser.name}
               </h1>
             </div>
@@ -299,8 +299,8 @@ export const ProfileScreen: React.FC = () => {
             </div>
 
             {/* 5. Location Field */}
-            <div className="flex items-center justify-center gap-1 text-xs text-[#172033] font-semibold">
-              <MapPin className="w-3.5 h-3.5 text-[#2563EB]" />
+            <div className="flex items-center justify-center gap-1 text-xs text-[#172033] dark:text-slate-200 font-semibold">
+              <MapPin className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
               <span>{currentUser.location || currentUser.locationZone || 'Delhi, India'}</span>
             </div>
 
@@ -309,9 +309,9 @@ export const ProfileScreen: React.FC = () => {
               {(currentUser.roleTags || ['Creative Designer', 'Visual Artist', 'Life Coach']).map((tag, idx) => (
                 <div
                   key={idx}
-                  className="px-3 py-1 rounded-full bg-white/60 backdrop-blur-md border border-white/80 text-[#172033] text-[11px] font-bold flex items-center gap-1 shadow-xs"
+                  className="px-3 py-1 rounded-full bg-white/60 dark:bg-slate-800/70 backdrop-blur-md border border-white/80 dark:border-slate-700 text-[#172033] dark:text-slate-200 text-[11px] font-bold flex items-center gap-1 shadow-xs"
                 >
-                  <span className="text-[#2563EB]">✺</span>
+                  <span className="text-[#2563EB] dark:text-blue-400">✺</span>
                   <span>{tag}</span>
                 </div>
               ))}
@@ -321,43 +321,43 @@ export const ProfileScreen: React.FC = () => {
           {/* 7. Horizontal Threads Stats Row */}
           <div className="relative z-10 space-y-1.5 pt-3">
             <div className="text-center">
-              <span className="text-[11px] font-bold text-[#172033] tracking-wide uppercase">
+              <span className="text-[11px] font-bold text-[#172033] dark:text-slate-300 tracking-wide uppercase">
                 Threads
               </span>
             </div>
 
             <div className="grid grid-cols-5 gap-1.5">
-              <div className="p-2 rounded-2xl bg-white/60 backdrop-blur-md border border-white/70 text-center">
-                <span className="text-[9px] text-[#64748B] block font-bold truncate">Sessions</span>
-                <span className="text-xs sm:text-sm font-black text-[#172033] block mt-0.5">
+              <div className="p-2 rounded-2xl bg-white/60 dark:bg-slate-800/70 backdrop-blur-md border border-white/70 dark:border-slate-700 text-center">
+                <span className="text-[9px] text-[#64748B] dark:text-slate-400 block font-bold truncate">Sessions</span>
+                <span className="text-xs sm:text-sm font-black text-[#172033] dark:text-white block mt-0.5">
                   {(currentUser.sessionsCount || 5983).toLocaleString()}
                 </span>
               </div>
 
-              <div className="p-2 rounded-2xl bg-white/60 backdrop-blur-md border border-white/70 text-center">
-                <span className="text-[9px] text-[#64748B] block font-bold truncate">Age</span>
-                <span className="text-xs sm:text-sm font-black text-[#172033] block mt-0.5">
+              <div className="p-2 rounded-2xl bg-white/60 dark:bg-slate-800/70 backdrop-blur-md border border-white/70 dark:border-slate-700 text-center">
+                <span className="text-[9px] text-[#64748B] dark:text-slate-400 block font-bold truncate">Age</span>
+                <span className="text-xs sm:text-sm font-black text-[#172033] dark:text-white block mt-0.5">
                   {currentUser.age || 23} y.o
                 </span>
               </div>
 
-              <div className="p-2 rounded-2xl bg-white/60 backdrop-blur-md border border-white/70 text-center">
-                <span className="text-[9px] text-[#64748B] block font-bold truncate">Works</span>
-                <span className="text-xs sm:text-sm font-black text-[#172033] block mt-0.5">
+              <div className="p-2 rounded-2xl bg-white/60 dark:bg-slate-800/70 backdrop-blur-md border border-white/70 dark:border-slate-700 text-center">
+                <span className="text-[9px] text-[#64748B] dark:text-slate-400 block font-bold truncate">Works</span>
+                <span className="text-xs sm:text-sm font-black text-[#172033] dark:text-white block mt-0.5">
                   {currentUser.worksCount || 751}
                 </span>
               </div>
 
-              <div className="p-2 rounded-2xl bg-white/60 backdrop-blur-md border border-white/70 text-center">
-                <span className="text-[9px] text-[#64748B] block font-bold truncate">Mood boards</span>
-                <span className="text-xs sm:text-sm font-black text-[#172033] block mt-0.5">
+              <div className="p-2 rounded-2xl bg-white/60 dark:bg-slate-800/70 backdrop-blur-md border border-white/70 dark:border-slate-700 text-center">
+                <span className="text-[9px] text-[#64748B] dark:text-slate-400 block font-bold truncate">Mood boards</span>
+                <span className="text-xs sm:text-sm font-black text-[#172033] dark:text-white block mt-0.5">
                   {currentUser.moodboardsCount || 38}
                 </span>
               </div>
 
-              <div className="p-2 rounded-2xl bg-white/60 backdrop-blur-md border border-white/70 text-center">
-                <span className="text-[9px] text-[#64748B] block font-bold truncate">Prompts</span>
-                <span className="text-xs sm:text-sm font-black text-[#172033] block mt-0.5">
+              <div className="p-2 rounded-2xl bg-white/60 dark:bg-slate-800/70 backdrop-blur-md border border-white/70 dark:border-slate-700 text-center">
+                <span className="text-[9px] text-[#64748B] dark:text-slate-400 block font-bold truncate">Prompts</span>
+                <span className="text-xs sm:text-sm font-black text-[#172033] dark:text-white block mt-0.5">
                   {currentUser.promptsCount || 142}
                 </span>
               </div>
@@ -371,64 +371,64 @@ export const ProfileScreen: React.FC = () => {
            ========================================================================= */}
         <div className="space-y-4">
           {/* Tabs Selector */}
-          <div className="flex items-center justify-between border-b border-[#DCE8F7] pb-2 overflow-x-auto scrollbar-none gap-2">
+          <div className="flex items-center justify-between border-b border-[#DCE8F7] dark:border-slate-800 pb-2 overflow-x-auto scrollbar-none gap-2">
             <button
               onClick={() => setActiveTab('activities')}
               className={`pb-1 text-xs font-bold transition-all relative shrink-0 ${
-                activeTab === 'activities' ? 'text-[#2563EB]' : 'text-[#64748B] hover:text-[#172033]'
+                activeTab === 'activities' ? 'text-[#2563EB] dark:text-blue-400' : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
               }`}
             >
               <span>⚡ Activities ({activities.length})</span>
               {activeTab === 'activities' && (
-                <span className="absolute -bottom-2 left-0 right-0 h-0.5 bg-[#2563EB] rounded-full" />
+                <span className="absolute -bottom-2 left-0 right-0 h-0.5 bg-[#2563EB] dark:bg-blue-400 rounded-full" />
               )}
             </button>
 
             <button
               onClick={() => setActiveTab('skills')}
               className={`pb-1 text-xs font-bold transition-all relative shrink-0 ${
-                activeTab === 'skills' ? 'text-[#2563EB]' : 'text-[#64748B] hover:text-[#172033]'
+                activeTab === 'skills' ? 'text-[#2563EB] dark:text-blue-400' : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
               }`}
             >
               <span>🎯 Skills ({currentUser.skills.length})</span>
               {activeTab === 'skills' && (
-                <span className="absolute -bottom-2 left-0 right-0 h-0.5 bg-[#2563EB] rounded-full" />
+                <span className="absolute -bottom-2 left-0 right-0 h-0.5 bg-[#2563EB] dark:bg-blue-400 rounded-full" />
               )}
             </button>
 
             <button
               onClick={() => setActiveTab('interests')}
               className={`pb-1 text-xs font-bold transition-all relative shrink-0 ${
-                activeTab === 'interests' ? 'text-[#2563EB]' : 'text-[#64748B] hover:text-[#172033]'
+                activeTab === 'interests' ? 'text-[#2563EB] dark:text-blue-400' : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
               }`}
             >
               <span>✨ Interests</span>
               {activeTab === 'interests' && (
-                <span className="absolute -bottom-2 left-0 right-0 h-0.5 bg-[#2563EB] rounded-full" />
+                <span className="absolute -bottom-2 left-0 right-0 h-0.5 bg-[#2563EB] dark:bg-blue-400 rounded-full" />
               )}
             </button>
 
             <button
               onClick={() => setActiveTab('bio')}
               className={`pb-1 text-xs font-bold transition-all relative shrink-0 ${
-                activeTab === 'bio' ? 'text-[#2563EB]' : 'text-[#64748B] hover:text-[#172033]'
+                activeTab === 'bio' ? 'text-[#2563EB] dark:text-blue-400' : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
               }`}
             >
               <span>📝 Bio</span>
               {activeTab === 'bio' && (
-                <span className="absolute -bottom-2 left-0 right-0 h-0.5 bg-[#2563EB] rounded-full" />
+                <span className="absolute -bottom-2 left-0 right-0 h-0.5 bg-[#2563EB] dark:bg-blue-400 rounded-full" />
               )}
             </button>
 
             <button
               onClick={() => setActiveTab('posters')}
               className={`pb-1 text-xs font-bold transition-all relative shrink-0 ${
-                activeTab === 'posters' ? 'text-[#2563EB]' : 'text-[#64748B] hover:text-[#172033]'
+                activeTab === 'posters' ? 'text-[#2563EB] dark:text-blue-400' : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
               }`}
             >
               <span>🖼️ Posters</span>
               {activeTab === 'posters' && (
-                <span className="absolute -bottom-2 left-0 right-0 h-0.5 bg-[#2563EB] rounded-full" />
+                <span className="absolute -bottom-2 left-0 right-0 h-0.5 bg-[#2563EB] dark:bg-blue-400 rounded-full" />
               )}
             </button>
           </div>
@@ -437,10 +437,10 @@ export const ProfileScreen: React.FC = () => {
           {activeTab === 'activities' && (
             <div className="space-y-3">
               <div className="flex items-center justify-between px-1">
-                <span className="text-xs font-bold text-[#64748B] uppercase tracking-wider">
+                <span className="text-xs font-bold text-[#64748B] dark:text-slate-400 uppercase tracking-wider">
                   Recent Activities & Meetups
                 </span>
-                <span className="text-[11px] text-[#2563EB] font-bold">
+                <span className="text-[11px] text-[#2563EB] dark:text-blue-400 font-bold">
                   {currentUser.activitiesCompleted} Total Completed
                 </span>
               </div>
@@ -449,23 +449,23 @@ export const ProfileScreen: React.FC = () => {
                 {activities.map(act => (
                   <div
                     key={act.id}
-                    className="bg-white border border-[#DCE8F7] rounded-2xl p-4 shadow-xs flex items-center justify-between gap-3"
+                    className="bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-2xl p-4 shadow-xs flex items-center justify-between gap-3"
                   >
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#F8FBFF] text-[#2563EB] border border-[#DCE8F7] uppercase">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#F8FBFF] dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-700 uppercase">
                           {act.category}
                         </span>
-                        <h4 className="font-extrabold text-sm text-[#172033]">{act.title}</h4>
+                        <h4 className="font-extrabold text-sm text-[#172033] dark:text-white">{act.title}</h4>
                       </div>
-                      <div className="flex items-center gap-3 text-xs text-[#64748B]">
+                      <div className="flex items-center gap-3 text-xs text-[#64748B] dark:text-slate-400">
                         <span className="flex items-center gap-1">
-                          <Clock className="w-3 h-3 text-[#2563EB]" />
+                          <Clock className="w-3 h-3 text-[#2563EB] dark:text-blue-400" />
                           <span>{act.date}</span>
                         </span>
                         <span>•</span>
                         <span className="flex items-center gap-1">
-                          <MapPin className="w-3 h-3 text-[#2563EB]" />
+                          <MapPin className="w-3 h-3 text-[#2563EB] dark:text-blue-400" />
                           <span>{act.location}</span>
                         </span>
                       </div>
@@ -473,8 +473,8 @@ export const ProfileScreen: React.FC = () => {
 
                     <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase shrink-0 ${
                       act.status === 'completed'
-                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                        : 'bg-amber-50 text-amber-700 border border-amber-200'
+                        ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800'
+                        : 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800'
                     }`}>
                       {act.status === 'completed' ? '✓ Completed' : '⚡ Ongoing'}
                     </span>
@@ -486,16 +486,16 @@ export const ProfileScreen: React.FC = () => {
 
           {/* Tab 2: Skills */}
           {activeTab === 'skills' && (
-            <div className="bg-white border border-[#DCE8F7] rounded-3xl p-5 space-y-4 shadow-xs">
+            <div className="bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-3xl p-5 space-y-4 shadow-xs">
               <div className="space-y-2">
-                <span className="text-xs font-bold text-[#64748B] uppercase tracking-wider">
+                <span className="text-xs font-bold text-[#64748B] dark:text-slate-400 uppercase tracking-wider">
                   Verified Skills & Talents
                 </span>
                 <div className="flex flex-wrap gap-2">
                   {currentUser.skills.map(sk => (
                     <span
                       key={sk}
-                      className="px-3.5 py-1.5 rounded-full bg-[#F8FBFF] border border-[#DCE8F7] text-[#2563EB] text-xs font-extrabold shadow-xs"
+                      className="px-3.5 py-1.5 rounded-full bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-[#2563EB] dark:text-blue-400 text-xs font-extrabold shadow-xs"
                     >
                       #{sk}
                     </span>
@@ -507,15 +507,15 @@ export const ProfileScreen: React.FC = () => {
 
           {/* Tab 3: Interests */}
           {activeTab === 'interests' && (
-            <div className="bg-white border border-[#DCE8F7] rounded-3xl p-5 space-y-3 shadow-xs">
-              <span className="text-xs font-bold text-[#64748B] uppercase tracking-wider">
+            <div className="bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-3xl p-5 space-y-3 shadow-xs">
+              <span className="text-xs font-bold text-[#64748B] dark:text-slate-400 uppercase tracking-wider">
                 Interests, Hobbies & Societies
               </span>
               <div className="flex flex-wrap gap-2">
                 {currentUser.interests.map(int => (
                   <span
                     key={int}
-                    className="px-3 py-1.5 rounded-full bg-[#F8FBFF] border border-[#DCE8F7] text-[#172033] text-xs font-semibold"
+                    className="px-3 py-1.5 rounded-full bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-[#172033] dark:text-slate-200 text-xs font-semibold"
                   >
                     ✨ {int}
                   </span>
@@ -526,15 +526,15 @@ export const ProfileScreen: React.FC = () => {
 
           {/* Tab 4: Bio */}
           {activeTab === 'bio' && (
-            <div className="bg-white border border-[#DCE8F7] rounded-3xl p-5 space-y-3 shadow-xs">
-              <span className="text-xs font-bold text-[#64748B] uppercase tracking-wider">
+            <div className="bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-3xl p-5 space-y-3 shadow-xs">
+              <span className="text-xs font-bold text-[#64748B] dark:text-slate-400 uppercase tracking-wider">
                 About Me / Bio
               </span>
-              <p className="text-xs sm:text-sm text-[#172033] leading-relaxed italic bg-[#F8FBFF] p-4 rounded-2xl border border-[#DCE8F7]">
+              <p className="text-xs sm:text-sm text-[#172033] dark:text-slate-200 leading-relaxed italic bg-[#F8FBFF] dark:bg-slate-800/80 p-4 rounded-2xl border border-[#DCE8F7] dark:border-slate-700">
                 "{currentUser.bio}"
               </p>
-              <div className="text-[11px] text-[#64748B] flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-[#2563EB]" />
+              <div className="text-[11px] text-[#64748B] dark:text-slate-400 flex items-center gap-1.5">
+                <MapPin className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
                 <span>Base Location: {currentUser.location || currentUser.locationZone}</span>
               </div>
             </div>
@@ -544,10 +544,10 @@ export const ProfileScreen: React.FC = () => {
           {activeTab === 'posters' && (
             <div className="space-y-3">
               <div className="flex items-center justify-between px-1">
-                <span className="text-xs font-bold text-[#64748B] uppercase tracking-wider">
+                <span className="text-xs font-bold text-[#64748B] dark:text-slate-400 uppercase tracking-wider">
                   Editorial Posters & Moodboards
                 </span>
-                <span className="text-[11px] text-[#64748B]">
+                <span className="text-[11px] text-[#64748B] dark:text-slate-400">
                   Tap to view poster
                 </span>
               </div>
@@ -557,7 +557,7 @@ export const ProfileScreen: React.FC = () => {
                   <div
                     key={mb.id}
                     onClick={() => setActivePoster(mb)}
-                    className="relative rounded-3xl overflow-hidden aspect-[3/4] bg-[#F0F6FF] border border-[#DCE8F7] group cursor-pointer shadow-xs hover:scale-[1.02] transition-transform duration-300"
+                    className="relative rounded-3xl overflow-hidden aspect-[3/4] bg-[#F0F6FF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-800 group cursor-pointer shadow-xs hover:scale-[1.02] transition-transform duration-300"
                   >
                     <img
                       src={mb.image}
@@ -581,13 +581,13 @@ export const ProfileScreen: React.FC = () => {
           {/* =========================================================================
               SETTINGS & ACCOUNT CONTROLS MENU
              ========================================================================= */}
-          <div className="bg-white border border-[#DCE8F7] rounded-3xl p-5 space-y-3 shadow-xs">
+          <div className="bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-3xl p-5 space-y-3 shadow-xs">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-black uppercase tracking-wider text-[#64748B] flex items-center gap-1.5">
-                <Settings className="w-3.5 h-3.5 text-[#2563EB]" />
+              <span className="text-xs font-black uppercase tracking-wider text-[#64748B] dark:text-slate-400 flex items-center gap-1.5">
+                <Settings className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
                 Account & Settings
               </span>
-              <span className="text-[11px] font-bold text-[#2563EB]">
+              <span className="text-[11px] font-bold text-[#2563EB] dark:text-blue-400">
                 {theme === 'dark' ? '🌙 Dark Mode' : '☀️ Bright Mode'}
               </span>
             </div>
@@ -596,104 +596,104 @@ export const ProfileScreen: React.FC = () => {
               <button
                 type="button"
                 onClick={() => openSettingsModal('appearance')}
-                className="p-3 rounded-2xl bg-[#F8FBFF] hover:bg-white border border-[#DCE8F7] text-left transition-all group"
+                className="p-3 rounded-2xl bg-[#F8FBFF] dark:bg-slate-800/60 hover:bg-white dark:hover:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700/60 text-left transition-all group"
               >
                 <div className="flex items-center justify-between mb-1">
                   <Sun className="w-4 h-4 text-amber-500" />
-                  <ChevronRight className="w-3.5 h-3.5 text-[#64748B] group-hover:translate-x-0.5 transition-transform" />
+                  <ChevronRight className="w-3.5 h-3.5 text-[#64748B] dark:text-slate-400 group-hover:translate-x-0.5 transition-transform" />
                 </div>
-                <div className="text-xs font-extrabold text-[#172033]">Theme & Display</div>
-                <div className="text-[10px] text-[#64748B]">Dark / Bright Mode</div>
+                <div className="text-xs font-extrabold text-[#172033] dark:text-white">Theme & Display</div>
+                <div className="text-[10px] text-[#64748B] dark:text-slate-400">Dark / Bright Mode</div>
               </button>
 
               <button
                 type="button"
                 onClick={() => openSettingsModal('privacy')}
-                className="p-3 rounded-2xl bg-[#F8FBFF] hover:bg-white border border-[#DCE8F7] text-left transition-all group"
+                className="p-3 rounded-2xl bg-[#F8FBFF] dark:bg-slate-800/60 hover:bg-white dark:hover:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700/60 text-left transition-all group"
               >
                 <div className="flex items-center justify-between mb-1">
-                  <Shield className="w-4 h-4 text-[#2563EB]" />
-                  <ChevronRight className="w-3.5 h-3.5 text-[#64748B] group-hover:translate-x-0.5 transition-transform" />
+                  <Shield className="w-4 h-4 text-[#2563EB] dark:text-blue-400" />
+                  <ChevronRight className="w-3.5 h-3.5 text-[#64748B] dark:text-slate-400 group-hover:translate-x-0.5 transition-transform" />
                 </div>
-                <div className="text-xs font-extrabold text-[#172033]">Privacy & Safety</div>
-                <div className="text-[10px] text-[#64748B]">Ghost Mode, Blocked</div>
+                <div className="text-xs font-extrabold text-[#172033] dark:text-white">Privacy & Safety</div>
+                <div className="text-[10px] text-[#64748B] dark:text-slate-400">Ghost Mode, Blocked</div>
               </button>
 
               <button
                 type="button"
                 onClick={() => openSettingsModal('preferences')}
-                className="p-3 rounded-2xl bg-[#F8FBFF] hover:bg-white border border-[#DCE8F7] text-left transition-all group"
+                className="p-3 rounded-2xl bg-[#F8FBFF] dark:bg-slate-800/60 hover:bg-white dark:hover:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700/60 text-left transition-all group"
               >
                 <div className="flex items-center justify-between mb-1">
                   <Sliders className="w-4 h-4 text-emerald-500" />
-                  <ChevronRight className="w-3.5 h-3.5 text-[#64748B] group-hover:translate-x-0.5 transition-transform" />
+                  <ChevronRight className="w-3.5 h-3.5 text-[#64748B] dark:text-slate-400 group-hover:translate-x-0.5 transition-transform" />
                 </div>
-                <div className="text-xs font-extrabold text-[#172033]">Preferences</div>
-                <div className="text-[10px] text-[#64748B]">Radar & Push Alerts</div>
+                <div className="text-xs font-extrabold text-[#172033] dark:text-white">Preferences</div>
+                <div className="text-[10px] text-[#64748B] dark:text-slate-400">Radar & Push Alerts</div>
               </button>
 
               <button
                 type="button"
                 onClick={() => openSettingsModal('location')}
-                className="p-3 rounded-2xl bg-[#F8FBFF] hover:bg-white border border-[#DCE8F7] text-left transition-all group"
+                className="p-3 rounded-2xl bg-[#F8FBFF] dark:bg-slate-800/60 hover:bg-white dark:hover:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700/60 text-left transition-all group"
               >
                 <div className="flex items-center justify-between mb-1">
                   <MapPin className="w-4 h-4 text-rose-500" />
-                  <ChevronRight className="w-3.5 h-3.5 text-[#64748B] group-hover:translate-x-0.5 transition-transform" />
+                  <ChevronRight className="w-3.5 h-3.5 text-[#64748B] dark:text-slate-400 group-hover:translate-x-0.5 transition-transform" />
                 </div>
-                <div className="text-xs font-extrabold text-[#172033]">Location Spot</div>
-                <div className="text-[10px] text-[#64748B] truncate">{currentUser.location?.split(',')[0] || 'Nearby'}</div>
+                <div className="text-xs font-extrabold text-[#172033] dark:text-white">Location Spot</div>
+                <div className="text-[10px] text-[#64748B] dark:text-slate-400 truncate">{currentUser.location?.split(',')[0] || 'Nearby'}</div>
               </button>
 
               <button
                 type="button"
                 onClick={() => openSettingsModal('premium')}
-                className="p-3 rounded-2xl bg-amber-50/70 hover:bg-amber-100 border border-amber-200/60 text-left transition-all group"
+                className="p-3 rounded-2xl bg-amber-50/70 dark:bg-amber-950/30 hover:bg-amber-100 dark:hover:bg-amber-950/50 border border-amber-200/60 dark:border-amber-800/50 text-left transition-all group"
               >
                 <div className="flex items-center justify-between mb-1">
                   <Crown className="w-4 h-4 text-amber-500 fill-amber-400" />
                   <ChevronRight className="w-3.5 h-3.5 text-amber-400 group-hover:translate-x-0.5 transition-transform" />
                 </div>
-                <div className="text-xs font-extrabold text-[#172033]">MEMA VIP</div>
-                <div className="text-[10px] text-amber-700 font-semibold">{isPremium ? 'Active Plan' : 'Free / Upgrade'}</div>
+                <div className="text-xs font-extrabold text-[#172033] dark:text-white">MEMA VIP</div>
+                <div className="text-[10px] text-amber-700 dark:text-amber-400 font-semibold">{isPremium ? 'Active Plan' : 'Free / Upgrade'}</div>
               </button>
 
               <button
                 type="button"
                 onClick={() => openSettingsModal('help')}
-                className="p-3 rounded-2xl bg-[#F8FBFF] hover:bg-white border border-[#DCE8F7] text-left transition-all group"
+                className="p-3 rounded-2xl bg-[#F8FBFF] dark:bg-slate-800/60 hover:bg-white dark:hover:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700/60 text-left transition-all group"
               >
                 <div className="flex items-center justify-between mb-1">
-                  <HelpCircle className="w-4 h-4 text-[#2563EB]" />
-                  <ChevronRight className="w-3.5 h-3.5 text-[#64748B] group-hover:translate-x-0.5 transition-transform" />
+                  <HelpCircle className="w-4 h-4 text-[#2563EB] dark:text-blue-400" />
+                  <ChevronRight className="w-3.5 h-3.5 text-[#64748B] dark:text-slate-400 group-hover:translate-x-0.5 transition-transform" />
                 </div>
-                <div className="text-xs font-extrabold text-[#172033]">Help & Support</div>
-                <div className="text-[10px] text-[#64748B]">FAQs & Live Chat</div>
+                <div className="text-xs font-extrabold text-[#172033] dark:text-white">Help & Support</div>
+                <div className="text-[10px] text-[#64748B] dark:text-slate-400">FAQs & Live Chat</div>
               </button>
 
               <button
                 type="button"
                 onClick={() => openSettingsModal('terms')}
-                className="p-3 rounded-2xl bg-[#F8FBFF] hover:bg-white border border-[#DCE8F7] text-left transition-all group"
+                className="p-3 rounded-2xl bg-[#F8FBFF] dark:bg-slate-800/60 hover:bg-white dark:hover:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700/60 text-left transition-all group"
               >
                 <div className="flex items-center justify-between mb-1">
-                  <FileText className="w-4 h-4 text-[#64748B]" />
-                  <ChevronRight className="w-3.5 h-3.5 text-[#64748B] group-hover:translate-x-0.5 transition-transform" />
+                  <FileText className="w-4 h-4 text-[#64748B] dark:text-slate-400" />
+                  <ChevronRight className="w-3.5 h-3.5 text-[#64748B] dark:text-slate-400 group-hover:translate-x-0.5 transition-transform" />
                 </div>
-                <div className="text-xs font-extrabold text-[#172033]">Terms & Policy</div>
-                <div className="text-[10px] text-[#64748B]">Legal & Code</div>
+                <div className="text-xs font-extrabold text-[#172033] dark:text-white">Terms & Policy</div>
+                <div className="text-[10px] text-[#64748B] dark:text-slate-400">Legal & Code</div>
               </button>
 
               <button
                 type="button"
                 onClick={() => openSettingsModal('logout')}
-                className="p-3 rounded-2xl bg-rose-50/70 hover:bg-rose-100 border border-rose-200/60 text-left transition-all group"
+                className="p-3 rounded-2xl bg-rose-50/70 dark:bg-rose-950/30 hover:bg-rose-100 dark:hover:bg-rose-950/50 border border-rose-200/60 dark:border-rose-800/50 text-left transition-all group"
               >
                 <div className="flex items-center justify-between mb-1">
                   <LogOut className="w-4 h-4 text-rose-500" />
                   <ChevronRight className="w-3.5 h-3.5 text-rose-400 group-hover:translate-x-0.5 transition-transform" />
                 </div>
-                <div className="text-xs font-extrabold text-rose-600">Logout</div>
+                <div className="text-xs font-extrabold text-rose-600 dark:text-rose-400">Logout</div>
                 <div className="text-[10px] text-rose-400">Sign out session</div>
               </button>
             </div>

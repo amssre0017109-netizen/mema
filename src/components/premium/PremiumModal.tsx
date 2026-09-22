@@ -33,37 +33,37 @@ export const PremiumModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-white border border-[#DCE8F7] rounded-[2.5rem] max-w-2xl w-full p-5 sm:p-8 shadow-2xl relative max-h-[92vh] overflow-y-auto space-y-5 text-[#172033]">
+      <div className="bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-[2.5rem] max-w-2xl w-full p-5 sm:p-8 shadow-2xl relative max-h-[92vh] overflow-y-auto space-y-5 text-[#172033] dark:text-slate-100">
         <button
           onClick={() => setIsPremiumModalOpen(false)}
-          className="absolute top-5 right-5 p-2 rounded-full bg-[#F8FBFF] text-[#64748B] hover:text-[#172033] border border-[#DCE8F7] transition-colors z-10"
+          className="absolute top-5 right-5 p-2 rounded-full bg-[#F8FBFF] dark:bg-slate-800 text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white border border-[#DCE8F7] dark:border-slate-700 transition-colors z-10"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Modal Header */}
         <div className="text-center space-y-2 pt-2 sm:pt-0">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-black uppercase tracking-wider">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 text-xs font-black uppercase tracking-wider">
             <Crown className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
             <span>MEMA VIP PREMIUM</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black font-display text-[#172033] leading-tight">
+          <h2 className="text-2xl sm:text-3xl font-black font-display text-[#172033] dark:text-white leading-tight">
             Unlock Unlimited Campus Superpowers
           </h2>
-          <p className="text-xs text-[#64748B] max-w-md mx-auto">
+          <p className="text-xs text-[#64748B] dark:text-slate-400 max-w-md mx-auto">
             Unlimited activity posts, direct chat & contact, VIP star badge, 10x visibility, and instant activity reservations.
           </p>
         </div>
 
         {/* View Switcher Segmented Control */}
-        <div className="grid grid-cols-2 gap-1.5 p-1 bg-[#F8FBFF] rounded-2xl border border-[#DCE8F7] max-w-md mx-auto">
+        <div className="grid grid-cols-2 gap-1.5 p-1 bg-[#F8FBFF] dark:bg-slate-850 rounded-2xl border border-[#DCE8F7] dark:border-slate-800 max-w-md mx-auto">
           <button
             type="button"
             onClick={() => setActiveTab('plans')}
             className={`py-2 px-3 rounded-xl text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 ${
               activeTab === 'plans'
                 ? 'bg-[#2563EB] text-white shadow-xs'
-                : 'text-[#64748B] hover:text-[#172033]'
+                : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
             }`}
           >
             <Zap className="w-3.5 h-3.5" />
@@ -76,7 +76,7 @@ export const PremiumModal: React.FC = () => {
             className={`py-2 px-3 rounded-xl text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 ${
               activeTab === 'comparison'
                 ? 'bg-[#2563EB] text-white shadow-xs'
-                : 'text-[#64748B] hover:text-[#172033]'
+                : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
@@ -97,8 +97,8 @@ export const PremiumModal: React.FC = () => {
                     key={plan.id}
                     className={`relative rounded-3xl p-5 border flex flex-col justify-between space-y-4 transition-all ${
                       isMonthly
-                        ? 'border-[#2563EB] bg-[#F0F6FF] text-[#172033] shadow-md ring-2 ring-[#2563EB]/20'
-                        : 'border-[#DCE8F7] bg-white text-[#172033] shadow-xs'
+                        ? 'border-[#2563EB] dark:border-blue-500 bg-[#F0F6FF] dark:bg-blue-950/40 text-[#172033] dark:text-white shadow-md ring-2 ring-[#2563EB]/20'
+                        : 'border-[#DCE8F7] dark:border-slate-800 bg-white dark:bg-slate-850 text-[#172033] dark:text-white shadow-xs'
                     }`}
                   >
                     {plan.badge && (
@@ -111,21 +111,21 @@ export const PremiumModal: React.FC = () => {
 
                     <div className="space-y-2.5">
                       <div className="flex items-center justify-between">
-                        <h3 className="font-black text-base text-[#172033]">{plan.name}</h3>
+                        <h3 className="font-black text-base text-[#172033] dark:text-white">{plan.name}</h3>
                         {isMonthly && (
-                          <span className="text-[10px] font-black uppercase tracking-wider text-[#2563EB] bg-white px-2 py-0.5 rounded-full border border-[#DCE8F7]">
+                          <span className="text-[10px] font-black uppercase tracking-wider text-[#2563EB] dark:text-blue-400 bg-white dark:bg-slate-800 px-2 py-0.5 rounded-full border border-[#DCE8F7] dark:border-slate-700">
                             Most Popular
                           </span>
                         )}
                       </div>
 
                       <div className="flex items-baseline gap-1.5">
-                        <span className="text-3xl font-black text-[#172033]">₹{plan.priceInr}</span>
-                        <span className="text-xs text-[#64748B]">{plan.tagline}</span>
+                        <span className="text-3xl font-black text-[#172033] dark:text-white">₹{plan.priceInr}</span>
+                        <span className="text-xs text-[#64748B] dark:text-slate-400">{plan.tagline}</span>
                       </div>
 
                       {plan.hasFreeTrial && (
-                        <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-bold">
+                        <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-[11px] font-bold">
                           <Check className="w-3.5 h-3.5" />
                           <span>1 Month 100% Free Trial</span>
                         </div>
@@ -134,20 +134,20 @@ export const PremiumModal: React.FC = () => {
                       {/* Key highlights matching screenshot */}
                       <ul className="space-y-1.5 pt-1 text-xs">
                         <li className="flex items-center gap-2">
-                          <Check className="w-3.5 h-3.5 text-[#2563EB] shrink-0" />
-                          <span className="text-[#172033] font-semibold">Unlimited activity & post creation</span>
+                          <Check className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400 shrink-0" />
+                          <span className="text-[#172033] dark:text-slate-200 font-semibold">Unlimited activity & post creation</span>
                         </li>
                         <li className="flex items-center gap-2">
-                          <Check className="w-3.5 h-3.5 text-[#2563EB] shrink-0" />
-                          <span className="text-[#172033] font-semibold">Direct Chat & instant contact</span>
+                          <Check className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400 shrink-0" />
+                          <span className="text-[#172033] dark:text-slate-200 font-semibold">Direct Chat & instant contact</span>
                         </li>
                         <li className="flex items-center gap-2">
-                          <Check className="w-3.5 h-3.5 text-[#2563EB] shrink-0" />
-                          <span className="text-[#172033] font-semibold">Activity booking & reservations</span>
+                          <Check className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400 shrink-0" />
+                          <span className="text-[#172033] dark:text-slate-200 font-semibold">Activity booking & reservations</span>
                         </li>
                         <li className="flex items-center gap-2">
-                          <Check className="w-3.5 h-3.5 text-[#2563EB] shrink-0" />
-                          <span className="text-[#172033] font-semibold">⭐ VIP Star Badge on profile</span>
+                          <Check className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400 shrink-0" />
+                          <span className="text-[#172033] dark:text-slate-200 font-semibold">⭐ VIP Star Badge on profile</span>
                         </li>
                       </ul>
                     </div>
@@ -157,7 +157,7 @@ export const PremiumModal: React.FC = () => {
                       className={`w-full py-3 rounded-full font-black text-xs transition-all flex items-center justify-center gap-1.5 shadow-sm active:scale-95 ${
                         isMonthly
                           ? 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white shadow-md shadow-blue-500/20'
-                          : 'bg-[#172033] hover:bg-[#1D4ED8] text-white'
+                          : 'bg-[#172033] dark:bg-slate-800 hover:bg-[#1D4ED8] dark:hover:bg-blue-600 text-white'
                       }`}
                     >
                       <span>{plan.hasFreeTrial ? 'Start 1 Month Free' : 'Choose 3-Month Plan'}</span>
@@ -169,18 +169,18 @@ export const PremiumModal: React.FC = () => {
             </div>
 
             {/* Quick Preview of the 15-Feature Matrix */}
-            <div className="p-4 rounded-3xl bg-[#F8FBFF] border border-[#DCE8F7] space-y-3">
+            <div className="p-4 rounded-3xl bg-[#F8FBFF] dark:bg-slate-850 border border-[#DCE8F7] dark:border-slate-800 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Award className="w-4 h-4 text-[#2563EB]" />
-                  <span className="text-xs font-black text-[#172033]">
+                  <Award className="w-4 h-4 text-[#2563EB] dark:text-blue-400" />
+                  <span className="text-xs font-black text-[#172033] dark:text-white">
                     Complete 15-Perk Feature Comparison
                   </span>
                 </div>
                 <button
                   type="button"
                   onClick={() => setActiveTab('comparison')}
-                  className="text-xs font-bold text-[#2563EB] hover:underline flex items-center gap-0.5"
+                  className="text-xs font-bold text-[#2563EB] dark:text-blue-400 hover:underline flex items-center gap-0.5"
                 >
                   <span>View All 15 Perks</span>
                   <ArrowRight className="w-3 h-3" />
@@ -188,17 +188,17 @@ export const PremiumModal: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[11px]">
-                <div className="bg-white p-2.5 rounded-2xl border border-[#DCE8F7]">
-                  <div className="text-[#64748B] text-[10px]">Nearby Activities</div>
-                  <div className="font-extrabold text-[#2563EB]">1/day ➔ Unlimited</div>
+                <div className="bg-white dark:bg-slate-900 p-2.5 rounded-2xl border border-[#DCE8F7] dark:border-slate-800">
+                  <div className="text-[#64748B] dark:text-slate-400 text-[10px]">Nearby Activities</div>
+                  <div className="font-extrabold text-[#2563EB] dark:text-blue-400">1/day ➔ Unlimited</div>
                 </div>
-                <div className="bg-white p-2.5 rounded-2xl border border-[#DCE8F7]">
-                  <div className="text-[#64748B] text-[10px]">Direct Chat & Contact</div>
-                  <div className="font-extrabold text-emerald-600">❌ ➔ ✅ Full Access</div>
+                <div className="bg-white dark:bg-slate-900 p-2.5 rounded-2xl border border-[#DCE8F7] dark:border-slate-800">
+                  <div className="text-[#64748B] dark:text-slate-400 text-[10px]">Direct Chat & Contact</div>
+                  <div className="font-extrabold text-emerald-600 dark:text-emerald-400">❌ ➔ ✅ Full Access</div>
                 </div>
-                <div className="bg-white p-2.5 rounded-2xl border border-[#DCE8F7]">
-                  <div className="text-[#64748B] text-[10px]">Radar Visibility</div>
-                  <div className="font-extrabold text-[#2563EB]">Basic ➔ 🔥 Boosted</div>
+                <div className="bg-white dark:bg-slate-900 p-2.5 rounded-2xl border border-[#DCE8F7] dark:border-slate-800">
+                  <div className="text-[#64748B] dark:text-slate-400 text-[10px]">Radar Visibility</div>
+                  <div className="font-extrabold text-[#2563EB] dark:text-blue-400">Basic ➔ 🔥 Boosted</div>
                 </div>
               </div>
             </div>
@@ -216,9 +216,9 @@ export const PremiumModal: React.FC = () => {
         )}
 
         {/* Trust & Guarantee Footer */}
-        <div className="pt-2 border-t border-[#DCE8F7] flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#64748B]">
+        <div className="pt-2 border-t border-[#DCE8F7] dark:border-slate-800 flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#64748B] dark:text-slate-400">
           <div className="flex items-center gap-1">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
             <span>100% Safe Student Guarantee • Cancel Anytime</span>
           </div>
           <span>Basic connections & joining remain free</span>

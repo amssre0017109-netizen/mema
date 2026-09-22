@@ -96,22 +96,22 @@ export const CreateRequestModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
-      <div className="bg-white border border-[#DCE8F7] rounded-[2.5rem] max-w-lg w-full p-6 sm:p-8 shadow-2xl relative max-h-[92vh] overflow-y-auto space-y-5 text-[#172033]">
+      <div className="bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-[2.5rem] max-w-lg w-full p-6 sm:p-8 shadow-2xl relative max-h-[92vh] overflow-y-auto space-y-5 text-[#172033] dark:text-white">
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-[#DCE8F7]">
+        <div className="flex items-center justify-between pb-3 border-b border-[#DCE8F7] dark:border-slate-800">
           <div>
-            <div className="flex items-center gap-1.5 text-xs font-black text-[#2563EB] uppercase tracking-wider">
-              <Zap className="w-3.5 h-3.5 fill-[#2563EB]" />
+            <div className="flex items-center gap-1.5 text-xs font-black text-[#2563EB] dark:text-blue-400 uppercase tracking-wider">
+              <Zap className="w-3.5 h-3.5 fill-[#2563EB] dark:fill-blue-400" />
               <span>Campus Quick Post (30 Sec)</span>
             </div>
-            <h2 className="text-xl font-black text-[#172033] font-display">
+            <h2 className="text-xl font-black text-[#172033] dark:text-white font-display">
               Post What You Need
             </h2>
           </div>
 
           <button
             onClick={() => setIsCreateRequestModalOpen(false)}
-            className="p-2 rounded-full bg-[#F8FBFF] text-[#64748B] hover:text-[#172033] hover:bg-[#F0F6FF] border border-[#DCE8F7] transition-colors"
+            className="p-2 rounded-full bg-[#F8FBFF] dark:bg-slate-800 text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white hover:bg-[#F0F6FF] dark:hover:bg-slate-700 border border-[#DCE8F7] dark:border-slate-700 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -120,7 +120,7 @@ export const CreateRequestModal: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           {/* Category */}
           <div>
-            <label className="block font-extrabold text-[#172033] mb-1.5">
+            <label className="block font-extrabold text-[#172033] dark:text-slate-200 mb-1.5">
               1. Category
             </label>
             <div className="grid grid-cols-3 gap-1.5">
@@ -138,7 +138,7 @@ export const CreateRequestModal: React.FC = () => {
                     className={`p-2 rounded-2xl text-left border transition-all flex items-center gap-2 ${
                       isSelected
                         ? 'bg-[#2563EB] text-white font-bold border-[#2563EB] shadow-sm'
-                        : 'bg-[#F8FBFF] text-[#172033] hover:bg-[#F0F6FF] border-[#DCE8F7]'
+                        : 'bg-[#F8FBFF] dark:bg-slate-800/80 text-[#172033] dark:text-slate-200 hover:bg-[#F0F6FF] dark:hover:bg-slate-750 border-[#DCE8F7] dark:border-slate-700'
                     }`}
                   >
                     <span className="text-base">{cat.icon}</span>
@@ -151,7 +151,7 @@ export const CreateRequestModal: React.FC = () => {
 
           {/* Need Title */}
           <div>
-            <label className="block font-extrabold text-[#172033] mb-1">
+            <label className="block font-extrabold text-[#172033] dark:text-slate-200 mb-1">
               2. Title (What do you need?)
             </label>
             <input
@@ -160,33 +160,33 @@ export const CreateRequestModal: React.FC = () => {
               value={title}
               onChange={e => setTitle(e.target.value)}
               placeholder="e.g. ⚽ Football Partner Needed / 💃 Bhangra dancer for Fest"
-              className="w-full bg-[#F8FBFF] border border-[#DCE8F7] focus:border-[#2563EB] rounded-2xl p-3 text-xs text-[#172033] font-semibold focus:outline-none shadow-xs"
+              className="w-full bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 focus:border-[#2563EB] dark:focus:border-blue-400 rounded-2xl p-3 text-xs text-[#172033] dark:text-white font-semibold focus:outline-none shadow-xs"
             />
           </div>
 
           {/* Date & Time */}
           <div className="grid grid-cols-2 gap-2.5">
             <div>
-              <label className="block font-extrabold text-[#172033] mb-1">When (Date):</label>
+              <label className="block font-extrabold text-[#172033] dark:text-slate-200 mb-1">When (Date):</label>
               <select
                 value={date}
                 onChange={e => setDate(e.target.value)}
-                className="w-full bg-[#F8FBFF] border border-[#DCE8F7] focus:border-[#2563EB] rounded-2xl p-2.5 text-xs text-[#172033] font-medium focus:outline-none"
+                className="w-full bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 focus:border-[#2563EB] dark:focus:border-blue-400 rounded-2xl p-2.5 text-xs text-[#172033] dark:text-white font-medium focus:outline-none"
               >
                 {quickDates.map(d => (
-                  <option key={d} value={d} className="bg-white text-[#172033]">{d}</option>
+                  <option key={d} value={d} className="bg-white dark:bg-slate-800 text-[#172033] dark:text-white">{d}</option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label className="block font-extrabold text-[#172033] mb-1">Time:</label>
+              <label className="block font-extrabold text-[#172033] dark:text-slate-200 mb-1">Time:</label>
               <input
                 type="text"
                 value={time}
                 onChange={e => setTime(e.target.value)}
                 placeholder="e.g. 6:00 PM"
-                className="w-full bg-[#F8FBFF] border border-[#DCE8F7] focus:border-[#2563EB] rounded-2xl p-2.5 text-xs text-[#172033] font-medium focus:outline-none"
+                className="w-full bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 focus:border-[#2563EB] dark:focus:border-blue-400 rounded-2xl p-2.5 text-xs text-[#172033] dark:text-white font-medium focus:outline-none"
               />
             </div>
           </div>
@@ -194,32 +194,32 @@ export const CreateRequestModal: React.FC = () => {
           {/* Spot & People */}
           <div className="grid grid-cols-3 gap-2.5">
             <div className="col-span-2">
-              <label className="block font-extrabold text-[#172033] mb-1">Location / Spot:</label>
+              <label className="block font-extrabold text-[#172033] dark:text-slate-200 mb-1">Location / Spot:</label>
               <input
                 type="text"
                 value={location}
                 onChange={e => setLocation(e.target.value)}
                 placeholder="e.g. Main Sports Ground / Community Park / Library"
-                className="w-full bg-[#F8FBFF] border border-[#DCE8F7] focus:border-[#2563EB] rounded-2xl p-2.5 text-xs text-[#172033] font-medium focus:outline-none"
+                className="w-full bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 focus:border-[#2563EB] dark:focus:border-blue-400 rounded-2xl p-2.5 text-xs text-[#172033] dark:text-white font-medium focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block font-extrabold text-[#172033] mb-1">People Needed:</label>
+              <label className="block font-extrabold text-[#172033] dark:text-slate-200 mb-1">People Needed:</label>
               <input
                 type="number"
                 min={1}
                 max={20}
                 value={peopleNeeded}
                 onChange={e => setPeopleNeeded(Number(e.target.value))}
-                className="w-full bg-[#F8FBFF] border border-[#DCE8F7] focus:border-[#2563EB] rounded-2xl p-2.5 text-xs text-[#172033] font-bold text-center focus:outline-none"
+                className="w-full bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 focus:border-[#2563EB] dark:focus:border-blue-400 rounded-2xl p-2.5 text-xs text-[#172033] dark:text-white font-bold text-center focus:outline-none"
               />
             </div>
           </div>
 
           {/* Skills */}
           <div className="space-y-1.5">
-            <label className="block font-extrabold text-[#172033]">
+            <label className="block font-extrabold text-[#172033] dark:text-white">
               Required Skill or Activity Tags:
             </label>
             <div className="flex flex-wrap gap-1.5">
@@ -242,13 +242,13 @@ export const CreateRequestModal: React.FC = () => {
 
             {/* Suggested skill chips */}
             <div className="flex flex-wrap items-center gap-1 pt-1">
-              <span className="text-[10px] text-[#64748B] font-bold uppercase">Quick Add:</span>
+              <span className="text-[10px] text-[#64748B] dark:text-slate-400 font-bold uppercase">Quick Add:</span>
               {suggestedSkills.map(sk => (
                 <button
                   type="button"
                   key={sk}
                   onClick={() => handleQuickSkillSelect(sk)}
-                  className="px-2 py-0.5 rounded-full bg-[#F0F6FF] hover:bg-[#E0EAFF] text-[#2563EB] text-[10px] font-medium transition-colors border border-[#DCE8F7]"
+                  className="px-2 py-0.5 rounded-full bg-[#F0F6FF] dark:bg-slate-800 hover:bg-[#E0EAFF] dark:hover:bg-slate-700 text-[#2563EB] dark:text-blue-400 text-[10px] font-medium transition-colors border border-[#DCE8F7] dark:border-slate-700"
                 >
                   + {sk}
                 </button>
@@ -258,7 +258,7 @@ export const CreateRequestModal: React.FC = () => {
 
           {/* Description */}
           <div>
-            <label className="block font-extrabold text-[#172033] mb-1">
+            <label className="block font-extrabold text-[#172033] dark:text-slate-200 mb-1">
               Short Description / Details:
             </label>
             <textarea
@@ -267,17 +267,17 @@ export const CreateRequestModal: React.FC = () => {
               value={description}
               onChange={e => setDescription(e.target.value)}
               placeholder="What should interested students know? (Gear, level, meetup spot...)"
-              className="w-full bg-[#F8FBFF] border border-[#DCE8F7] focus:border-[#2563EB] rounded-2xl p-3 text-xs text-[#172033] focus:outline-none shadow-xs"
+              className="w-full bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 focus:border-[#2563EB] dark:focus:border-blue-400 rounded-2xl p-3 text-xs text-[#172033] dark:text-white focus:outline-none shadow-xs"
             />
           </div>
 
           {/* Urgent Toggle */}
-          <div className="flex items-center justify-between p-3 rounded-2xl bg-[#F8FBFF] border border-[#DCE8F7]">
+          <div className="flex items-center justify-between p-3 rounded-2xl bg-[#F8FBFF] dark:bg-slate-800/80 border border-[#DCE8F7] dark:border-slate-700">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-amber-500" />
               <div>
-                <span className="font-bold text-[#172033] block">Mark as Urgent (Happening Today/Tomorrow)</span>
-                <span className="text-[10px] text-[#64748B]">Instantly alerts students with matching skills.</span>
+                <span className="font-bold text-[#172033] dark:text-white block">Mark as Urgent (Happening Today/Tomorrow)</span>
+                <span className="text-[10px] text-[#64748B] dark:text-slate-400">Instantly alerts students with matching skills.</span>
               </div>
             </div>
             <input
@@ -289,11 +289,11 @@ export const CreateRequestModal: React.FC = () => {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-end gap-2 pt-3 border-t border-[#DCE8F7]">
+          <div className="flex items-center justify-end gap-2 pt-3 border-t border-[#DCE8F7] dark:border-slate-800">
             <button
               type="button"
               onClick={() => setIsCreateRequestModalOpen(false)}
-              className="px-5 py-2.5 bg-[#F8FBFF] border border-[#DCE8F7] text-[#64748B] font-bold rounded-full hover:bg-[#F0F6FF] transition-colors"
+              className="px-5 py-2.5 bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-[#64748B] dark:text-slate-300 font-bold rounded-full hover:bg-[#F0F6FF] dark:hover:bg-slate-700 transition-colors"
             >
               Cancel
             </button>

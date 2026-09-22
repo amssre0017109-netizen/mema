@@ -21,14 +21,14 @@ export const BottomNav: React.FC = () => {
   return (
     <div className="fixed bottom-6 left-0 right-0 z-40 flex items-center justify-center px-4 pointer-events-none">
       {/* Floating Clean Blue-Tinted Glass Dock */}
-      <div className="pointer-events-auto glass-dock-light rounded-full p-2 sm:p-2.5 flex items-center gap-2 sm:gap-4 shadow-light-dock max-w-md w-full justify-around">
+      <div className="pointer-events-auto glass-dock-light dark:bg-slate-900/95 dark:border-slate-800 rounded-full p-2 sm:p-2.5 flex items-center gap-2 sm:gap-4 shadow-light-dock dark:shadow-2xl max-w-md w-full justify-around">
         {/* 1. Home */}
         <button
           onClick={() => setCurrentView('home')}
           className={`p-2.5 sm:p-3 rounded-full transition-all duration-200 ${
             currentView === 'home'
-              ? 'text-[#2563EB] bg-[#F0F6FF] scale-105 shadow-xs font-bold'
-              : 'text-[#64748B] hover:text-[#172033] hover:bg-[#F8FBFF] active:scale-95'
+              ? 'text-[#2563EB] dark:text-blue-400 bg-[#F0F6FF] dark:bg-blue-950/60 scale-105 shadow-xs font-bold'
+              : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white hover:bg-[#F8FBFF] dark:hover:bg-slate-800 active:scale-95'
           }`}
           title="Home Feed"
         >
@@ -40,8 +40,8 @@ export const BottomNav: React.FC = () => {
           onClick={() => setCurrentView('discover')}
           className={`p-2.5 sm:p-3 rounded-full transition-all duration-200 ${
             currentView === 'discover'
-              ? 'text-[#2563EB] bg-[#F0F6FF] scale-105 shadow-xs font-bold'
-              : 'text-[#64748B] hover:text-[#172033] hover:bg-[#F8FBFF] active:scale-95'
+              ? 'text-[#2563EB] dark:text-blue-400 bg-[#F0F6FF] dark:bg-blue-950/60 scale-105 shadow-xs font-bold'
+              : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white hover:bg-[#F8FBFF] dark:hover:bg-slate-800 active:scale-95'
           }`}
           title="Students Directory"
         >
@@ -62,8 +62,8 @@ export const BottomNav: React.FC = () => {
           onClick={() => setCurrentView('messages')}
           className={`relative p-2.5 sm:p-3 rounded-full transition-all duration-200 ${
             currentView === 'messages'
-              ? 'text-[#2563EB] bg-[#F0F6FF] scale-105 shadow-xs font-bold'
-              : 'text-[#64748B] hover:text-[#172033] hover:bg-[#F8FBFF] active:scale-95'
+              ? 'text-[#2563EB] dark:text-blue-400 bg-[#F0F6FF] dark:bg-blue-950/60 scale-105 shadow-xs font-bold'
+              : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white hover:bg-[#F8FBFF] dark:hover:bg-slate-800 active:scale-95'
           }`}
           title="Messages"
         >
@@ -78,8 +78,8 @@ export const BottomNav: React.FC = () => {
           onClick={() => setCurrentView('profile')}
           className={`p-2.5 sm:p-3 rounded-full transition-all duration-200 ${
             currentView === 'profile'
-              ? 'text-[#2563EB] bg-[#F0F6FF] scale-105 shadow-xs font-bold'
-              : 'text-[#64748B] hover:text-[#172033] hover:bg-[#F8FBFF] active:scale-95'
+              ? 'text-[#2563EB] dark:text-blue-400 bg-[#F0F6FF] dark:bg-blue-950/60 scale-105 shadow-xs font-bold'
+              : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white hover:bg-[#F8FBFF] dark:hover:bg-slate-800 active:scale-95'
           }`}
           title="Profile"
         >

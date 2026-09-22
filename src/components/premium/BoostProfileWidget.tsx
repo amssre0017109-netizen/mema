@@ -19,25 +19,25 @@ export const BoostProfileWidget: React.FC = () => {
 
   if (isProfileBoostActive) {
     return (
-      <div className="bg-amber-50/90 border border-amber-200 rounded-3xl p-4 shadow-xs flex items-center justify-between gap-4">
+      <div className="bg-amber-50/90 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 rounded-3xl p-4 shadow-xs flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-xs animate-bounce">
             <Zap className="w-5 h-5 fill-white" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-extrabold uppercase tracking-widest text-amber-800">
+              <span className="text-[10px] font-extrabold uppercase tracking-widest text-amber-800 dark:text-amber-300">
                 ⚡ Priority Boost Active
               </span>
             </div>
-            <h4 className="font-extrabold text-sm text-slate-900">
+            <h4 className="font-extrabold text-sm text-slate-900 dark:text-amber-100">
               Your requests & profile are pinned at the top of the feed!
             </h4>
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-amber-200 text-xs font-black text-amber-900 shrink-0">
-          <Clock className="w-3.5 h-3.5 text-amber-600" />
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white dark:bg-slate-800 border border-amber-200 dark:border-amber-800 text-xs font-black text-amber-900 dark:text-amber-300 shrink-0">
+          <Clock className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
           <span>{formatTime(profileBoostSecondsLeft)}</span>
         </div>
       </div>
@@ -45,14 +45,14 @@ export const BoostProfileWidget: React.FC = () => {
   }
 
   return (
-    <div className="bg-white border border-[#DCE8F7] rounded-3xl p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <div className="bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-3xl p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-2xl bg-[#F8FBFF] text-[#172033] border border-[#DCE8F7] flex items-center justify-center shrink-0">
+        <div className="w-10 h-10 rounded-2xl bg-[#F8FBFF] dark:bg-slate-800 text-[#172033] dark:text-white border border-[#DCE8F7] dark:border-slate-700 flex items-center justify-center shrink-0">
           <Sparkles className="w-5 h-5 text-amber-500" />
         </div>
         <div>
-          <h4 className="font-extrabold text-sm text-[#172033]">Boost Profile & Need Visibility</h4>
-          <p className="text-xs text-[#64748B]">
+          <h4 className="font-extrabold text-sm text-[#172033] dark:text-white">Boost Profile & Need Visibility</h4>
+          <p className="text-xs text-[#64748B] dark:text-slate-400">
             Pin your sports, creative, or project requests to the top of the feed.
           </p>
         </div>

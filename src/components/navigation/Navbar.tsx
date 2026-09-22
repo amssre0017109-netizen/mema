@@ -47,7 +47,7 @@ export const Navbar: React.FC = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-2xl border-b border-[#DCE8F7] text-[#172033] shadow-xs transition-colors">
+    <header className="sticky top-0 z-40 w-full bg-white/95 dark:bg-[#0A0F1D]/95 backdrop-blur-2xl border-b border-[#DCE8F7] dark:border-slate-800 text-[#172033] dark:text-slate-100 shadow-xs transition-colors">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Left: Brand Logo + User Greeting */}
@@ -56,7 +56,7 @@ export const Navbar: React.FC = () => {
             <Logo onClick={() => setCurrentView('home')} size="md" />
 
             {/* Vertical separator */}
-            <div className="h-6 w-[1px] bg-[#DCE8F7] hidden sm:block" />
+            <div className="h-6 w-[1px] bg-[#DCE8F7] dark:bg-slate-800 hidden sm:block" />
 
             {/* User Avatar & Greeting */}
             <div className="hidden sm:flex items-center gap-2.5">
@@ -65,24 +65,24 @@ export const Navbar: React.FC = () => {
                 className="relative shrink-0 group"
                 title="View Profile"
               >
-                <div className="story-ring-light group-hover:scale-105 transition-transform p-0.5">
+                <div className="story-ring-light dark:story-ring-dark group-hover:scale-105 transition-transform p-0.5">
                   <img
                     src={currentUser.avatar}
                     alt={currentUser.name}
-                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover ring-2 ring-white"
+                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover ring-2 ring-white dark:ring-slate-900"
                   />
                 </div>
               </button>
 
               <div className="flex flex-col text-left">
                 <div className="flex items-center gap-1">
-                  <span className="font-bold text-xs text-[#172033] tracking-tight">
+                  <span className="font-bold text-xs text-[#172033] dark:text-white tracking-tight">
                     Hi, {currentUser.name.split(' ')[0]}
                   </span>
                   <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] animate-pulse" />
                 </div>
-                <div className="flex items-center gap-1 text-[10px] font-semibold text-[#64748B]">
-                  <MapPin className="w-2.5 h-2.5 text-[#2563EB]" />
+                <div className="flex items-center gap-1 text-[10px] font-semibold text-[#64748B] dark:text-slate-400">
+                  <MapPin className="w-2.5 h-2.5 text-[#2563EB] dark:text-blue-400" />
                   <span className="max-w-[120px] truncate">
                     {currentUser.location?.split(',')[0] || 'Nearby'}
                   </span>
@@ -92,7 +92,7 @@ export const Navbar: React.FC = () => {
           </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1 bg-[#F8FBFF] p-1 rounded-full border border-[#DCE8F7]">
+          <nav className="hidden md:flex items-center gap-1 bg-[#F8FBFF] dark:bg-slate-900/90 p-1 rounded-full border border-[#DCE8F7] dark:border-slate-800">
             {navItems.map(item => {
               const isActive = currentView === item.id;
               return (
@@ -102,7 +102,7 @@ export const Navbar: React.FC = () => {
                   className={`px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all ${
                     isActive
                       ? 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white shadow-sm shadow-blue-500/20'
-                      : 'text-[#64748B] hover:text-[#172033] hover:bg-white'
+                      : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white hover:bg-white dark:hover:bg-slate-800'
                   }`}
                 >
                   <span>{item.icon}</span>
@@ -117,7 +117,7 @@ export const Navbar: React.FC = () => {
             {/* Theme Toggle Button (Bright / Dark) */}
             <button
               onClick={toggleTheme}
-              className="p-1.5 sm:p-2 text-[#64748B] hover:text-[#2563EB] transition-colors rounded-lg flex items-center justify-center"
+              className="p-1.5 sm:p-2 text-[#64748B] dark:text-slate-400 hover:text-[#2563EB] dark:hover:text-blue-400 transition-colors rounded-lg flex items-center justify-center"
               title={theme === 'dark' ? 'Switch to Bright Mode' : 'Switch to Dark Mode'}
             >
               {theme === 'dark' ? (
@@ -130,7 +130,7 @@ export const Navbar: React.FC = () => {
             {/* Auth / Account Switcher Button */}
             <button
               onClick={() => openAuthModal('signin')}
-              className="p-1.5 sm:p-2 text-[#64748B] hover:text-[#2563EB] transition-colors rounded-lg flex items-center justify-center"
+              className="p-1.5 sm:p-2 text-[#64748B] dark:text-slate-400 hover:text-[#2563EB] dark:hover:text-blue-400 transition-colors rounded-lg flex items-center justify-center"
               title="Sign In / Switch Student Account"
             >
               <KeyRound className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
@@ -139,7 +139,7 @@ export const Navbar: React.FC = () => {
             {/* Settings Button */}
             <button
               onClick={() => openSettingsModal()}
-              className="p-1.5 sm:p-2 text-[#64748B] hover:text-[#2563EB] transition-colors rounded-lg flex items-center justify-center"
+              className="p-1.5 sm:p-2 text-[#64748B] dark:text-slate-400 hover:text-[#2563EB] dark:hover:text-blue-400 transition-colors rounded-lg flex items-center justify-center"
               title="Settings & Preferences"
             >
               <Settings className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
@@ -148,7 +148,7 @@ export const Navbar: React.FC = () => {
             {/* Notification Bell */}
             <button
               onClick={() => setIsNotificationDrawerOpen(true)}
-              className="relative p-1.5 sm:p-2 text-[#64748B] hover:text-[#2563EB] transition-colors rounded-lg flex items-center justify-center"
+              className="relative p-1.5 sm:p-2 text-[#64748B] dark:text-slate-400 hover:text-[#2563EB] dark:hover:text-blue-400 transition-colors rounded-lg flex items-center justify-center"
               title="MEMA Alerts"
             >
               <Bell className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
