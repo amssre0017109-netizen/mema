@@ -14,10 +14,10 @@ export const Logo: React.FC<LogoProps> = ({
   onClick
 }) => {
   const sizeMap = {
-    sm: { box: 'w-7 h-7', text: 'text-sm', sub: 'text-[7px]', icon: 'w-4 h-4' },
-    md: { box: 'w-9 h-9 sm:w-10 sm:h-10', text: 'text-base sm:text-lg', sub: 'text-[7.5px] sm:text-[8.5px]', icon: 'w-5 h-5 sm:w-6 sm:h-6' },
-    lg: { box: 'w-12 h-12', text: 'text-xl', sub: 'text-[9.5px]', icon: 'w-7 h-7' },
-    xl: { box: 'w-16 h-16', text: 'text-2xl', sub: 'text-[11px]', icon: 'w-9 h-9' }
+    sm: { box: 'w-7 h-7', text: 'text-sm', sub: 'text-[6.5px]', icon: 'w-3.5 h-3.5' },
+    md: { box: 'w-8 h-8 sm:w-9 sm:h-9', text: 'text-base sm:text-lg', sub: 'text-[7px] sm:text-[8px]', icon: 'w-4.5 h-4.5 sm:w-5 sm:h-5' },
+    lg: { box: 'w-11 h-11', text: 'text-xl', sub: 'text-[9px]', icon: 'w-6 h-6' },
+    xl: { box: 'w-14 h-14', text: 'text-2xl', sub: 'text-[10px]', icon: 'w-8 h-8' }
   };
 
   const currentSize = sizeMap[size];
