@@ -14,10 +14,10 @@ export const Logo: React.FC<LogoProps> = ({
   onClick
 }) => {
   const sizeMap = {
-    sm: { icon: 'w-6 h-6', text: 'text-sm', sub: 'text-[7px]' },
-    md: { icon: 'w-8 h-8 sm:w-9 sm:h-9', text: 'text-base sm:text-lg', sub: 'text-[7.5px] sm:text-[8.5px]' },
-    lg: { icon: 'w-10 h-10', text: 'text-xl', sub: 'text-[9.5px]' },
-    xl: { icon: 'w-14 h-14', text: 'text-2xl', sub: 'text-[11px]' }
+    sm: { icon: 'w-7 h-7', text: 'text-base font-black', sub: 'text-[8px] font-black' },
+    md: { icon: 'w-9 h-9 sm:w-10 sm:h-10', text: 'text-lg sm:text-xl font-black', sub: 'text-[9px] sm:text-[10px] font-black' },
+    lg: { icon: 'w-11 h-11', text: 'text-2xl font-black', sub: 'text-[11px] font-black' },
+    xl: { icon: 'w-16 h-16', text: 'text-3xl font-black', sub: 'text-[13px] font-black' }
   };
 
   const currentSize = sizeMap[size];
@@ -25,7 +25,7 @@ export const Logo: React.FC<LogoProps> = ({
   return (
     <div
       onClick={onClick}
-      className={`inline-flex items-center gap-2 select-none transition-all ${
+      className={`inline-flex items-center gap-2.5 select-none transition-all ${
         onClick ? 'cursor-pointer group hover:opacity-95 active:scale-95' : ''
       } ${className}`}
     >
@@ -35,7 +35,7 @@ export const Logo: React.FC<LogoProps> = ({
           viewBox="0 0 48 48"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="w-full h-full"
+          className="w-full h-full drop-shadow-xs"
         >
           <defs>
             <linearGradient id="memaGradBrand1" x1="10" y1="38" x2="38" y2="10" gradientUnits="userSpaceOnUse">
@@ -75,21 +75,21 @@ export const Logo: React.FC<LogoProps> = ({
         </svg>
       </div>
 
-      {/* Wordmark Typography */}
+      {/* Bold Attractive Wordmark Typography: MEMA - find your mood */}
       {showText && (
         <div className="flex flex-col text-left leading-none">
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             <span
-              className={`font-black tracking-tight font-display bg-gradient-to-r from-slate-900 via-[#1D4ED8] to-blue-600 dark:from-white dark:via-blue-300 dark:to-indigo-300 bg-clip-text text-transparent ${currentSize.text}`}
+              className={`tracking-tight font-display bg-gradient-to-r from-[#172033] via-[#1D4ED8] to-[#2563EB] dark:from-white dark:via-blue-300 dark:to-blue-500 bg-clip-text text-transparent drop-shadow-xs ${currentSize.text}`}
             >
               MEMA
             </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#1D4ED8] dark:bg-blue-400 animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] animate-pulse" />
           </div>
           <span
-            className={`font-mono font-extrabold uppercase tracking-[0.14em] text-[#1D4ED8] dark:text-blue-400 opacity-90 mt-0.5 whitespace-nowrap ${currentSize.sub}`}
+            className={`font-sans tracking-[0.16em] text-[#2563EB] dark:text-blue-400 mt-0.5 whitespace-nowrap ${currentSize.sub}`}
           >
-            FIND YOUR MOOD
+            — find your mood
           </span>
         </div>
       )}
