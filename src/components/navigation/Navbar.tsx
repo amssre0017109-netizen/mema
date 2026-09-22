@@ -112,48 +112,48 @@ export const Navbar: React.FC = () => {
             })}
           </nav>
 
-          {/* Right Action Icons */}
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* Right Action Icons (Clean Boundary-Free Icons) */}
+          <div className="flex items-center gap-1 sm:gap-2">
             {/* Theme Toggle Button (Bright / Dark) */}
             <button
               onClick={toggleTheme}
-              className="p-2.5 rounded-full bg-[#F8FBFF] hover:bg-white border border-[#DCE8F7] text-[#64748B] hover:text-[#2563EB] transition-colors shadow-xs"
+              className="p-2 text-[#64748B] hover:text-[#2563EB] transition-colors flex items-center justify-center"
               title={theme === 'dark' ? 'Switch to Bright Mode' : 'Switch to Dark Mode'}
             >
               {theme === 'dark' ? (
-                <Sun className="w-4 h-4 text-amber-500 animate-in spin-in-180 duration-200" />
+                <Sun className="w-5 h-5 text-amber-500 animate-in spin-in-180 duration-200" />
               ) : (
-                <Moon className="w-4 h-4 text-[#2563EB] animate-in spin-in-180 duration-200" />
+                <Moon className="w-5 h-5 text-[#2563EB] animate-in spin-in-180 duration-200" />
               )}
             </button>
 
             {/* Auth / Account Switcher Button */}
             <button
               onClick={() => openAuthModal('signin')}
-              className="p-2.5 rounded-full bg-[#F8FBFF] hover:bg-white border border-[#DCE8F7] text-[#64748B] hover:text-[#2563EB] transition-colors shadow-xs flex"
+              className="p-2 text-[#64748B] hover:text-[#2563EB] transition-colors flex items-center justify-center"
               title="Sign In / Switch Student Account"
             >
-              <KeyRound className="w-4 h-4" />
+              <KeyRound className="w-5 h-5" />
             </button>
 
             {/* Settings Button */}
             <button
               onClick={() => openSettingsModal()}
-              className="p-2.5 rounded-full bg-[#F8FBFF] hover:bg-white border border-[#DCE8F7] text-[#64748B] hover:text-[#2563EB] transition-colors shadow-xs flex"
+              className="p-2 text-[#64748B] hover:text-[#2563EB] transition-colors flex items-center justify-center"
               title="Settings & Preferences"
             >
-              <Settings className="w-4 h-4" />
+              <Settings className="w-5 h-5" />
             </button>
 
             {/* Notification Bell */}
             <button
               onClick={() => setIsNotificationDrawerOpen(true)}
-              className="relative p-2.5 rounded-full bg-[#F8FBFF] hover:bg-white border border-[#DCE8F7] text-[#64748B] hover:text-[#2563EB] transition-colors shadow-xs"
+              className="relative p-2 text-[#64748B] hover:text-[#2563EB] transition-colors flex items-center justify-center"
               title="MEMA Alerts"
             >
-              <Bell className="w-4 h-4" />
+              <Bell className="w-5 h-5" />
               {unreadNotificationsCount > 0 && (
-                <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-[#2563EB] border-2 border-white rounded-full animate-ping" />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#2563EB] rounded-full animate-ping" />
               )}
             </button>
           </div>

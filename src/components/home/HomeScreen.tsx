@@ -30,6 +30,7 @@ export const HomeScreen: React.FC = () => {
   const {
     currentUser,
     allStudents,
+    campusRequests,
     filteredRequests,
     setIsCreateRequestModalOpen,
     setActiveInterestTargetRequest,
@@ -43,18 +44,18 @@ export const HomeScreen: React.FC = () => {
     myCampusOnly,
     setMyCampusOnly,
     setCurrentView,
-    setNotificationToast,
+    openUserProfileModal,
     followedUserIds,
     toggleFollowUser,
     isFollowingUser,
-    openUserProfileModal,
+    setNotificationToast,
     openStoryViewer
   } = useApp();
 
-  const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<'all' | 'campus'>('all');
-  const [activeMenuRequestId, setActiveMenuRequestId] = useState<string | null>(null);
   const [bookmarkedIds, setBookmarkedIds] = useState<string[]>([]);
+  const [activeMenuRequestId, setActiveMenuRequestId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const [dismissedSuggestionIds, setDismissedSuggestionIds] = useState<string[]>([]);
 
   const followedStudents = allStudents.filter(s => followedUserIds.includes(s.id));
@@ -91,8 +92,9 @@ export const HomeScreen: React.FC = () => {
 
   // 🧠 CONTROLLED AGENTIC SEARCH TOOL: Search and rank requests
   const rankedRequestResults = useMemo(() => {
-    return tool_search_and_rank_requests(parsedIntent, filteredRequests);
-  }, [parsedIntent, filteredRequests]);
+    const baseRequests = searchQuery.trim() ? campusRequests : filteredRequests;
+    return tool_search_and_rank_requests(parsedIntent, baseRequests);
+  }, [parsedIntent, filteredRequests, campusRequests, searchQuery]);
 
   const searchFilteredRequests = rankedRequestResults.map(r => r.request);
 
@@ -457,11 +459,35 @@ export const HomeScreen: React.FC = () => {
             4. FEED CARDS (Clean White + Soft Blue Highlights)
            ========================================================================= */}
         <div className="space-y-5">
-          {searchFilteredRequests.map(req => {
-            const isCreator = req.creator.id === currentUser.id;
-            const alreadyExpressed = req.interestedUsers.some(u => u.id === currentUser.id);
-            const isBookmarked = bookmarkedIds.includes(req.id);
-            const isMenuOpen = activeMenuRequestId === req.id;
+          {searchFilteredRequests.length === 0 ? (
+            <div className="bg-white border border-[#DCE8F7] rounded-3xl p-8 text-center space-y-3 shadow-xs">
+              <div className="w-12 h-12 rounded-full bg-[#F0F6FF] border border-[#DCE8F7] flex items-center justify-center mx-auto text-[#2563EB]">
+                <Search className="w-6 h-6" />
+              </div>
+              <h3 className="font-extrabold text-base text-[#172033]">
+                {searchQuery ? `No needs found for "${searchQuery}"` : 'No campus needs found'}
+              </h3>
+              <p className="text-xs text-[#64748B] max-w-sm mx-auto">
+                Try searching for activities like "football", "badminton", "dance", "physics", "gym", or reset your filters.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery('');
+                  setSelectedCategory('all');
+                  setMyCampusOnly(false);
+                }}
+                className="px-5 py-2 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-bold shadow-xs transition-colors"
+              >
+                Clear Search & Filters
+              </button>
+            </div>
+          ) : (
+            searchFilteredRequests.map(req => {
+              const isCreator = req.creator.id === currentUser.id;
+              const alreadyExpressed = req.interestedUsers.some(u => u.id === currentUser.id);
+              const isBookmarked = bookmarkedIds.includes(req.id);
+              const isMenuOpen = activeMenuRequestId === req.id;
 
             const matchingSkills = currentUser.skills.filter(sk =>
               req.requiredSkills.some(r => r.toLowerCase().includes(sk.toLowerCase()) || sk.toLowerCase().includes(r.toLowerCase()))
@@ -697,7 +723,7 @@ export const HomeScreen: React.FC = () => {
                 </div>
               </div>
             );
-          })}
+          }))}
         </div>
       </div>
     </div>
