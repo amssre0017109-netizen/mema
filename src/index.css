@@ -3,21 +3,48 @@
 @tailwind utilities;
 
 :root {
-  --indicator-dot: #000000;
+  --indicator-dot: #172033;
+  --bg-main: #F0F6FF;
+  --bg-card: #FFFFFF;
+  --bg-subtle: #F8FBFF;
+  --border-color: #DCE8F7;
+  --text-primary: #172033;
+  --text-secondary: #64748B;
+  color-scheme: light;
 }
 
-.dark, [data-theme="dark"] {
+.dark, [data-theme="dark"], html.dark {
   --indicator-dot: #FFFFFF;
+  --bg-main: #0A0F1D;
+  --bg-card: #111A2E;
+  --bg-subtle: #17223B;
+  --border-color: #1E2D4A;
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  color-scheme: dark;
 }
 
 @layer base {
+  html.dark {
+    color-scheme: dark;
+  }
+
   body {
-    @apply bg-[#F0F6FF] text-[#172033] font-sans antialiased overflow-x-hidden;
+    @apply bg-[#F0F6FF] text-[#172033] font-sans antialiased overflow-x-hidden transition-colors duration-200;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  .dark body, body.dark {
+    background-color: #0A0F1D !important;
+    color: #F1F5F9 !important;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-display tracking-tight text-[#172033];
+  }
+
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+    color: #F1F5F9 !important;
   }
 }
 
@@ -29,16 +56,22 @@
 ::-webkit-scrollbar-track {
   background: #F0F6FF;
 }
+.dark ::-webkit-scrollbar-track, html.dark ::-webkit-scrollbar-track {
+  background: #0A0F1D;
+}
 ::-webkit-scrollbar-thumb {
   background: #DCE8F7;
   border-radius: 9999px;
+}
+.dark ::-webkit-scrollbar-thumb, html.dark ::-webkit-scrollbar-thumb {
+  background: #1E2D4A;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #2563EB;
 }
 
 /* Sleek MEMA Floating Glass Dock */
-.glass-dock-dark, .glass-dock-light {
+.glass-dock-light {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
@@ -46,31 +79,56 @@
   box-shadow: 0 20px 45px -10px rgba(37, 99, 235, 0.12), 0 0 0 1px #FFFFFF;
 }
 
-.dock-pill-active-dark, .dock-pill-active-light {
+.glass-dock-dark, .dark .glass-dock-light, .dark .glass-dock-dark, html.dark .glass-dock-light {
+  background: rgba(17, 26, 46, 0.92) !important;
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid #1E2D4A !important;
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(37, 99, 235, 0.2) !important;
+}
+
+.dock-pill-active-light, .dock-pill-active-dark {
   background: #2563EB;
   color: #FFFFFF;
   box-shadow: 0 4px 18px rgba(37, 99, 235, 0.35);
 }
 
 /* Sleek MEMA White Cards with Subtle Blue Glow */
-.card-dark, .card-light {
+.card-light {
   background: #FFFFFF;
   border: 1px solid #DCE8F7;
   box-shadow: 0 4px 20px -2px rgba(37, 99, 235, 0.05);
 }
 
-.card-dark-hover, .card-light-hover {
+.card-dark, .dark .card-light, .dark .card-dark, html.dark .card-light {
+  background: #111A2E !important;
+  border: 1px solid #1E2D4A !important;
+  color: #F1F5F9 !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.35) !important;
+}
+
+.card-light-hover, .card-dark-hover {
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.card-dark-hover:hover, .card-light-hover:hover {
+.card-light-hover:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 30px -4px rgba(37, 99, 235, 0.12);
   border-color: #2563EB;
 }
+.card-dark-hover:hover, .dark .card-light-hover:hover, html.dark .card-light-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px -4px rgba(37, 99, 235, 0.3) !important;
+  border-color: #2563EB !important;
+}
 
 /* Story Ring with Glowing Light Dark-Blue Gradient */
-.story-ring-dark, .story-ring-light {
+.story-ring-light {
   background: linear-gradient(135deg, #1D4ED8, #2563EB, #60A5FA);
+  padding: 2.5px;
+  border-radius: 9999px;
+}
+.story-ring-dark, .dark .story-ring-light, html.dark .story-ring-light {
+  background: linear-gradient(135deg, #2563EB, #3B82F6, #93C5FD);
   padding: 2.5px;
   border-radius: 9999px;
 }
@@ -79,4 +137,103 @@
   background: #DCE8F7;
   padding: 2px;
   border-radius: 9999px;
+}
+.dark .story-ring-gray, html.dark .story-ring-gray {
+  background: #1E2D4A !important;
+}
+
+/* =========================================================================
+   GLOBAL DARK MODE ADAPTIVE STYLES (OBSIDIAN MIDNIGHT PALETTE)
+   ========================================================================= */
+
+.dark header, html.dark header {
+  background-color: rgba(10, 15, 29, 0.95) !important;
+  border-color: #1E2D4A !important;
+}
+
+.dark .bg-white, html.dark .bg-white {
+  background-color: #111A2E !important;
+}
+
+.dark .bg-\[\#F0F6FF\], html.dark .bg-\[\#F0F6FF\] {
+  background-color: #0A0F1D !important;
+}
+
+.dark .bg-\[\#F8FBFF\], html.dark .bg-\[\#F8FBFF\] {
+  background-color: #17223B !important;
+}
+
+.dark .border-\[\#DCE8F7\], html.dark .border-\[\#DCE8F7\] {
+  border-color: #1E2D4A !important;
+}
+
+.dark .border-b-\[\#DCE8F7\], html.dark .border-b-\[\#DCE8F7\] {
+  border-bottom-color: #1E2D4A !important;
+}
+
+.dark .border-t-\[\#DCE8F7\], html.dark .border-t-\[\#DCE8F7\] {
+  border-top-color: #1E2D4A !important;
+}
+
+.dark .border-r-\[\#DCE8F7\], html.dark .border-r-\[\#DCE8F7\] {
+  border-right-color: #1E2D4A !important;
+}
+
+.dark .border-l-\[\#DCE8F7\], html.dark .border-l-\[\#DCE8F7\] {
+  border-left-color: #1E2D4A !important;
+}
+
+.dark .divide-\[\#DCE8F7\] > * + *, html.dark .divide-\[\#DCE8F7\] > * + * {
+  border-color: #1E2D4A !important;
+}
+
+.dark .text-\[\#172033\], html.dark .text-\[\#172033\] {
+  color: #F1F5F9 !important;
+}
+
+.dark .text-\[\#64748B\], html.dark .text-\[\#64748B\] {
+  color: #94A3B8 !important;
+}
+
+.dark .ring-white, html.dark .ring-white {
+  --tw-ring-color: #111A2E !important;
+}
+
+/* Form Controls & Inputs in Dark Mode */
+.dark input[type="text"],
+.dark input[type="email"],
+.dark input[type="password"],
+.dark input[type="number"],
+.dark input[type="search"],
+.dark input[type="tel"],
+.dark textarea,
+.dark select,
+html.dark input[type="text"],
+html.dark input[type="email"],
+html.dark input[type="password"],
+html.dark input[type="number"],
+html.dark input[type="search"],
+html.dark input[type="tel"],
+html.dark textarea,
+html.dark select {
+  background-color: #17223B !important;
+  color: #F1F5F9 !important;
+  border-color: #1E2D4A !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder,
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #64748B !important;
+}
+
+/* Modals backdrop & surface */
+.dark .bg-black\/40,
+.dark .bg-black\/50,
+.dark .bg-black\/60,
+html.dark .bg-black\/40,
+html.dark .bg-black\/50,
+html.dark .bg-black\/60 {
+  background-color: rgba(0, 0, 0, 0.75) !important;
 }

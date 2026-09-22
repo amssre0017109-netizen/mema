@@ -36,7 +36,7 @@ const AppContent: React.FC = () => {
   } = useApp();
 
   return (
-    <div className="min-h-screen bg-[#F0F6FF] text-[#172033] flex flex-col relative font-sans">
+    <div className="min-h-screen bg-[#F0F6FF] dark:bg-[#0A0F1D] text-[#172033] dark:text-[#F1F5F9] flex flex-col relative font-sans transition-colors duration-200">
       <Navbar />
 
       <main className="flex-1">
