@@ -16,9 +16,12 @@ import {
   X,
   Sparkles,
   Check,
-  Search
+  Search,
+  Smile,
+  SmilePlus
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { EmojiPicker } from './EmojiPicker';
 
 export const MessagesScreen: React.FC = () => {
   const {
@@ -26,17 +29,22 @@ export const MessagesScreen: React.FC = () => {
     activeConversationId,
     setActiveConversationId,
     sendMessage,
+    toggleMessageReaction,
     respondToMeetupProposal,
     clearConversationMessages,
     openReportModal,
     blockUser,
     openUserProfileModal,
-    setNotificationToast
+    setNotificationToast,
+    currentUser,
+    authUser
   } = useApp();
 
   const [inputMessage, setInputMessage] = useState('');
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMeetupModalOpen, setIsMeetupModalOpen] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Safe Meetup Proposal Customization
   const [selectedSpot, setSelectedSpot] = useState('Central Library Study Commons');
@@ -64,12 +72,29 @@ export const MessagesScreen: React.FC = () => {
     }
   }, [activeConv?.messages]);
 
+  const handleSelectEmoji = (emoji: string) => {
+    if (inputRef.current) {
+      const input = inputRef.current;
+      const start = input.selectionStart ?? inputMessage.length;
+      const end = input.selectionEnd ?? inputMessage.length;
+      const updated = inputMessage.substring(0, start) + emoji + inputMessage.substring(end);
+      setInputMessage(updated);
+      setTimeout(() => {
+        input.focus();
+        input.setSelectionRange(start + emoji.length, start + emoji.length);
+      }, 0);
+    } else {
+      setInputMessage(prev => prev + emoji);
+    }
+  };
+
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputMessage.trim() || !activeConversationId) return;
 
     sendMessage(activeConversationId, inputMessage.trim());
     setInputMessage('');
+    setIsEmojiPickerOpen(false);
   };
 
   const handleQuickSend = (text: string) => {
@@ -107,10 +132,11 @@ export const MessagesScreen: React.FC = () => {
 
   const quickActionChips = [
     { label: '🛡️ Safe Meetup', action: () => setIsMeetupModalOpen(true) },
-    { label: '📚 Library Co-Study', action: () => handleQuickSend('Hey! Up for a co-study session at the Central Library?') },
-    { label: '⏰ Free This Evening', action: () => handleQuickSend('I am free this evening after 5 PM! Let me know if that works.') },
-    { label: '⚽ Ready to Join', action: () => handleQuickSend('Count me in! I will reach the spot on time.') },
-    { label: '👍 Sounds Great!', action: () => handleQuickSend('Sounds like a solid plan! See you there.') }
+    { label: '🔥 Lit / Awesome!', action: () => handleQuickSend('🔥 That sounds awesome!') },
+    { label: '📚 Library Co-Study', action: () => handleQuickSend('📚 Up for a co-study session at the Central Library?') },
+    { label: '⏰ Free This Evening', action: () => handleQuickSend('⏰ I am free this evening after 5 PM! Let me know if that works.') },
+    { label: '⚽ Ready to Join', action: () => handleQuickSend('⚽ Count me in! I will reach the spot on time.') },
+    { label: '👍 Sounds Great!', action: () => handleQuickSend('👍 Sounds like a solid plan! See you there.') }
   ];
 
   const presetSpots = [
@@ -369,10 +395,10 @@ export const MessagesScreen: React.FC = () => {
                   activeConv.messages.map(msg => (
                     <div
                       key={msg.id}
-                      className={`flex flex-col ${msg.isMine ? 'items-end' : 'items-start'}`}
+                      className={`flex flex-col group/msg relative ${msg.isMine ? 'items-end' : 'items-start'}`}
                     >
                       <div
-                        className={`max-w-[85%] sm:max-w-[80%] rounded-2xl px-4 py-2.5 text-xs shadow-2xs ${
+                        className={`max-w-[85%] sm:max-w-[80%] rounded-2xl px-4 py-2.5 text-xs shadow-2xs relative ${
                           msg.isMine
                             ? 'bg-[#2563EB] text-white rounded-br-xs'
                             : 'bg-white dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-[#172033] dark:text-slate-100 rounded-bl-xs'
@@ -443,7 +469,50 @@ export const MessagesScreen: React.FC = () => {
                           </div>
                         )}
                       </div>
-                      <span className="text-[10px] text-[#64748B] dark:text-slate-400 mt-1 px-1">
+
+                      {/* Message Emoji Reactions Display */}
+                      {msg.reactions && msg.reactions.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-1 px-1">
+                          {msg.reactions.map((reaction, rIdx) => {
+                            const hasReacted = reaction.users.includes(authUser?.id || currentUser?.id || 'me');
+                            return (
+                              <button
+                                key={rIdx}
+                                type="button"
+                                onClick={() => toggleMessageReaction(activeConv.id, msg.id, reaction.emoji)}
+                                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold border transition-all active:scale-95 ${
+                                  hasReacted
+                                    ? 'bg-blue-50 dark:bg-blue-950/80 border-[#2563EB] text-[#2563EB] dark:text-blue-400 shadow-2xs'
+                                    : 'bg-white/90 dark:bg-slate-800/90 border-[#DCE8F7] dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-[#2563EB]'
+                                }`}
+                                title={`Reaction ${reaction.emoji}`}
+                              >
+                                <span>{reaction.emoji}</span>
+                                <span className="text-[10px]">{reaction.count}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+
+                      {/* Quick Emoji Reaction Toolbar (hover/focus) */}
+                      <div className={`flex items-center gap-1 mt-0.5 opacity-0 group-hover/msg:opacity-100 focus-within:opacity-100 transition-opacity ${msg.isMine ? 'justify-end' : 'justify-start'}`}>
+                        <div className="flex items-center gap-0.5 p-0.5 rounded-full bg-white dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 shadow-xs">
+                          {['👍', '❤️', '🔥', '😂', '👏', '🎉'].map(emoji => (
+                            <button
+                              key={emoji}
+                              type="button"
+                              onClick={() => toggleMessageReaction(activeConv.id, msg.id, emoji)}
+                              className="w-5 h-5 flex items-center justify-center text-xs rounded-full hover:bg-[#F0F6FF] dark:hover:bg-slate-700 hover:scale-125 transition-transform"
+                              title={`React ${emoji}`}
+                            >
+                              {emoji}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <span className="text-[10px] text-[#64748B] dark:text-slate-400 px-1">
                         {msg.timestamp}
                       </span>
                     </div>
@@ -466,8 +535,9 @@ export const MessagesScreen: React.FC = () => {
                 ))}
               </div>
 
-              {/* Message Input Bar */}
-              <form onSubmit={handleSend} className="p-3 bg-white dark:bg-slate-900 border-t border-[#DCE8F7] dark:border-slate-800 flex items-center gap-2">
+              {/* Message Input Bar with Emoji Option */}
+              <form onSubmit={handleSend} className="p-3 bg-white dark:bg-slate-900 border-t border-[#DCE8F7] dark:border-slate-800 flex items-center gap-2 relative">
+                {/* Propose Safe Meetup */}
                 <button
                   type="button"
                   onClick={() => setIsMeetupModalOpen(true)}
@@ -477,7 +547,32 @@ export const MessagesScreen: React.FC = () => {
                   <Plus className="w-4 h-4" />
                 </button>
 
+                {/* Emoji Picker Popover Button */}
+                <div className="relative shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => setIsEmojiPickerOpen(prev => !prev)}
+                    className={`p-2.5 rounded-full border transition-all flex items-center justify-center ${
+                      isEmojiPickerOpen
+                        ? 'bg-[#2563EB] text-white border-[#2563EB] shadow-xs'
+                        : 'bg-[#F8FBFF] dark:bg-slate-800 hover:bg-[#F0F6FF] dark:hover:bg-slate-700 text-[#2563EB] dark:text-blue-400 border-[#DCE8F7] dark:border-slate-700'
+                    }`}
+                    title="Insert Emoji"
+                  >
+                    <Smile className="w-4 h-4" />
+                  </button>
+
+                  <EmojiPicker
+                    isOpen={isEmojiPickerOpen}
+                    onClose={() => setIsEmojiPickerOpen(false)}
+                    onSelectEmoji={handleSelectEmoji}
+                    position="bottom-left"
+                  />
+                </div>
+
+                {/* Chat Input Text Box */}
                 <input
+                  ref={inputRef}
                   type="text"
                   value={inputMessage}
                   onChange={e => setInputMessage(e.target.value)}
@@ -485,6 +580,7 @@ export const MessagesScreen: React.FC = () => {
                   className="flex-1 bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 focus:border-[#2563EB] dark:focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 rounded-full px-4 py-2.5 text-xs text-[#172033] dark:text-white placeholder-[#64748B] dark:placeholder-slate-500 focus:outline-none transition-colors"
                 />
 
+                {/* Send Button */}
                 <button
                   type="submit"
                   disabled={!inputMessage.trim()}

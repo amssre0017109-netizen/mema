@@ -92,6 +92,7 @@ interface AppContextType {
   activeConversationId: string | null;
   setActiveConversationId: (id: string | null) => void;
   sendMessage: (convId: string, text: string, isIcebreaker?: boolean, safeMeetup?: ChatMessage['safeMeetupProposal']) => void;
+  toggleMessageReaction: (convId: string, messageId: string, emoji: string) => void;
   respondToMeetupProposal: (convId: string, msgId: string, accept: boolean) => void;
   clearConversationMessages: (convId: string) => void;
   startConversationWithStudent: (student: UserProfile, contextTitle?: string, initialMessage?: string) => void;
@@ -663,6 +664,50 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }, 1500);
   };
 
+  // Toggle emoji reaction on message
+  const toggleMessageReaction = (convId: string, messageId: string, emoji: string) => {
+    const currentUserId = authUser?.id || currentUser?.id || 'me';
+    setConversations(prev =>
+      prev.map(c => {
+        if (c.id === convId) {
+          const updatedMessages = c.messages.map(m => {
+            if (m.id === messageId) {
+              const currentReactions = m.reactions || [];
+              const existingReaction = currentReactions.find(r => r.emoji === emoji);
+              let newReactions;
+              if (existingReaction) {
+                if (existingReaction.users.includes(currentUserId)) {
+                  const updatedUsers = existingReaction.users.filter(u => u !== currentUserId);
+                  if (updatedUsers.length === 0) {
+                    newReactions = currentReactions.filter(r => r.emoji !== emoji);
+                  } else {
+                    newReactions = currentReactions.map(r =>
+                      r.emoji === emoji
+                        ? { ...r, count: updatedUsers.length, users: updatedUsers }
+                        : r
+                    );
+                  }
+                } else {
+                  newReactions = currentReactions.map(r =>
+                    r.emoji === emoji
+                      ? { ...r, count: r.count + 1, users: [...r.users, currentUserId] }
+                      : r
+                  );
+                }
+              } else {
+                newReactions = [...currentReactions, { emoji, count: 1, users: [currentUserId] }];
+              }
+              return { ...m, reactions: newReactions };
+            }
+            return m;
+          });
+          return { ...c, messages: updatedMessages };
+        }
+        return c;
+      })
+    );
+  };
+
   // Respond to Safe Meetup Proposal
   const respondToMeetupProposal = (convId: string, msgId: string, accept: boolean) => {
     let proposalLocation = 'Campus Safe Spot';
@@ -1086,6 +1131,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         activeConversationId,
         setActiveConversationId,
         sendMessage,
+        toggleMessageReaction,
         respondToMeetupProposal,
         clearConversationMessages,
         startConversationWithStudent,

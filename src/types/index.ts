@@ -118,6 +118,12 @@ export interface CampusNotification {
   };
 }
 
+export interface ChatMessageReaction {
+  emoji: string;
+  count: number;
+  users: string[];
+}
+
 export interface ChatMessage {
   id: string;
   senderId: string;
@@ -130,6 +136,7 @@ export interface ChatMessage {
     time: string;
     status: 'proposed' | 'accepted';
   };
+  reactions?: ChatMessageReaction[];
 }
 
 export interface Conversation {

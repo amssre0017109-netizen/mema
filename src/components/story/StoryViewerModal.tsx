@@ -274,8 +274,34 @@ export const StoryViewerModal: React.FC = () => {
           </button>
         </div>
 
-        {/* Bottom Reply Bar */}
-        <div className="relative z-20 p-4 bg-black/60 backdrop-blur-md border-t border-white/10 pointer-events-auto">
+        {/* Bottom Reply Bar with Quick Emoji Options */}
+        <div className="relative z-20 p-4 bg-black/60 backdrop-blur-md border-t border-white/10 pointer-events-auto space-y-2.5">
+          {/* Quick Reaction Emojis */}
+          <div className="flex items-center justify-between gap-1 px-1">
+            {['🔥', '👏', '❤️', '😂', '🙌', '🚀', '😍', '✨'].map(emoji => (
+              <button
+                key={emoji}
+                type="button"
+                onClick={() => {
+                  startConversationWithStudent(
+                    user,
+                    'Story Reaction',
+                    `${emoji} Reacted to your story!`
+                  );
+                  setNotificationToast({
+                    message: `Sent ${emoji} to ${user.name.split(' ')[0]}!`,
+                    subtext: 'Your reaction was delivered via campus chat.'
+                  });
+                  closeStoryViewer();
+                }}
+                className="w-8 h-8 flex items-center justify-center text-base rounded-full bg-white/10 hover:bg-white/25 hover:scale-125 transition-transform active:scale-95 text-white shadow-sm"
+                title={`React with ${emoji}`}
+              >
+                {emoji}
+              </button>
+            ))}
+          </div>
+
           <form onSubmit={handleSendReply} className="flex items-center gap-2">
             <input
               type="text"
