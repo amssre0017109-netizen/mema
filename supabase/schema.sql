@@ -126,9 +126,47 @@ create table if not exists public.subscriptions (
   created_at timestamptz default now()
 );
 
+-- 8. USER FOLLOWS & RELATIONSHIPS TABLE
+create table if not exists public.user_follows (
+  id uuid primary key default gen_random_uuid(),
+  follower_id text references public.profiles(id) on delete cascade not null,
+  following_id text references public.profiles(id) on delete cascade not null,
+  created_at timestamptz default now(),
+  unique(follower_id, following_id)
+);
+
+create index if not exists idx_user_follows_follower on public.user_follows(follower_id);
+create index if not exists idx_user_follows_following on public.user_follows(following_id);
+
 -- =========================================================================
--- SEED INITIAL MEMA PROFILES
+-- ROW LEVEL SECURITY (RLS) POLICIES
 -- =========================================================================
+alter table public.profiles enable row level security;
+alter table public.campus_requests enable row level security;
+alter table public.request_interests enable row level security;
+alter table public.conversations enable row level security;
+alter table public.messages enable row level security;
+alter table public.payment_transactions enable row level security;
+alter table public.subscriptions enable row level security;
+alter table public.user_follows enable row level security;
+
+-- Allow public reads for student directory, feeds, and follow relationships
+create policy "Allow public read for profiles" on public.profiles for select using (true);
+create policy "Allow public read for campus_requests" on public.campus_requests for select using (true);
+create policy "Allow public read for request_interests" on public.request_interests for select using (true);
+create policy "Allow public read for conversations" on public.conversations for select using (true);
+create policy "Allow public read for messages" on public.messages for select using (true);
+create policy "Allow public read for user_follows" on public.user_follows for select using (true);
+
+-- Allow public insert/updates/deletes for active app usage
+create policy "Allow insert for profiles" on public.profiles for insert with check (true);
+create policy "Allow update for profiles" on public.profiles for update using (true);
+create policy "Allow insert for campus_requests" on public.campus_requests for insert with check (true);
+create policy "Allow insert for request_interests" on public.request_interests for insert with check (true);
+create policy "Allow insert for messages" on public.messages for insert with check (true);
+create policy "Allow insert for payment_transactions" on public.payment_transactions for insert with check (true);
+create policy "Allow insert for user_follows" on public.user_follows for insert with check (true);
+create policy "Allow delete for user_follows" on public.user_follows for delete using (true);
 insert into public.profiles (id, name, age, occupation_type, college, degree, year, location, distance_km, distance_display, avatar, verified_college, student_id_verified, skills, interests, bio)
 values
   ('stu_7', 'Tanya Sharma', 20, 'school_student', 'Delhi Public School', 'Badminton Doubles Champion', 'Class 12th', 'North Delhi Area', 0.8, '~Within 1 km', 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80', true, true, array['Badminton', 'Fitness', 'Running', 'Athletics'], array['Badminton Sparring', 'State Tournaments', 'Morning Drills'], 'Competitive badminton player looking for daily morning sparring partners on campus courts.'),
@@ -146,32 +184,6 @@ values
   ('req_1', '⚽ Football Partner / Players Needed', 'Sports', 'Activity', 'Today', '6:00 PM', 'Campus Sports Ground', 'Delhi Technological University (DTU)', 0.4, 'Campus Grounds • Nearby (~500m)', 2, 4, array['Football', 'Active Running'], 'We have 10 players for a 6v6 friendly match on the main turf. Need 2 more players (any position welcome). Boots recommended, bibs provided!', 'stu_3', 'Rohan Gupta', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80', true, 14),
   ('req_4', '💻 React & Tailwind Dev for Smart India Hackathon', 'Coding', 'Team', 'This Weekend', '10:00 AM', 'Tech Commons / Online Discord', 'NSUT Delhi', 3.2, 'West Delhi Area • ~3-4 km away', 1, 3, array['React / Web Dev', 'UI/UX Design', 'API Integration'], 'We have our backend (FastAPI + Postgres) and ML model ready for our AI campus navigation problem statement. Need 1 solid frontend builder in React to build clean dashboards.', 'stu_4', 'Ananya Roy', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80', true, 35)
 on conflict (id) do nothing;
-
--- =========================================================================
--- ROW LEVEL SECURITY (RLS) POLICIES
--- =========================================================================
-alter table public.profiles enable row level security;
-alter table public.campus_requests enable row level security;
-alter table public.request_interests enable row level security;
-alter table public.conversations enable row level security;
-alter table public.messages enable row level security;
-alter table public.payment_transactions enable row level security;
-alter table public.subscriptions enable row level security;
-
--- Allow public reads for student directory and feeds
-create policy "Allow public read for profiles" on public.profiles for select using (true);
-create policy "Allow public read for campus_requests" on public.campus_requests for select using (true);
-create policy "Allow public read for request_interests" on public.request_interests for select using (true);
-create policy "Allow public read for conversations" on public.conversations for select using (true);
-create policy "Allow public read for messages" on public.messages for select using (true);
-
--- Allow public insert/updates for active app usage
-create policy "Allow insert for profiles" on public.profiles for insert with check (true);
-create policy "Allow update for profiles" on public.profiles for update using (true);
-create policy "Allow insert for campus_requests" on public.campus_requests for insert with check (true);
-create policy "Allow insert for request_interests" on public.request_interests for insert with check (true);
-create policy "Allow insert for messages" on public.messages for insert with check (true);
-create policy "Allow insert for payment_transactions" on public.payment_transactions for insert with check (true);
 
 -- =========================================================================
 -- ENABLE REALTIME ON MESSAGES & REQUESTS

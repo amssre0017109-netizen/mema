@@ -48,6 +48,7 @@ export const HomeScreen: React.FC = () => {
     followedUserIds,
     toggleFollowUser,
     isFollowingUser,
+    isFollowLoading,
     setNotificationToast,
     openStoryViewer
   } = useApp();
@@ -59,7 +60,7 @@ export const HomeScreen: React.FC = () => {
   const [dismissedSuggestionIds, setDismissedSuggestionIds] = useState<string[]>([]);
 
   const followedStudents = allStudents.filter(s => followedUserIds.includes(s.id));
-  const suggestedToFollow = allStudents.filter(s => !followedUserIds.includes(s.id));
+  const suggestedToFollow = allStudents.filter(s => !followedUserIds.includes(s.id) && s.id !== currentUser.id);
 
   // Nearby profile suggestions sorted by proximity
   const nearbySuggestions = allStudents
@@ -248,10 +249,11 @@ export const HomeScreen: React.FC = () => {
                 <div className="h-5 flex items-center justify-center w-full px-1">
                   <button
                     type="button"
+                    disabled={isFollowLoading(student.id)}
                     onClick={() => toggleFollowUser(student.id)}
-                    className="w-full py-0.5 rounded-full bg-[#F8FBFF] dark:bg-slate-800 hover:bg-[#2563EB] text-[#2563EB] dark:text-blue-400 hover:text-white border border-[#DCE8F7] dark:border-slate-700 text-[10px] font-black tracking-tight transition-colors shadow-2xs text-center truncate"
+                    className="w-full py-0.5 rounded-full bg-[#F8FBFF] dark:bg-slate-800 hover:bg-[#2563EB] text-[#2563EB] dark:text-blue-400 hover:text-white border border-[#DCE8F7] dark:border-slate-700 text-[10px] font-black tracking-tight transition-colors shadow-2xs text-center truncate disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    + Follow
+                    {isFollowLoading(student.id) ? '...' : '+ Follow'}
                   </button>
                 </div>
               </div>
@@ -371,14 +373,19 @@ export const HomeScreen: React.FC = () => {
                     <div className="grid grid-cols-2 gap-1.5 pt-2 border-t border-[#DCE8F7] dark:border-slate-700">
                       <button
                         type="button"
+                        disabled={isFollowLoading(student.id)}
                         onClick={() => toggleFollowUser(student.id)}
                         className={`py-1.5 px-2 rounded-xl text-[11px] font-extrabold transition-all flex items-center justify-center gap-1 ${
-                          isFollowing
-                            ? 'bg-[#F8FBFF] dark:bg-slate-900 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-700'
+                          isFollowLoading(student.id)
+                            ? 'opacity-60 cursor-not-allowed bg-slate-100 dark:bg-slate-800 text-[#64748B]'
+                            : isFollowing
+                            ? 'bg-[#F8FBFF] dark:bg-slate-900 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800'
                             : 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white shadow-xs'
                         }`}
                       >
-                        {isFollowing ? (
+                        {isFollowLoading(student.id) ? (
+                          <span className="inline-block w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                        ) : isFollowing ? (
                           <>
                             <UserCheck className="w-3 h-3" />
                             <span>Following</span>

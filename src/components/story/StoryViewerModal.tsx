@@ -14,9 +14,11 @@ export const StoryViewerModal: React.FC = () => {
   const {
     activeStoryUser,
     closeStoryViewer,
+    currentUser,
     openUserProfileModal,
     toggleFollowUser,
     isFollowingUser,
+    isFollowLoading,
     startConversationWithStudent,
     setNotificationToast
   } = useApp();
@@ -205,30 +207,37 @@ export const StoryViewerModal: React.FC = () => {
 
             <div className="flex items-center gap-1.5 shrink-0">
               {/* Follow Button inside Story */}
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleFollowUser(user.id);
-                }}
-                className={`px-3 py-1.5 rounded-full text-xs font-black transition-all flex items-center gap-1 shadow-md ${
-                  isFollowing
-                    ? 'bg-white/20 backdrop-blur-md text-white border border-white/30'
-                    : 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white shadow-md shadow-blue-500/20'
-                }`}
-              >
-                {isFollowing ? (
-                  <>
-                    <UserCheck className="w-3 h-3" />
-                    <span>Following</span>
-                  </>
-                ) : (
-                  <>
-                    <UserPlus className="w-3 h-3" />
-                    <span>Follow</span>
-                  </>
-                )}
-              </button>
+              {user.id !== currentUser.id && (
+                <button
+                  type="button"
+                  disabled={isFollowLoading(user.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleFollowUser(user.id);
+                  }}
+                  className={`px-3 py-1.5 rounded-full text-xs font-black transition-all flex items-center gap-1 shadow-md ${
+                    isFollowLoading(user.id)
+                      ? 'opacity-60 cursor-not-allowed bg-white/10 text-white/70 border border-white/20'
+                      : isFollowing
+                      ? 'bg-white/20 backdrop-blur-md text-white border border-white/30'
+                      : 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white shadow-md shadow-blue-500/20'
+                  }`}
+                >
+                  {isFollowLoading(user.id) ? (
+                    <span className="inline-block w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : isFollowing ? (
+                    <>
+                      <UserCheck className="w-3 h-3" />
+                      <span>Following</span>
+                    </>
+                  ) : (
+                    <>
+                      <UserPlus className="w-3 h-3" />
+                      <span>Follow</span>
+                    </>
+                  )}
+                </button>
+              )}
 
               {/* Close Button */}
               <button

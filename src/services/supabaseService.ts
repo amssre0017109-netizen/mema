@@ -158,5 +158,163 @@ export const supabaseService = {
       console.error('Error saving payment transaction to Supabase:', err);
       return { success: false, error: err };
     }
+  },
+
+  /**
+   * Fetch IDs of users that the follower is currently following
+   */
+  async getFollowingUserIds(followerId: string): Promise<string[]> {
+    if (!followerId) return [];
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('user_follows')
+          .select('following_id')
+          .eq('follower_id', followerId);
+
+        if (!error && data) {
+          const ids = data.map((r: any) => r.following_id);
+          try {
+            localStorage.setItem(`mema_follows_${followerId}`, JSON.stringify(ids));
+          } catch {}
+          return ids;
+        }
+      } catch (err) {
+        console.warn('Error fetching follows from Supabase, falling back to persistent cache:', err);
+      }
+    }
+
+    // Local / Demo persistence fallback
+    try {
+      const saved = localStorage.getItem(`mema_follows_${followerId}`);
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch {}
+    return [];
+  },
+
+  /**
+   * Create follow relationship
+   */
+  async followUser(followerId: string, followingId: string): Promise<{ success: boolean; error?: string }> {
+    if (!followerId || !followingId) {
+      return { success: false, error: 'Invalid user parameters.' };
+    }
+
+    if (followerId === followingId) {
+      return { success: false, error: 'You cannot follow your own profile.' };
+    }
+
+    if (isSupabaseConfigured) {
+      try {
+        const { error } = await supabase
+          .from('user_follows')
+          .insert({
+            follower_id: followerId,
+            following_id: followingId
+          });
+
+        // If duplicate key error (code 23505), follow relationship already exists
+        if (error && (error as any).code !== '23505' && !error.message?.includes('duplicate')) {
+          throw error;
+        }
+
+        try {
+          const current = JSON.parse(localStorage.getItem(`mema_follows_${followerId}`) || '[]');
+          if (!current.includes(followingId)) {
+            current.push(followingId);
+            localStorage.setItem(`mema_follows_${followerId}`, JSON.stringify(current));
+          }
+        } catch {}
+
+        return { success: true };
+      } catch (err: any) {
+        console.error('Error following user in Supabase:', err);
+        return { success: false, error: err.message || 'Failed to follow user.' };
+      }
+    }
+
+    // Local / Demo persistence fallback
+    try {
+      const current = JSON.parse(localStorage.getItem(`mema_follows_${followerId}`) || '[]');
+      if (!current.includes(followingId)) {
+        current.push(followingId);
+        localStorage.setItem(`mema_follows_${followerId}`, JSON.stringify(current));
+      }
+      return { success: true };
+    } catch (err: any) {
+      return { success: false, error: err.message || 'Failed to follow user.' };
+    }
+  },
+
+  /**
+   * Remove follow relationship
+   */
+  async unfollowUser(followerId: string, followingId: string): Promise<{ success: boolean; error?: string }> {
+    if (!followerId || !followingId) {
+      return { success: false, error: 'Invalid user parameters.' };
+    }
+
+    if (isSupabaseConfigured) {
+      try {
+        const { error } = await supabase
+          .from('user_follows')
+          .delete()
+          .match({
+            follower_id: followerId,
+            following_id: followingId
+          });
+
+        if (error) throw error;
+
+        try {
+          const current = JSON.parse(localStorage.getItem(`mema_follows_${followerId}`) || '[]');
+          const updated = current.filter((id: string) => id !== followingId);
+          localStorage.setItem(`mema_follows_${followerId}`, JSON.stringify(updated));
+        } catch {}
+
+        return { success: true };
+      } catch (err: any) {
+        console.error('Error unfollowing user in Supabase:', err);
+        return { success: false, error: err.message || 'Failed to unfollow user.' };
+      }
+    }
+
+    // Local / Demo persistence fallback
+    try {
+      const current = JSON.parse(localStorage.getItem(`mema_follows_${followerId}`) || '[]');
+      const updated = current.filter((id: string) => id !== followingId);
+      localStorage.setItem(`mema_follows_${followerId}`, JSON.stringify(updated));
+      return { success: true };
+    } catch (err: any) {
+      return { success: false, error: err.message || 'Failed to unfollow user.' };
+    }
+  },
+
+  /**
+   * Get total followers and following counts for a profile
+   */
+  async getFollowCounts(userId: string): Promise<{ followersCount: number; followingCount: number }> {
+    if (!userId) return { followersCount: 0, followingCount: 0 };
+
+    if (isSupabaseConfigured) {
+      try {
+        const [followersRes, followingRes] = await Promise.all([
+          supabase.from('user_follows').select('id', { count: 'exact', head: true }).eq('following_id', userId),
+          supabase.from('user_follows').select('id', { count: 'exact', head: true }).eq('follower_id', userId)
+        ]);
+
+        return {
+          followersCount: followersRes.count || 0,
+          followingCount: followingRes.count || 0
+        };
+      } catch (err) {
+        console.warn('Error fetching follow counts from Supabase:', err);
+      }
+    }
+
+    return { followersCount: 0, followingCount: 0 };
   }
 };

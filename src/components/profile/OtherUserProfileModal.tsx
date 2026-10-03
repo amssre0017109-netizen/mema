@@ -26,9 +26,11 @@ export const OtherUserProfileModal: React.FC = () => {
   const {
     viewingProfileUser,
     closeUserProfileModal,
+    currentUser,
     followedUserIds,
     toggleFollowUser,
     isFollowingUser,
+    isFollowLoading,
     startConversationWithStudent,
     setNotificationToast
   } = useApp();
@@ -218,27 +220,34 @@ export const OtherUserProfileModal: React.FC = () => {
           </div>
 
           {/* Action Buttons: Follow & Message */}
-          <div className="grid grid-cols-2 gap-2 pt-2 max-w-xs mx-auto">
-            <button
-              onClick={() => toggleFollowUser(user.id)}
-              className={`py-2.5 px-4 rounded-full text-xs font-black transition-all flex items-center justify-center gap-1.5 shadow-sm active:scale-95 ${
-                isFollowing
-                  ? 'bg-white dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-700'
-                  : 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white shadow-md shadow-blue-500/20'
-              }`}
-            >
-              {isFollowing ? (
-                <>
-                  <UserCheck className="w-3.5 h-3.5" />
-                  <span>Following</span>
-                </>
-              ) : (
-                <>
-                  <UserPlus className="w-3.5 h-3.5" />
-                  <span>+ Follow</span>
-                </>
-              )}
-            </button>
+          <div className={`grid ${user.id !== currentUser.id ? 'grid-cols-2' : 'grid-cols-1'} gap-2 pt-2 max-w-xs mx-auto`}>
+            {user.id !== currentUser.id && (
+              <button
+                disabled={isFollowLoading(user.id)}
+                onClick={() => toggleFollowUser(user.id)}
+                className={`py-2.5 px-4 rounded-full text-xs font-black transition-all flex items-center justify-center gap-1.5 shadow-sm active:scale-95 ${
+                  isFollowLoading(user.id)
+                    ? 'opacity-60 cursor-not-allowed bg-slate-100 dark:bg-slate-800 text-[#64748B] border border-[#DCE8F7] dark:border-slate-700'
+                    : isFollowing
+                    ? 'bg-white dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-750'
+                    : 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white shadow-md shadow-blue-500/20'
+                }`}
+              >
+                {isFollowLoading(user.id) ? (
+                  <span className="inline-block w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                ) : isFollowing ? (
+                  <>
+                    <UserCheck className="w-3.5 h-3.5" />
+                    <span>Following</span>
+                  </>
+                ) : (
+                  <>
+                    <UserPlus className="w-3.5 h-3.5" />
+                    <span>+ Follow</span>
+                  </>
+                )}
+              </button>
+            )}
 
             <button
               onClick={handleStartChat}

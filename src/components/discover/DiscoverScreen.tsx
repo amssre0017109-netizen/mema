@@ -27,7 +27,8 @@ export const DiscoverScreen: React.FC = () => {
     startConversationWithStudent,
     openUserProfileModal,
     toggleFollowUser,
-    isFollowingUser
+    isFollowingUser,
+    isFollowLoading
   } = useApp();
 
   const [selectedSkillFilter, setSelectedSkillFilter] = useState<string>('all');
@@ -286,27 +287,34 @@ export const DiscoverScreen: React.FC = () => {
                     </div>
 
                     <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
-                      <button
-                        type="button"
-                        onClick={() => toggleFollowUser(student.id)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all shadow-xs flex items-center gap-1 ${
-                          isFollowing
-                            ? 'bg-[#F8FBFF] dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-700'
-                            : 'bg-white dark:bg-slate-900 hover:bg-[#F8FBFF] dark:hover:bg-slate-800 text-[#64748B] dark:text-slate-300 hover:text-[#172033] dark:hover:text-white border border-[#DCE8F7] dark:border-slate-700'
-                        }`}
-                      >
-                        {isFollowing ? (
-                          <>
-                            <UserCheck className="w-3 h-3" />
-                            <span>Following</span>
-                          </>
-                        ) : (
-                          <>
-                            <UserPlus className="w-3 h-3" />
-                            <span>+ Follow</span>
-                          </>
-                        )}
-                      </button>
+                      {student.id !== currentUser.id && (
+                        <button
+                          type="button"
+                          disabled={isFollowLoading(student.id)}
+                          onClick={() => toggleFollowUser(student.id)}
+                          className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all shadow-xs flex items-center gap-1 ${
+                            isFollowLoading(student.id)
+                              ? 'opacity-60 cursor-not-allowed bg-slate-100 dark:bg-slate-800 text-[#64748B] border border-[#DCE8F7] dark:border-slate-700'
+                              : isFollowing
+                              ? 'bg-[#F8FBFF] dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-750'
+                              : 'bg-white dark:bg-slate-900 hover:bg-[#F8FBFF] dark:hover:bg-slate-800 text-[#64748B] dark:text-slate-300 hover:text-[#172033] dark:hover:text-white border border-[#DCE8F7] dark:border-slate-700'
+                          }`}
+                        >
+                          {isFollowLoading(student.id) ? (
+                            <span className="inline-block w-3 h-3 border-2 border-[#2563EB] border-t-transparent rounded-full animate-spin" />
+                          ) : isFollowing ? (
+                            <>
+                              <UserCheck className="w-3 h-3" />
+                              <span>Following</span>
+                            </>
+                          ) : (
+                            <>
+                              <UserPlus className="w-3 h-3" />
+                              <span>+ Follow</span>
+                            </>
+                          )}
+                        </button>
+                      )}
 
                       <button
                         onClick={() => startConversationWithStudent(student, 'Talent Directory')}

@@ -33,6 +33,7 @@ import {
   INITIAL_ADMIN_METRICS
 } from '../services/subscriptionService';
 import { supabase, isSupabaseConfigured } from '../lib/supabaseClient';
+import { supabaseService } from '../services/supabaseService';
 
 
 export type AppView = 'home' | 'discover' | 'activities' | 'messages' | 'profile' | 'admin';
@@ -104,8 +105,10 @@ interface AppContextType {
   blockUser: (userId: string, userName?: string) => void;
   // Follow System & Profile Dossier
   followedUserIds: string[];
-  toggleFollowUser: (userId: string) => void;
+  followLoadingUserIds: string[];
+  toggleFollowUser: (userId: string) => Promise<void>;
   isFollowingUser: (userId: string) => boolean;
+  isFollowLoading: (userId: string) => boolean;
   viewingProfileUser: UserProfile | null;
   openUserProfileModal: (user: UserProfile) => void;
   closeUserProfileModal: () => void;
@@ -202,7 +205,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [blockedUserIds, setBlockedUserIds] = useState<string[]>([]);
 
   // Follow & Dossier Profile Viewer
-  const [followedUserIds, setFollowedUserIds] = useState<string[]>(['stu_1', 'stu_2', 'stu_4']);
+  const [followedUserIds, setFollowedUserIds] = useState<string[]>([]);
+  const [followLoadingUserIds, setFollowLoadingUserIds] = useState<string[]>([]);
   const [viewingProfileUser, setViewingProfileUser] = useState<UserProfile | null>(null);
   const [activeStoryUser, setActiveStoryUser] = useState<UserProfile | null>(null);
 
@@ -315,6 +319,23 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       subscription.unsubscribe();
     };
   }, []);
+
+  // 👥 Synchronize follow relationships from database on user/session initialization
+  useEffect(() => {
+    const activeFollowerId = authUser?.id || currentUser.id;
+    if (!activeFollowerId) return;
+
+    let isMounted = true;
+    supabaseService.getFollowingUserIds(activeFollowerId).then(ids => {
+      if (isMounted) {
+        setFollowedUserIds(ids);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [authUser?.id, currentUser.id]);
 
   // 🚀 Loading Splash Screen (2s)
   const [showLoadingScreen, setShowLoadingScreen] = useState(true);
@@ -787,22 +808,79 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   // Follow & Profile Dossier Handlers
-  const toggleFollowUser = (userId: string) => {
-    setFollowedUserIds(prev => {
-      const isFollowed = prev.includes(userId);
-      const updated = isFollowed ? prev.filter(id => id !== userId) : [...prev, userId];
-      const targetUser = allStudents.find(s => s.id === userId);
-      const targetName = targetUser?.name || 'Member';
-      setNotificationToast({
-        message: isFollowed ? `Unfollowed ${targetName}` : `Following ${targetName} 🌟`,
-        subtext: isFollowed ? `You won't see their updates in your followed stories.` : `You can now see their stories & full profile dossier.`
-      });
-      return updated;
-    });
+  const isFollowLoading = (userId: string) => {
+    return followLoadingUserIds.includes(userId);
   };
 
   const isFollowingUser = (userId: string) => {
     return followedUserIds.includes(userId);
+  };
+
+  const toggleFollowUser = async (userId: string) => {
+    const activeFollowerId = authUser?.id || currentUser.id;
+
+    if (!activeFollowerId || !userId) return;
+
+    // Prevent self-follow
+    if (activeFollowerId === userId || currentUser.id === userId) {
+      setNotificationToast({
+        message: '⚠️ Action Not Allowed',
+        subtext: 'You cannot follow your own profile.'
+      });
+      return;
+    }
+
+    // Prevent duplicate concurrent requests
+    if (followLoadingUserIds.includes(userId)) return;
+
+    setFollowLoadingUserIds(prev => [...prev, userId]);
+
+    const isCurrentlyFollowed = followedUserIds.includes(userId);
+    const targetUser = allStudents.find(s => s.id === userId);
+    const targetName = targetUser?.name || 'Member';
+
+    try {
+      if (isCurrentlyFollowed) {
+        // Unfollow
+        const res = await supabaseService.unfollowUser(activeFollowerId, userId);
+        if (res.success) {
+          setFollowedUserIds(prev => prev.filter(id => id !== userId));
+          setNotificationToast({
+            message: `Unfollowed ${targetName}`,
+            subtext: `You won't see their updates in your followed stories.`
+          });
+        } else {
+          setNotificationToast({
+            message: 'Unfollow Failed',
+            subtext: res.error || 'Could not update follow status. Please try again.'
+          });
+        }
+      } else {
+        // Follow
+        const res = await supabaseService.followUser(activeFollowerId, userId);
+        if (res.success) {
+          setFollowedUserIds(prev => (prev.includes(userId) ? prev : [...prev, userId]));
+          setNotificationToast({
+            message: `Following ${targetName} 🌟`,
+            subtext: `You can now see their stories & full profile dossier.`
+          });
+          triggerMatchCelebration();
+        } else {
+          setNotificationToast({
+            message: 'Follow Failed',
+            subtext: res.error || 'Could not update follow status. Please try again.'
+          });
+        }
+      }
+    } catch (err: any) {
+      console.error('Follow toggle error:', err);
+      setNotificationToast({
+        message: 'Network Error',
+        subtext: 'Failed to communicate with server. Please try again.'
+      });
+    } finally {
+      setFollowLoadingUserIds(prev => prev.filter(id => id !== userId));
+    }
   };
 
   const openUserProfileModal = (user: UserProfile) => {
@@ -1021,8 +1099,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         blockUser,
         // Follow & Dossier Profile Viewer
         followedUserIds,
+        followLoadingUserIds,
         toggleFollowUser,
         isFollowingUser,
+        isFollowLoading,
         viewingProfileUser,
         openUserProfileModal,
         closeUserProfileModal,
