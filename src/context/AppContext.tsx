@@ -322,12 +322,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // 👥 Synchronize follow relationships from database on user/session initialization
   useEffect(() => {
-    const activeFollowerId = authUser?.id || currentUser.id;
+    const activeFollowerId = authUser?.id || currentUser?.id || 'me';
     if (!activeFollowerId) return;
 
     let isMounted = true;
     supabaseService.getFollowingUserIds(activeFollowerId).then(ids => {
-      if (isMounted) {
+      if (isMounted && Array.isArray(ids)) {
         setFollowedUserIds(ids);
       }
     });
@@ -335,7 +335,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return () => {
       isMounted = false;
     };
-  }, [authUser?.id, currentUser.id]);
+  }, [authUser?.id, currentUser?.id]);
 
   // 🚀 Loading Splash Screen (2s)
   const [showLoadingScreen, setShowLoadingScreen] = useState(true);
@@ -817,12 +817,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const toggleFollowUser = async (userId: string) => {
-    const activeFollowerId = authUser?.id || currentUser.id;
+    const activeFollowerId = authUser?.id || currentUser?.id || 'me';
 
     if (!activeFollowerId || !userId) return;
 
     // Prevent self-follow
-    if (activeFollowerId === userId || currentUser.id === userId) {
+    if (activeFollowerId === userId || currentUser?.id === userId || userId === 'me') {
       setNotificationToast({
         message: '⚠️ Action Not Allowed',
         subtext: 'You cannot follow your own profile.'

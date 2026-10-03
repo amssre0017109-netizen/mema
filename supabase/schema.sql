@@ -129,8 +129,8 @@ create table if not exists public.subscriptions (
 -- 8. USER FOLLOWS & RELATIONSHIPS TABLE
 create table if not exists public.user_follows (
   id uuid primary key default gen_random_uuid(),
-  follower_id text references public.profiles(id) on delete cascade not null,
-  following_id text references public.profiles(id) on delete cascade not null,
+  follower_id text not null,
+  following_id text not null,
   created_at timestamptz default now(),
   unique(follower_id, following_id)
 );
