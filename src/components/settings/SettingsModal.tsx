@@ -35,7 +35,9 @@ import {
   Edit3,
   Camera,
   Layers,
-  ChevronDown
+  ChevronDown,
+  KeyRound,
+  GraduationCap
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { Logo } from '../ui/Logo';
@@ -51,6 +53,7 @@ export type SettingsCategoryId =
   | 'premium'
   | 'help_support'
   | 'terms_privacy'
+  | 'mema_auth'
   | 'logout';
 
 // Alias for backwards compatibility
@@ -106,6 +109,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     if (tab === 'premium') return 'premium';
     if (tab === 'help' || tab === 'help_support') return 'help_support';
     if (tab === 'terms' || tab === 'terms_privacy') return 'terms_privacy';
+    if (tab === 'auth' || tab === 'mema_auth' || tab === 'authentication' || tab === 'signin' || tab === 'signup' || tab === 'login') return 'mema_auth';
     if (tab === 'logout') return 'logout';
     return null;
   };
@@ -1213,7 +1217,137 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           </div>
 
           {/* ---------------------------------------------------------
-              ITEM 10: LOGOUT
+              ITEM 10: MEMA AUTHENTICATION & SECURITY
+             --------------------------------------------------------- */}
+          <div className="transition-colors">
+            <button
+              type="button"
+              onClick={() => handleToggleCategory('mema_auth')}
+              className={`w-full py-4 px-5 sm:px-6 flex items-center justify-between transition-colors text-left group min-h-[64px] ${
+                expandedCategory === 'mema_auth'
+                  ? 'bg-[#F0F6FF] dark:bg-slate-900/80'
+                  : 'hover:bg-[#F8FBFF] dark:hover:bg-slate-900/40'
+              }`}
+            >
+              <div className="flex items-center gap-3.5">
+                <div className="w-9 h-9 rounded-2xl bg-blue-100 dark:bg-blue-950/60 text-[#2563EB] dark:text-blue-400 flex items-center justify-center shrink-0">
+                  <KeyRound className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="text-sm font-extrabold text-[#172033] dark:text-white block">
+                    MEMA Authentication
+                  </span>
+                  <span className="text-[11px] text-[#64748B] dark:text-slate-400">
+                    Sign in, register student account, or switch demo personas
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                {isAuthenticated || authUser ? (
+                  <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3" />
+                    <span>Signed In</span>
+                  </span>
+                ) : (
+                  <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-[#F0F6FF] dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-700">
+                    Demo Mode
+                  </span>
+                )}
+                <ChevronRight
+                  className={`w-4 h-4 text-[#64748B] transition-transform duration-200 ${
+                    expandedCategory === 'mema_auth' ? 'rotate-90 text-[#2563EB]' : 'group-hover:translate-x-0.5'
+                  }`}
+                />
+              </div>
+            </button>
+
+            {/* Expanded Detailed Content */}
+            {expandedCategory === 'mema_auth' && (
+              <div className="px-5 sm:px-6 pb-6 pt-2 bg-[#F8FBFF] dark:bg-slate-900/40 space-y-4 animate-in fade-in duration-200">
+                {/* Active Session Info Card */}
+                <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={currentUser.avatar}
+                      alt={currentUser.name}
+                      className="w-12 h-12 rounded-full object-cover ring-2 ring-[#2563EB]"
+                    />
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-black text-[#172033] dark:text-white block">
+                          {currentUser.name}
+                        </span>
+                        {currentUser.verifiedCollege && (
+                          <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
+                        )}
+                      </div>
+                      <span className="text-[11px] text-[#64748B] dark:text-slate-400 block truncate max-w-[200px] sm:max-w-xs">
+                        {authUser?.email || currentUser.college || 'student@mema.campus'}
+                      </span>
+                      <span className="inline-block mt-0.5 text-[10px] font-bold px-2 py-0.2 rounded-full bg-[#F0F6FF] dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-700">
+                        {authUser ? 'Supabase Cloud Auth' : 'Active Demo Student Session'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Primary Auth Action Buttons */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      openAuthModal('signin');
+                    }}
+                    className="py-3 px-4 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 transition-all active:scale-98"
+                  >
+                    <KeyRound className="w-4 h-4" />
+                    <span>Sign In with Account</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      openAuthModal('signup');
+                    }}
+                    className="py-3 px-4 rounded-2xl bg-white dark:bg-slate-800 hover:bg-[#F0F6FF] dark:hover:bg-slate-700 text-[#2563EB] dark:text-blue-400 font-extrabold text-xs flex items-center justify-center gap-2 border border-[#DCE8F7] dark:border-slate-700 transition-all active:scale-98"
+                  >
+                    <GraduationCap className="w-4 h-4" />
+                    <span>Create New Student Account</span>
+                  </button>
+                </div>
+
+                {/* Quick Persona Switcher */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    openAuthModal('demo');
+                  }}
+                  className="w-full py-3 px-4 rounded-2xl bg-[#F0F6FF] dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-700 text-[#172033] dark:text-slate-200 font-bold text-xs flex items-center justify-center gap-2 border border-[#DCE8F7] dark:border-slate-700 transition-all active:scale-98"
+                >
+                  <Sparkles className="w-4 h-4 text-amber-500" />
+                  <span>Switch Demo Persona (Aman, Rohan, Tanya, etc.)</span>
+                </button>
+
+                {/* Security Guarantee Note */}
+                <div className="p-3.5 bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-2xl text-[11px] text-[#64748B] dark:text-slate-400 space-y-1">
+                  <div className="font-bold text-[#172033] dark:text-slate-200 flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
+                    <span>Safe Campus Authentication</span>
+                  </div>
+                  <p className="leading-relaxed">
+                    MEMA supports Supabase cloud email authentication with verified college badges and instant session restoration across devices.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* ---------------------------------------------------------
+              ITEM 11: LOGOUT
              --------------------------------------------------------- */}
           <div className="transition-colors">
             <button

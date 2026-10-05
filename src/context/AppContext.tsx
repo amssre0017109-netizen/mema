@@ -170,8 +170,8 @@ interface AppContextType {
   // ⚙️ Settings Modal
   isSettingsModalOpen: boolean;
   setIsSettingsModalOpen: (open: boolean) => void;
-  settingsInitialTab: 'appearance' | 'help' | 'privacy' | 'preferences' | 'location' | 'premium' | 'terms' | 'logout';
-  openSettingsModal: (tab?: 'appearance' | 'help' | 'privacy' | 'preferences' | 'location' | 'premium' | 'terms' | 'logout') => void;
+  settingsInitialTab: 'appearance' | 'help' | 'privacy' | 'preferences' | 'location' | 'premium' | 'terms' | 'logout' | 'auth' | 'mema_auth';
+  openSettingsModal: (tab?: 'appearance' | 'help' | 'privacy' | 'preferences' | 'location' | 'premium' | 'terms' | 'logout' | 'auth' | 'mema_auth') => void;
   closeSettingsModal: () => void;
   unblockUser: (userId: string) => void;
   logoutUser: () => void;
@@ -346,9 +346,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // ⚙️ Settings Modal
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
-  const [settingsInitialTab, setSettingsInitialTab] = useState<'appearance' | 'help' | 'privacy' | 'preferences' | 'location' | 'premium' | 'terms' | 'logout'>('appearance');
+  const [settingsInitialTab, setSettingsInitialTab] = useState<'appearance' | 'help' | 'privacy' | 'preferences' | 'location' | 'premium' | 'terms' | 'logout' | 'auth' | 'mema_auth'>('appearance');
 
-  const openSettingsModal = (tab?: 'appearance' | 'help' | 'privacy' | 'preferences' | 'location' | 'premium' | 'terms' | 'logout') => {
+  const openSettingsModal = (tab?: 'appearance' | 'help' | 'privacy' | 'preferences' | 'location' | 'premium' | 'terms' | 'logout' | 'auth' | 'mema_auth') => {
     if (tab) setSettingsInitialTab(tab);
     setIsSettingsModalOpen(true);
   };

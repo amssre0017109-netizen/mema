@@ -13,8 +13,7 @@ import {
   MapPin,
   Sun,
   Moon,
-  Settings,
-  KeyRound
+  Settings
 } from 'lucide-react';
 import { useApp, AppView } from '../../context/AppContext';
 import { Logo } from '../ui/Logo';
@@ -33,9 +32,7 @@ export const Navbar: React.FC = () => {
     setIsPremiumModalOpen,
     theme,
     toggleTheme,
-    openSettingsModal,
-    openAuthModal,
-    isAuthenticated
+    openSettingsModal
   } = useApp();
 
   const navItems: { id: AppView; label: string; icon: React.ReactNode }[] = [
@@ -125,15 +122,6 @@ export const Navbar: React.FC = () => {
               ) : (
                 <Moon className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-[#2563EB] animate-in spin-in-180 duration-200" />
               )}
-            </button>
-
-            {/* Auth / Account Switcher Button */}
-            <button
-              onClick={() => openAuthModal('signin')}
-              className="p-1.5 sm:p-2 text-[#64748B] dark:text-slate-400 hover:text-[#2563EB] dark:hover:text-blue-400 transition-colors rounded-lg flex items-center justify-center"
-              title="Sign In / Switch Student Account"
-            >
-              <KeyRound className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
             </button>
 
             {/* Settings Button */}
