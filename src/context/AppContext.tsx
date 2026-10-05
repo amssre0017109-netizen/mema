@@ -480,10 +480,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
     } catch {}
 
-    setNotificationToast({
-      message: '👋 Logged Out Successfully',
-      subtext: 'You have been safely signed out. Protected areas are now locked.'
-    });
+    // 5. Automatically refresh the page for a completely clean reload
+    try {
+      window.location.reload();
+    } catch {
+      window.location.href = window.location.origin + window.location.pathname;
+    }
   };
 
   const isPremium = userSubscription.status === 'PREMIUM' || userSubscription.status === 'TRIAL';
