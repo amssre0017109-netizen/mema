@@ -50,8 +50,18 @@ export const HomeScreen: React.FC = () => {
     isFollowingUser,
     isFollowLoading,
     setNotificationToast,
-    openStoryViewer
+    openStoryViewer,
+    isAuthenticated,
+    openAuthModal
   } = useApp();
+
+  const handleCreateRequestClick = () => {
+    if (!isAuthenticated) {
+      openAuthModal('signin');
+      return;
+    }
+    setIsCreateRequestModalOpen(true);
+  };
 
   const [activeTab, setActiveTab] = useState<'all' | 'campus'>('all');
   const [bookmarkedIds, setBookmarkedIds] = useState<string[]>([]);
@@ -181,7 +191,7 @@ export const HomeScreen: React.FC = () => {
           <div className="flex items-center gap-3.5 overflow-x-auto pb-1.5 pt-1 scrollbar-none">
             {/* User's own story circle */}
             <div
-              onClick={() => setIsCreateRequestModalOpen(true)}
+              onClick={handleCreateRequestClick}
               className="w-[76px] sm:w-[80px] flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group"
             >
               <div className="relative w-16 h-16 flex items-center justify-center">
@@ -455,7 +465,7 @@ export const HomeScreen: React.FC = () => {
           </div>
 
           <button
-            onClick={() => setIsCreateRequestModalOpen(true)}
+            onClick={handleCreateRequestClick}
             className="text-xs font-bold text-[#2563EB] dark:text-blue-400 hover:text-[#1D4ED8] hover:underline flex items-center gap-1"
           >
             <span>+ Post Need</span>

@@ -25,6 +25,30 @@ export const SKILL_CATEGORIES = [
   { id: 'Other', name: 'Other Skills', icon: '✨', tags: ['Photography', 'Video Editing', 'UI/UX Design', 'Public Speaking'] }
 ];
 
+export const GUEST_USER: UserProfile = {
+  id: 'guest',
+  name: 'Guest Explorer',
+  age: 20,
+  occupationType: 'school_student',
+  college: 'Campus Guest',
+  degree: 'Visitor',
+  year: 'Guest',
+  location: 'Campus Area',
+  locationZone: 'Campus Feed',
+  avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=400&q=80',
+  coverImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=80',
+  verifiedCollege: false,
+  studentIdVerified: false,
+  skills: ['Exploring MEMA'],
+  interests: ['Campus Activities', 'Meetups'],
+  activitiesCompleted: 0,
+  requestsPosted: 0,
+  recentActivities: [],
+  bio: 'Exploring MEMA campus network.',
+  onlineStatus: 'active_now',
+  isGuest: true
+};
+
 export const CURRENT_USER: UserProfile = {
   id: 'me',
   name: 'Jamal Knox',

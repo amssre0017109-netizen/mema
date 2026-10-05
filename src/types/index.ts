@@ -101,6 +101,7 @@ export interface UserProfile {
     image: string;
     tag?: string;
   }>;
+  isGuest?: boolean;
 }
 
 export interface CampusNotification {

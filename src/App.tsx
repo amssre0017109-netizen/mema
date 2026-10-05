@@ -22,6 +22,8 @@ import { AuthModal } from './components/auth/AuthModal';
 import { Toast } from './components/ui/Toast';
 import { LoadingSplashScreen } from './components/ui/LoadingSplashScreen';
 
+import { AuthGuard } from './components/auth/AuthGuard';
+
 const AppContent: React.FC = () => {
   const {
     currentView,
@@ -42,10 +44,38 @@ const AppContent: React.FC = () => {
       <main className="flex-1">
         {currentView === 'home' && <HomeScreen />}
         {currentView === 'discover' && <DiscoverScreen />}
-        {currentView === 'activities' && <ActivitiesScreen />}
-        {currentView === 'messages' && <MessagesScreen />}
-        {currentView === 'profile' && <ProfileScreen />}
-        {currentView === 'admin' && <AdminDashboard />}
+        {currentView === 'activities' && (
+          <AuthGuard
+            title="My Plans & Activities"
+            description="Sign in to track your joined campus meetups, posted requests, and scheduled activities."
+          >
+            <ActivitiesScreen />
+          </AuthGuard>
+        )}
+        {currentView === 'messages' && (
+          <AuthGuard
+            title="Campus Chat Protected"
+            description="Sign in to view private conversations, direct messages, and safe meetup proposals."
+          >
+            <MessagesScreen />
+          </AuthGuard>
+        )}
+        {currentView === 'profile' && (
+          <AuthGuard
+            title="Student Profile Locked"
+            description="Sign in to view your campus dossier, customize your profile studio, and manage your badges."
+          >
+            <ProfileScreen />
+          </AuthGuard>
+        )}
+        {currentView === 'admin' && (
+          <AuthGuard
+            title="Admin Portal Protected"
+            description="Sign in with an authorized administrator account to access platform metrics and telemetry."
+          >
+            <AdminDashboard />
+          </AuthGuard>
+        )}
       </main>
 
       <BottomNav />

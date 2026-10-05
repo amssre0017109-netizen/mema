@@ -21,6 +21,7 @@ import {
   MOCK_CAMPUS_REQUESTS,
   MOCK_STUDENTS,
   CURRENT_USER,
+  GUEST_USER,
   MOCK_NOTIFICATIONS,
   MOCK_CONVERSATIONS,
   CAMPUS_OPTIONS
@@ -177,16 +178,60 @@ interface AppContextType {
   logoutUser: () => void;
 }
 
+const getInitialAuthUser = () => {
+  try {
+    const sessionStr = localStorage.getItem('mema_auth_session');
+    if (sessionStr) {
+      return JSON.parse(sessionStr);
+    }
+  } catch {}
+  return null;
+};
+
+const getInitialCurrentUser = (): UserProfile => {
+  try {
+    const userStr = localStorage.getItem('mema_user_profile');
+    if (userStr) {
+      const parsed = JSON.parse(userStr);
+      if (parsed && parsed.id && parsed.id !== 'guest') {
+        return parsed;
+      }
+    }
+    const sessionStr = localStorage.getItem('mema_auth_session');
+    if (sessionStr) {
+      const parsedSession = JSON.parse(sessionStr);
+      if (parsedSession && parsedSession.id) {
+        return {
+          ...CURRENT_USER,
+          id: parsedSession.id,
+          name: parsedSession.user_metadata?.name || parsedSession.email?.split('@')[0] || 'Campus Student',
+          college: parsedSession.user_metadata?.college || 'Delhi Technological University (DTU)',
+          isGuest: false
+        };
+      }
+    }
+  } catch {}
+  return GUEST_USER;
+};
+
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentView, setCurrentView] = useState<AppView>('home');
-  const [currentUser, setCurrentUser] = useState<UserProfile>(CURRENT_USER);
+  const [authUser, setAuthUser] = useState<any>(getInitialAuthUser);
+  const [currentUser, setCurrentUser] = useState<UserProfile>(getInitialCurrentUser);
   const [allStudents, setAllStudents] = useState<UserProfile[]>(MOCK_STUDENTS);
   const [campusRequests, setCampusRequests] = useState<CampusRequest[]>(MOCK_CAMPUS_REQUESTS);
   const [conversations, setConversations] = useState<Conversation[]>(MOCK_CONVERSATIONS);
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
   const [notifications, setNotifications] = useState<CampusNotification[]>(MOCK_NOTIFICATIONS);
+
+  const isAuthenticated = Boolean(
+    authUser &&
+    currentUser &&
+    currentUser.id !== 'guest' &&
+    !currentUser.isGuest
+  );
 
   // Filters
   const [selectedCampus, setSelectedCampus] = useState<string>('Delhi Technological University (DTU)');
@@ -264,8 +309,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     });
   };
 
-  // 🔐 Authentication & Session States
-  const [authUser, setAuthUser] = useState<any>(null);
+  // 🔐 Authentication & Session Modal States
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalMode, setAuthModalMode] = useState<'signin' | 'signup' | 'demo'>('signin');
 
@@ -286,33 +330,56 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         setAuthUser(session.user);
-        if (session.user.user_metadata?.name) {
-          setCurrentUser(prev => ({
-            ...prev,
-            id: session.user.id,
-            name: session.user.user_metadata.name || prev.name,
-            college: session.user.user_metadata.college || prev.college,
-            avatar: session.user.user_metadata.avatar || prev.avatar
-          }));
+        try {
+          localStorage.setItem('mema_auth_session', JSON.stringify(session.user));
+        } catch {}
+        const profileData: UserProfile = {
+          ...CURRENT_USER,
+          id: session.user.id,
+          name: session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'Campus Student',
+          college: session.user.user_metadata?.college || 'Delhi Technological University (DTU)',
+          avatar: session.user.user_metadata?.avatar || CURRENT_USER.avatar,
+          isGuest: false
+        };
+        setCurrentUser(profileData);
+        try {
+          localStorage.setItem('mema_user_profile', JSON.stringify(profileData));
+        } catch {}
+      } else {
+        const localAuth = localStorage.getItem('mema_auth_session');
+        if (!localAuth) {
+          setAuthUser(null);
+          setCurrentUser(GUEST_USER);
         }
       }
     });
 
     // Subscribe to auth events (SIGN_IN, SIGN_OUT, TOKEN_REFRESHED)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
         setAuthUser(session.user);
-        if (session.user.user_metadata?.name) {
-          setCurrentUser(prev => ({
-            ...prev,
-            id: session.user.id,
-            name: session.user.user_metadata.name || prev.name,
-            college: session.user.user_metadata.college || prev.college,
-            avatar: session.user.user_metadata.avatar || prev.avatar
-          }));
-        }
-      } else {
+        try {
+          localStorage.setItem('mema_auth_session', JSON.stringify(session.user));
+        } catch {}
+        const profileData: UserProfile = {
+          ...CURRENT_USER,
+          id: session.user.id,
+          name: session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'Campus Student',
+          college: session.user.user_metadata?.college || 'Delhi Technological University (DTU)',
+          avatar: session.user.user_metadata?.avatar || CURRENT_USER.avatar,
+          isGuest: false
+        };
+        setCurrentUser(profileData);
+        try {
+          localStorage.setItem('mema_user_profile', JSON.stringify(profileData));
+        } catch {}
+      } else if (event === 'SIGNED_OUT') {
         setAuthUser(null);
+        setCurrentUser(GUEST_USER);
+        try {
+          localStorage.removeItem('mema_auth_session');
+          localStorage.removeItem('mema_user_profile');
+        } catch {}
       }
     });
 
@@ -323,8 +390,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // 👥 Synchronize follow relationships from database on user/session initialization
   useEffect(() => {
-    const activeFollowerId = authUser?.id || currentUser?.id || 'me';
-    if (!activeFollowerId) return;
+    if (!isAuthenticated || !authUser) {
+      setFollowedUserIds([]);
+      return;
+    }
+    const activeFollowerId = authUser.id || currentUser.id;
+    if (!activeFollowerId || activeFollowerId === 'guest') return;
 
     let isMounted = true;
     supabaseService.getFollowingUserIds(activeFollowerId).then(ids => {
@@ -336,7 +407,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return () => {
       isMounted = false;
     };
-  }, [authUser?.id, currentUser?.id]);
+  }, [isAuthenticated, authUser?.id, currentUser?.id]);
 
   // 🚀 Loading Splash Screen (2s)
   const [showLoadingScreen, setShowLoadingScreen] = useState(true);
@@ -373,12 +444,45 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         console.warn('Supabase sign out error:', err);
       }
     }
+
+    // 1. Reset in-memory session and user profile
     setAuthUser(null);
-    setCurrentView('home');
+    setCurrentUser(GUEST_USER);
+    setFollowedUserIds([]);
+    setActiveConversationId(null);
+
+    // 2. Clear all persistent auth storage
+    try {
+      localStorage.removeItem('mema_auth_session');
+      localStorage.removeItem('mema_user_profile');
+      localStorage.removeItem('mema_followed_users');
+
+      // Clear any cached Supabase tokens
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith('sb-') || key.includes('supabase.auth')) {
+          localStorage.removeItem(key);
+        }
+      });
+      sessionStorage.clear();
+    } catch (err) {
+      console.warn('Storage cleanup error:', err);
+    }
+
+    // 3. Dismiss modals
     setIsSettingsModalOpen(false);
+    setIsAuthModalOpen(false);
+
+    // 4. Force view back to home and replace browser history to prevent Back button re-entry
+    setCurrentView('home');
+    try {
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+    } catch {}
+
     setNotificationToast({
       message: '👋 Logged Out Successfully',
-      subtext: 'You have been safely signed out of your MEMA session.'
+      subtext: 'You have been safely signed out. Protected areas are now locked.'
     });
   };
 
@@ -421,6 +525,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const addCampusRequest = (
     reqData: Omit<CampusRequest, 'id' | 'createdAt' | 'interestedUsers' | 'peopleJoined' | 'likesCount' | 'commentsCount'>
   ) => {
+    if (!isAuthenticated) {
+      openAuthModal('signin');
+      setNotificationToast({
+        message: '🔐 Sign In Required',
+        subtext: 'Please sign in or create an account to post campus requests.'
+      });
+      return;
+    }
+
     const newReq: CampusRequest = {
       ...reqData,
       id: `req_${Date.now()}`,
@@ -448,6 +561,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Express Interest in a Request
   const expressInterest = (requestId: string, note?: string) => {
+    if (!isAuthenticated) {
+      openAuthModal('signin');
+      setNotificationToast({
+        message: '🔐 Sign In Required',
+        subtext: 'Please sign in or create an account to express interest in campus requests.'
+      });
+      return;
+    }
+
     const target = campusRequests.find(r => r.id === requestId);
     if (!target) return;
 
@@ -784,6 +906,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Start chat with a student
   const startConversationWithStudent = (student: UserProfile, contextTitle?: string, initialMessage?: string) => {
+    if (!isAuthenticated) {
+      openAuthModal('signin');
+      setNotificationToast({
+        message: '🔐 Sign In Required',
+        subtext: 'Please sign in or create an account to start chatting with students.'
+      });
+      return;
+    }
+
     const existing = conversations.find(c => c.partner.id === student.id);
     if (existing) {
       setActiveConversationId(existing.id);
@@ -862,7 +993,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const toggleFollowUser = async (userId: string) => {
-    const activeFollowerId = authUser?.id || currentUser?.id || 'me';
+    if (!isAuthenticated || !authUser || currentUser.id === 'guest' || currentUser.isGuest) {
+      openAuthModal('signin');
+      setNotificationToast({
+        message: '🔐 Sign In Required',
+        subtext: 'Please sign in or create an account to follow students.'
+      });
+      return;
+    }
+
+    const activeFollowerId = authUser.id || currentUser.id;
 
     if (!activeFollowerId || !userId) return;
 
@@ -1199,7 +1339,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         // 🔐 Authentication & Session
         authUser,
         setAuthUser,
-        isAuthenticated: Boolean(authUser),
+        isAuthenticated,
         isAuthModalOpen,
         setIsAuthModalOpen,
         authModalMode,

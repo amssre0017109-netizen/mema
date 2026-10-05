@@ -10,7 +10,8 @@ import {
   MessageSquare,
   User,
   Bell,
-  MapPin
+  MapPin,
+  LogIn
 } from 'lucide-react';
 import { useApp, AppView } from '../../context/AppContext';
 import { Logo } from '../ui/Logo';
@@ -24,6 +25,8 @@ export const Navbar: React.FC = () => {
     setIsNotificationDrawerOpen,
     unreadNotificationsCount,
     currentUser,
+    isAuthenticated,
+    openAuthModal,
     isPremium,
     isTrial,
     setIsPremiumModalOpen
@@ -41,7 +44,7 @@ export const Navbar: React.FC = () => {
     <header className="sticky top-0 z-40 w-full bg-white/95 dark:bg-[#0A0F1D]/95 backdrop-blur-2xl border-b border-[#DCE8F7] dark:border-slate-800 text-[#172033] dark:text-slate-100 shadow-xs transition-colors">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-14 sm:h-16">
-          {/* Left: Brand Logo + User Greeting */}
+          {/* Left: Brand Logo + User Greeting / Sign In */}
           <div className="flex items-center gap-3 sm:gap-4">
             {/* MEMA Logo */}
             <Logo onClick={() => setCurrentView('home')} size="md" />
@@ -49,37 +52,47 @@ export const Navbar: React.FC = () => {
             {/* Vertical separator */}
             <div className="h-6 w-[1px] bg-[#DCE8F7] dark:bg-slate-800 hidden sm:block" />
 
-            {/* User Avatar & Greeting */}
-            <div className="hidden sm:flex items-center gap-2.5">
-              <button
-                onClick={() => setCurrentView('profile')}
-                className="relative shrink-0 group"
-                title="View Profile"
-              >
-                <div className="story-ring-light dark:story-ring-dark group-hover:scale-105 transition-transform p-0.5">
-                  <img
-                    src={currentUser.avatar}
-                    alt={currentUser.name}
-                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover ring-2 ring-white dark:ring-slate-900"
-                  />
-                </div>
-              </button>
+            {/* User Avatar & Greeting OR Sign In Button */}
+            {isAuthenticated ? (
+              <div className="hidden sm:flex items-center gap-2.5">
+                <button
+                  onClick={() => setCurrentView('profile')}
+                  className="relative shrink-0 group"
+                  title="View Profile"
+                >
+                  <div className="story-ring-light dark:story-ring-dark group-hover:scale-105 transition-transform p-0.5">
+                    <img
+                      src={currentUser.avatar}
+                      alt={currentUser.name}
+                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover ring-2 ring-white dark:ring-slate-900"
+                    />
+                  </div>
+                </button>
 
-              <div className="flex flex-col text-left">
-                <div className="flex items-center gap-1">
-                  <span className="font-bold text-xs text-[#172033] dark:text-white tracking-tight">
-                    Hi, {currentUser.name.split(' ')[0]}
-                  </span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] animate-pulse" />
-                </div>
-                <div className="flex items-center gap-1 text-[10px] font-semibold text-[#64748B] dark:text-slate-400">
-                  <MapPin className="w-2.5 h-2.5 text-[#2563EB] dark:text-blue-400" />
-                  <span className="max-w-[120px] truncate">
-                    {currentUser.location?.split(',')[0] || 'Nearby'}
-                  </span>
+                <div className="flex flex-col text-left">
+                  <div className="flex items-center gap-1">
+                    <span className="font-bold text-xs text-[#172033] dark:text-white tracking-tight">
+                      Hi, {currentUser.name.split(' ')[0]}
+                    </span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] animate-pulse" />
+                  </div>
+                  <div className="flex items-center gap-1 text-[10px] font-semibold text-[#64748B] dark:text-slate-400">
+                    <MapPin className="w-2.5 h-2.5 text-[#2563EB] dark:text-blue-400" />
+                    <span className="max-w-[120px] truncate">
+                      {currentUser.location?.split(',')[0] || 'Nearby'}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <button
+                onClick={() => openAuthModal('signin')}
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F0F6FF] dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-slate-700 text-[#2563EB] dark:text-blue-400 text-xs font-bold border border-[#DCE8F7] dark:border-slate-700 transition-all active:scale-95"
+              >
+                <LogIn className="w-3.5 h-3.5" />
+                <span>Sign In</span>
+              </button>
+            )}
           </div>
 
           {/* Desktop Navigation Links */}
@@ -103,8 +116,18 @@ export const Navbar: React.FC = () => {
             })}
           </nav>
 
-          {/* Right Action Icons: Notification Bell Only */}
-          <div className="flex items-center">
+          {/* Right Action Icons */}
+          <div className="flex items-center gap-2">
+            {!isAuthenticated && (
+              <button
+                onClick={() => openAuthModal('signin')}
+                className="sm:hidden flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#2563EB] text-white text-[11px] font-bold shadow-xs active:scale-95"
+              >
+                <LogIn className="w-3 h-3" />
+                <span>Sign In</span>
+              </button>
+            )}
+
             {/* Notification Bell */}
             <button
               onClick={() => setIsNotificationDrawerOpen(true)}

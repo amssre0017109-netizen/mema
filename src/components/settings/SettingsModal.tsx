@@ -1244,14 +1244,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
 
               <div className="flex items-center gap-2.5">
-                {isAuthenticated || authUser ? (
+                {isAuthenticated ? (
                   <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
                     <CheckCircle2 className="w-3 h-3" />
                     <span>Signed In</span>
                   </span>
                 ) : (
-                  <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-[#F0F6FF] dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-700">
-                    Demo Mode
+                  <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-[#64748B] dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                    Not Signed In
                   </span>
                 )}
                 <ChevronRight
@@ -1266,31 +1266,42 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             {expandedCategory === 'mema_auth' && (
               <div className="px-5 sm:px-6 pb-6 pt-2 bg-[#F8FBFF] dark:bg-slate-900/40 space-y-4 animate-in fade-in duration-200">
                 {/* Active Session Info Card */}
-                <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={currentUser.avatar}
-                      alt={currentUser.name}
-                      className="w-12 h-12 rounded-full object-cover ring-2 ring-[#2563EB]"
-                    />
-                    <div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-black text-[#172033] dark:text-white block">
-                          {currentUser.name}
+                {isAuthenticated ? (
+                  <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={currentUser.avatar}
+                        alt={currentUser.name}
+                        className="w-12 h-12 rounded-full object-cover ring-2 ring-[#2563EB]"
+                      />
+                      <div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-xs font-black text-[#172033] dark:text-white block">
+                            {currentUser.name}
+                          </span>
+                          {currentUser.verifiedCollege && (
+                            <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
+                          )}
+                        </div>
+                        <span className="text-[11px] text-[#64748B] dark:text-slate-400 block truncate max-w-[200px] sm:max-w-xs">
+                          {authUser?.email || currentUser.college || 'student@mema.campus'}
                         </span>
-                        {currentUser.verifiedCollege && (
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
-                        )}
+                        <span className="inline-block mt-0.5 text-[10px] font-bold px-2 py-0.2 rounded-full bg-[#F0F6FF] dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-700">
+                          {authUser?.id?.startsWith('usr_') || authUser?.id?.startsWith('student_') ? 'Active Student Session' : 'Supabase Cloud Auth'}
+                        </span>
                       </div>
-                      <span className="text-[11px] text-[#64748B] dark:text-slate-400 block truncate max-w-[200px] sm:max-w-xs">
-                        {authUser?.email || currentUser.college || 'student@mema.campus'}
-                      </span>
-                      <span className="inline-block mt-0.5 text-[10px] font-bold px-2 py-0.2 rounded-full bg-[#F0F6FF] dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-700">
-                        {authUser ? 'Supabase Cloud Auth' : 'Active Demo Student Session'}
-                      </span>
                     </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 text-center space-y-1.5">
+                    <span className="text-xs font-black text-[#172033] dark:text-white block">
+                      Guest Explorer Session
+                    </span>
+                    <p className="text-[11px] text-[#64748B] dark:text-slate-400">
+                      Sign in or create a student account to unlock campus chat, posting needs, and your verified profile.
+                    </p>
+                  </div>
+                )}
 
                 {/* Primary Auth Action Buttons */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -1312,7 +1323,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       onClose();
                       openAuthModal('signup');
                     }}
-                    className="py-3 px-4 rounded-2xl bg-white dark:bg-slate-800 hover:bg-[#F0F6FF] dark:hover:bg-slate-700 text-[#2563EB] dark:text-blue-400 font-extrabold text-xs flex items-center justify-center gap-2 border border-[#DCE8F7] dark:border-slate-700 transition-all active:scale-98"
+                    className="py-3 px-4 rounded-2xl bg-white dark:bg-slate-800 hover:bg-[#F0F6FF] dark:hover:bg-slate-750 text-[#2563EB] dark:text-blue-400 font-extrabold text-xs flex items-center justify-center gap-2 border border-[#DCE8F7] dark:border-slate-700 transition-all active:scale-98"
                   >
                     <GraduationCap className="w-4 h-4" />
                     <span>Create New Student Account</span>
@@ -1365,10 +1376,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 </div>
                 <div>
                   <span className="text-sm font-extrabold text-rose-600 dark:text-rose-400 block">
-                    Logout
+                    {isAuthenticated ? 'Logout' : 'Session & Auth'}
                   </span>
                   <span className="text-[11px] text-[#64748B] dark:text-slate-400">
-                    Sign out of your account on this device
+                    {isAuthenticated ? 'Sign out of your account on this device' : 'You are currently browsing as a guest'}
                   </span>
                 </div>
               </div>
@@ -1385,65 +1396,86 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             {/* Expanded Detailed Content */}
             {expandedCategory === 'logout' && (
               <div className="px-5 sm:px-6 pb-6 pt-2 bg-rose-50/40 dark:bg-rose-950/20 space-y-4 animate-in fade-in duration-200">
-                <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-rose-100 dark:border-rose-900 flex items-center gap-3">
-                  <img
-                    src={currentUser.avatar}
-                    alt={currentUser.name}
-                    className="w-11 h-11 rounded-full object-cover ring-2 ring-rose-200"
-                  />
-                  <div>
-                    <span className="text-xs font-black text-[#172033] dark:text-white block">{currentUser.name}</span>
-                    <span className="text-[10px] text-[#64748B]">{currentUser.location || 'Active nearby'}</span>
-                  </div>
-                </div>
+                {isAuthenticated ? (
+                  <>
+                    <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-rose-100 dark:border-rose-900 flex items-center gap-3">
+                      <img
+                        src={currentUser.avatar}
+                        alt={currentUser.name}
+                        className="w-11 h-11 rounded-full object-cover ring-2 ring-rose-200"
+                      />
+                      <div>
+                        <span className="text-xs font-black text-[#172033] dark:text-white block">{currentUser.name}</span>
+                        <span className="text-[10px] text-[#64748B]">{currentUser.location || 'Active nearby'}</span>
+                      </div>
+                    </div>
 
-                {!showLogoutConfirm ? (
-                  <div className="space-y-2">
+                    {!showLogoutConfirm ? (
+                      <div className="space-y-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            onClose();
+                            openAuthModal('signin');
+                          }}
+                          className="w-full py-3.5 px-4 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 transition-all active:scale-98"
+                        >
+                          <Sparkles className="w-4 h-4" />
+                          <span>Switch / Sign In with Student Account</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => setShowLogoutConfirm(true)}
+                          className="w-full py-3.5 px-4 rounded-2xl bg-white hover:bg-rose-50 text-rose-600 font-extrabold text-xs flex items-center justify-center gap-2 border border-rose-200 transition-all active:scale-98"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          <span>Log Out of Current Session</span>
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-rose-200 dark:border-rose-800 space-y-3">
+                        <p className="text-xs font-bold text-rose-700 dark:text-rose-300 text-center">
+                          Are you sure you want to sign out? You will need to sign back in to see your messages and activity feed.
+                        </p>
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setShowLogoutConfirm(false)}
+                            className="flex-1 py-2.5 rounded-xl bg-[#F0F6FF] dark:bg-slate-800 text-[#172033] dark:text-slate-300 text-xs font-bold border border-[#DCE8F7]"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              onClose();
+                              logoutUser();
+                            }}
+                            className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black"
+                          >
+                            Confirm Logout
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 space-y-3 text-center">
+                    <p className="text-xs font-bold text-[#64748B] dark:text-slate-400">
+                      You are currently browsing MEMA as a guest. Sign in to access your student profile, messages, and campus plans.
+                    </p>
                     <button
                       type="button"
                       onClick={() => {
                         onClose();
                         openAuthModal('signin');
                       }}
-                      className="w-full py-3.5 px-4 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 transition-all active:scale-98"
+                      className="w-full py-3 px-4 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 transition-all active:scale-98"
                     >
-                      <Sparkles className="w-4 h-4" />
-                      <span>Switch / Sign In with Student Account</span>
+                      <KeyRound className="w-4 h-4" />
+                      <span>Sign In / Create Account</span>
                     </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setShowLogoutConfirm(true)}
-                      className="w-full py-3.5 px-4 rounded-2xl bg-white hover:bg-rose-50 text-rose-600 font-extrabold text-xs flex items-center justify-center gap-2 border border-rose-200 transition-all active:scale-98"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      <span>Log Out of Current Session</span>
-                    </button>
-                  </div>
-                ) : (
-                  <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-rose-200 dark:border-rose-800 space-y-3">
-                    <p className="text-xs font-bold text-rose-700 dark:text-rose-300 text-center">
-                      Are you sure you want to sign out? You will need to sign back in to see your messages and activity feed.
-                    </p>
-                    <div className="flex gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setShowLogoutConfirm(false)}
-                        className="flex-1 py-2.5 rounded-xl bg-[#F0F6FF] dark:bg-slate-800 text-[#172033] dark:text-slate-300 text-xs font-bold border border-[#DCE8F7]"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          onClose();
-                          logoutUser();
-                        }}
-                        className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black"
-                      >
-                        Confirm Logout
-                      </button>
-                    </div>
                   </div>
                 )}
               </div>

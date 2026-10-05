@@ -81,6 +81,18 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
         if (data.user) {
           setAuthUser(data.user);
+          const profileData = {
+            ...currentUser,
+            id: data.user.id,
+            name: data.user.user_metadata?.name || data.user.email?.split('@')[0] || 'Campus Student',
+            college: data.user.user_metadata?.college || college || 'Delhi Technological University (DTU)',
+            isGuest: false
+          };
+          setCurrentUser(profileData);
+          try {
+            localStorage.setItem('mema_auth_session', JSON.stringify(data.user));
+            localStorage.setItem('mema_user_profile', JSON.stringify(profileData));
+          } catch {}
           setNotificationToast({
             message: '🎉 Welcome Back!',
             subtext: `Signed in as ${data.user.email}`
@@ -88,20 +100,27 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         }
       } else {
         // Fallback / Demo Session
-        const matched = MOCK_STUDENTS.find(s => s.name.toLowerCase().includes(email.split('@')[0].toLowerCase())) || currentUser;
-        setCurrentUser({
-          ...matched,
-          name: fullName || matched.name,
-          college: college || matched.college
-        });
-        setAuthUser({
+        const matched = MOCK_STUDENTS.find(s => s.name.toLowerCase().includes(email.split('@')[0].toLowerCase())) || MOCK_STUDENTS[0];
+        const userObj = {
           id: matched.id,
           email: email.trim(),
-          user_metadata: { name: fullName || matched.name }
-        });
+          user_metadata: { name: fullName || matched.name, college: college || matched.college }
+        };
+        const profileObj = {
+          ...matched,
+          name: fullName || matched.name,
+          college: college || matched.college,
+          isGuest: false
+        };
+        setCurrentUser(profileObj);
+        setAuthUser(userObj);
+        try {
+          localStorage.setItem('mema_auth_session', JSON.stringify(userObj));
+          localStorage.setItem('mema_user_profile', JSON.stringify(profileObj));
+        } catch {}
         setNotificationToast({
           message: '✓ Signed In (Demo Mode)',
-          subtext: `Active profile: ${matched.name}`
+          subtext: `Active profile: ${profileObj.name}`
         });
       }
 
@@ -155,31 +174,44 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
         if (data.user) {
           setAuthUser(data.user);
-          setCurrentUser(prev => ({
-            ...prev,
-            id: data.user!.id,
+          const profileData = {
+            ...currentUser,
+            id: data.user.id,
             name: fullName.trim(),
             college: college,
-            occupationType: occupationType
-          }));
+            occupationType: occupationType,
+            isGuest: false
+          };
+          setCurrentUser(profileData);
+          try {
+            localStorage.setItem('mema_auth_session', JSON.stringify(data.user));
+            localStorage.setItem('mema_user_profile', JSON.stringify(profileData));
+          } catch {}
         }
       } else {
         // Fallback / Demo Profile Creation
+        const newId = `usr_${Date.now()}`;
+        const userObj = {
+          id: newId,
+          email: email.trim(),
+          user_metadata: { name: fullName.trim(), college: college }
+        };
         const newProfile = {
-          ...currentUser,
-          id: `usr_${Date.now()}`,
+          ...MOCK_STUDENTS[0],
+          id: newId,
           name: fullName.trim(),
           college: college,
           occupationType: occupationType,
           verifiedCollege: true,
-          studentIdVerified: true
+          studentIdVerified: true,
+          isGuest: false
         };
         setCurrentUser(newProfile);
-        setAuthUser({
-          id: newProfile.id,
-          email: email.trim(),
-          user_metadata: { name: fullName.trim(), college: college }
-        });
+        setAuthUser(userObj);
+        try {
+          localStorage.setItem('mema_auth_session', JSON.stringify(userObj));
+          localStorage.setItem('mema_user_profile', JSON.stringify(newProfile));
+        } catch {}
       }
 
       setNotificationToast({
@@ -196,12 +228,21 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   };
 
   const handleSelectDemoPersona = (student: typeof MOCK_STUDENTS[0]) => {
-    setCurrentUser(student);
-    setAuthUser({
+    const personaProfile = {
+      ...student,
+      isGuest: false
+    };
+    const userObj = {
       id: student.id,
       email: `${student.name.toLowerCase().replace(/\s+/g, '')}@campus.mema.in`,
       user_metadata: { name: student.name, college: student.college }
-    });
+    };
+    setCurrentUser(personaProfile);
+    setAuthUser(userObj);
+    try {
+      localStorage.setItem('mema_auth_session', JSON.stringify(userObj));
+      localStorage.setItem('mema_user_profile', JSON.stringify(personaProfile));
+    } catch {}
     setNotificationToast({
       message: `👤 Switched Profile: ${student.name}`,
       subtext: `Role: ${student.degree} • ${student.college}`

@@ -13,10 +13,20 @@ export const BottomNav: React.FC = () => {
     currentView,
     setCurrentView,
     conversations,
-    setIsCreateRequestModalOpen
+    setIsCreateRequestModalOpen,
+    isAuthenticated,
+    openAuthModal
   } = useApp();
 
   const totalUnread = conversations.reduce((sum, c) => sum + c.unreadCount, 0);
+
+  const handleCreateClick = () => {
+    if (!isAuthenticated) {
+      openAuthModal('signin');
+      return;
+    }
+    setIsCreateRequestModalOpen(true);
+  };
 
   return (
     <div className="fixed bottom-6 left-0 right-0 z-40 flex items-center justify-center px-4 pointer-events-none">
@@ -50,7 +60,7 @@ export const BottomNav: React.FC = () => {
 
         {/* 3. Center Primary Blue + Button */}
         <button
-          onClick={() => setIsCreateRequestModalOpen(true)}
+          onClick={handleCreateClick}
           className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-tr from-[#2563EB] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[#1E40AF] text-white flex items-center justify-center shadow-lg shadow-blue-600/30 transition-transform hover:scale-110 active:scale-95"
           title="Create Request"
         >
