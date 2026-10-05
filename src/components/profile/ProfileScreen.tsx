@@ -31,7 +31,8 @@ import {
   HelpCircle,
   FileText,
   LogOut,
-  ChevronRight
+  ChevronRight,
+  KeyRound
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { EditProfileStudioModal } from './EditProfileStudioModal';
@@ -682,6 +683,19 @@ export const ProfileScreen: React.FC = () => {
                 </div>
                 <div className="text-xs font-extrabold text-[#172033] dark:text-white">Terms & Policy</div>
                 <div className="text-[10px] text-[#64748B] dark:text-slate-400">Legal & Code</div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => openSettingsModal('auth')}
+                className="p-3 rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 hover:bg-blue-100 dark:hover:bg-blue-950/50 border border-blue-200/60 dark:border-blue-800/50 text-left transition-all group"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <KeyRound className="w-4 h-4 text-[#2563EB] dark:text-blue-400" />
+                  <ChevronRight className="w-3.5 h-3.5 text-blue-400 group-hover:translate-x-0.5 transition-transform" />
+                </div>
+                <div className="text-xs font-extrabold text-[#172033] dark:text-white">MEMA Auth</div>
+                <div className="text-[10px] text-[#2563EB] dark:text-blue-400 font-semibold">Sign In / Switch</div>
               </button>
 
               <button

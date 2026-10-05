@@ -10,10 +10,7 @@ import {
   MessageSquare,
   User,
   Bell,
-  MapPin,
-  Sun,
-  Moon,
-  Settings
+  MapPin
 } from 'lucide-react';
 import { useApp, AppView } from '../../context/AppContext';
 import { Logo } from '../ui/Logo';
@@ -29,10 +26,7 @@ export const Navbar: React.FC = () => {
     currentUser,
     isPremium,
     isTrial,
-    setIsPremiumModalOpen,
-    theme,
-    toggleTheme,
-    openSettingsModal
+    setIsPremiumModalOpen
   } = useApp();
 
   const navItems: { id: AppView; label: string; icon: React.ReactNode }[] = [
@@ -109,39 +103,17 @@ export const Navbar: React.FC = () => {
             })}
           </nav>
 
-          {/* Right Action Icons (Clean Boundary-Free Icons) */}
-          <div className="flex items-center gap-0.5 sm:gap-1.5">
-            {/* Theme Toggle Button (Bright / Dark) */}
-            <button
-              onClick={toggleTheme}
-              className="p-1.5 sm:p-2 text-[#64748B] dark:text-slate-400 hover:text-[#2563EB] dark:hover:text-blue-400 transition-colors rounded-lg flex items-center justify-center"
-              title={theme === 'dark' ? 'Switch to Bright Mode' : 'Switch to Dark Mode'}
-            >
-              {theme === 'dark' ? (
-                <Sun className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-amber-500 animate-in spin-in-180 duration-200" />
-              ) : (
-                <Moon className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-[#2563EB] animate-in spin-in-180 duration-200" />
-              )}
-            </button>
-
-            {/* Settings Button */}
-            <button
-              onClick={() => openSettingsModal()}
-              className="p-1.5 sm:p-2 text-[#64748B] dark:text-slate-400 hover:text-[#2563EB] dark:hover:text-blue-400 transition-colors rounded-lg flex items-center justify-center"
-              title="Settings & Preferences"
-            >
-              <Settings className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
-            </button>
-
+          {/* Right Action Icons: Notification Bell Only */}
+          <div className="flex items-center">
             {/* Notification Bell */}
             <button
               onClick={() => setIsNotificationDrawerOpen(true)}
-              className="relative p-1.5 sm:p-2 text-[#64748B] dark:text-slate-400 hover:text-[#2563EB] dark:hover:text-blue-400 transition-colors rounded-lg flex items-center justify-center"
+              className="relative p-2 text-[#64748B] dark:text-slate-400 hover:text-[#2563EB] dark:hover:text-blue-400 hover:bg-[#F8FBFF] dark:hover:bg-slate-800 transition-colors rounded-full flex items-center justify-center"
               title="MEMA Alerts"
             >
-              <Bell className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
+              <Bell className="w-5 h-5" />
               {unreadNotificationsCount > 0 && (
-                <span className="absolute top-1 sm:top-1.5 right-1 sm:right-1.5 w-2 h-2 bg-[#2563EB] rounded-full animate-ping" />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#2563EB] rounded-full animate-ping" />
               )}
             </button>
           </div>
