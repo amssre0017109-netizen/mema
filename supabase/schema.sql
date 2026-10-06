@@ -1,237 +1,271 @@
--- =========================================================================
--- MEMA — Find Your Mood: Supabase PostgreSQL Database Schema
--- Run this script in your Supabase SQL Editor (https://app.supabase.com)
--- =========================================================================
+-- =============================================================================
+-- MEMA Web Application - Production Database Schema & Security Setup
+-- Platform: Supabase (PostgreSQL 15+)
+-- Instructions: Run this script in the Supabase SQL Editor of your project.
+-- =============================================================================
 
--- Enable UUID extension
-create extension if not exists "pgcrypto";
+-- 1. Enable Required Extensions
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
--- 1. PROFILES TABLE (Members & Students)
-create table if not exists public.profiles (
-  id text primary key,
-  name text not null,
-  age integer default 21,
-  occupation_type text default 'working_professional', -- 'school_student', 'creator_freelancer', 'working_professional'
-  college text default 'Delhi Technological University (DTU)',
-  degree text default 'Student',
-  year text default '3rd Year',
-  location text default 'Nearby Area',
-  location_zone text default 'Nearby Area',
-  distance_km numeric default 0.8,
-  distance_display text default '~Within 1 km',
-  avatar text not null,
-  cover_image text,
-  verified_college boolean default true,
-  student_id_verified boolean default true,
-  skills text[] default '{}',
-  interests text[] default '{}',
-  activities_completed integer default 0,
-  requests_posted integer default 0,
-  bio text default '',
-  online_status text default 'active_now', -- 'active_now', 'active_today', 'away'
-  created_at timestamptz default now(),
-  updated_at timestamptz default now()
+-- =============================================================================
+-- 2. Profiles Table (Extends Supabase auth.users)
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS public.profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  age INTEGER DEFAULT 21,
+  occupation_type TEXT DEFAULT 'working_professional' CHECK (occupation_type IN ('school_student', 'creator_freelancer', 'working_professional')),
+  college TEXT DEFAULT 'Connaught Place, New Delhi',
+  degree TEXT DEFAULT 'Student',
+  year TEXT DEFAULT '3rd Year',
+  location TEXT DEFAULT 'Connaught Place, New Delhi',
+  location_zone TEXT DEFAULT 'Connaught Place, New Delhi',
+  distance_km NUMERIC DEFAULT 0.5,
+  distance_display TEXT DEFAULT 'Nearby (~500m)',
+  avatar TEXT DEFAULT 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+  cover_image TEXT DEFAULT 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&q=80',
+  verified_college BOOLEAN DEFAULT TRUE,
+  student_id_verified BOOLEAN DEFAULT TRUE,
+  skills TEXT[] DEFAULT ARRAY['Coding', 'Design', 'Music']::TEXT[],
+  interests TEXT[] DEFAULT ARRAY['Campus Activities', 'Tech Meetups']::TEXT[],
+  activities_completed INTEGER DEFAULT 0,
+  requests_posted INTEGER DEFAULT 0,
+  bio TEXT DEFAULT 'Passionate learner & collaborator on MEMA',
+  online_status TEXT DEFAULT 'active_now',
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 2. CAMPUS REQUESTS & ACTIVITIES TABLE
-create table if not exists public.campus_requests (
-  id text primary key,
-  title text not null,
-  category text not null,
-  need_type text default 'Activity', -- 'Person', 'Team', 'Activity', 'Equipment'
-  date text default 'Today',
-  time text default '5:00 PM',
-  location text not null,
-  college text default 'Delhi Technological University (DTU)',
-  distance_km numeric default 0.5,
-  distance_display text default 'Nearby (~500m)',
-  people_needed integer default 1,
-  people_joined integer default 0,
-  required_skills text[] default '{}',
-  description text not null,
-  creator_id text references public.profiles(id) on delete cascade,
-  creator_name text not null,
-  creator_avatar text not null,
-  creator_degree text,
-  creator_year text,
-  creator_verified boolean default true,
-  is_urgent boolean default false,
-  likes_count integer default 0,
-  comments_count integer default 0,
-  created_at timestamptz default now()
+-- =============================================================================
+-- 3. Campus Requests / Activity Needs Table
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS public.campus_requests (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  creator_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
+  creator_name TEXT NOT NULL,
+  creator_avatar TEXT,
+  creator_degree TEXT DEFAULT 'Student',
+  creator_year TEXT DEFAULT '3rd Year',
+  creator_verified BOOLEAN DEFAULT TRUE,
+  title TEXT NOT NULL,
+  category TEXT NOT NULL,
+  need_type TEXT DEFAULT 'Activity',
+  date TEXT DEFAULT 'Today',
+  time TEXT DEFAULT '5:00 PM',
+  location TEXT NOT NULL,
+  college TEXT,
+  distance_km NUMERIC DEFAULT 0.5,
+  distance_display TEXT DEFAULT 'Nearby',
+  people_needed INTEGER DEFAULT 1,
+  people_joined INTEGER DEFAULT 0,
+  required_skills TEXT[] DEFAULT '{}'::TEXT[],
+  description TEXT,
+  is_urgent BOOLEAN DEFAULT FALSE,
+  likes_count INTEGER DEFAULT 0,
+  comments_count INTEGER DEFAULT 0,
+  status TEXT DEFAULT 'OPEN' CHECK (status IN ('OPEN', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED')),
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 3. REQUEST INTERESTS (RSVP & Applications)
-create table if not exists public.request_interests (
-  id uuid primary key default gen_random_uuid(),
-  request_id text references public.campus_requests(id) on delete cascade,
-  user_id text references public.profiles(id) on delete cascade,
-  user_name text not null,
-  user_avatar text not null,
-  user_college text,
-  user_skills text[] default '{}',
-  note text,
-  status text default 'PENDING', -- 'PENDING', 'ACCEPTED', 'DECLINED'
-  created_at timestamptz default now()
+-- =============================================================================
+-- 4. Request Interests / Join Applications
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS public.request_interests (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  request_id UUID REFERENCES public.campus_requests(id) ON DELETE CASCADE NOT NULL,
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
+  user_name TEXT NOT NULL,
+  user_avatar TEXT,
+  user_college TEXT,
+  user_skills TEXT[] DEFAULT '{}'::TEXT[],
+  note TEXT,
+  status TEXT DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'ACCEPTED', 'DECLINED')),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE (request_id, user_id)
 );
 
--- 4. CONVERSATIONS TABLE
-create table if not exists public.conversations (
-  id text primary key,
-  user1_id text references public.profiles(id) on delete cascade,
-  user2_id text references public.profiles(id) on delete cascade,
-  last_message text,
-  last_message_time text default 'Just now',
-  activity_title text,
-  created_at timestamptz default now(),
-  updated_at timestamptz default now()
+-- =============================================================================
+-- 5. User Follows Table
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS public.user_follows (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  follower_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  following_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE (follower_id, following_id)
 );
 
--- 5. MESSAGES TABLE
-create table if not exists public.messages (
-  id uuid primary key default gen_random_uuid(),
-  conversation_id text references public.conversations(id) on delete cascade,
-  sender_id text references public.profiles(id) on delete cascade,
-  text text not null,
-  is_icebreaker boolean default false,
-  safe_meetup_location text,
-  safe_meetup_time text,
-  safe_meetup_status text, -- 'proposed', 'accepted'
-  created_at timestamptz default now()
+-- =============================================================================
+-- 6. Conversations & Chat Messages
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS public.conversations (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  participant_ids UUID[] NOT NULL,
+  last_message TEXT,
+  last_message_time TIMESTAMPTZ DEFAULT NOW(),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 6. RAZORPAY PAYMENT TRANSACTIONS TABLE
-create table if not exists public.payment_transactions (
-  id uuid primary key default gen_random_uuid(),
-  user_id text references public.profiles(id) on delete cascade,
-  razorpay_payment_id text not null,
-  razorpay_order_id text,
-  amount_inr numeric not null,
-  plan_id text not null,
-  plan_name text not null,
-  payment_method text default 'RAZORPAY',
-  status text default 'SUCCESS',
-  created_at timestamptz default now()
+CREATE TABLE IF NOT EXISTS public.messages (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  conversation_id UUID REFERENCES public.conversations(id) ON DELETE CASCADE NOT NULL,
+  sender_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  text TEXT NOT NULL,
+  media_url TEXT,
+  media_type TEXT,
+  read BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 7. USER SUBSCRIPTIONS TABLE (VIP Premium)
-create table if not exists public.subscriptions (
-  id uuid primary key default gen_random_uuid(),
-  user_id text references public.profiles(id) on delete cascade unique,
-  plan_id text not null,
-  plan_name text not null,
-  status text default 'ACTIVE', -- 'ACTIVE', 'TRIAL', 'EXPIRED', 'CANCELLED'
-  auto_renew boolean default true,
-  expires_at timestamptz default (now() + interval '90 days'),
-  created_at timestamptz default now()
+-- =============================================================================
+-- 7. Payment Transactions (Razorpay Integration)
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS public.payment_transactions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  razorpay_payment_id TEXT NOT NULL,
+  razorpay_order_id TEXT,
+  amount_inr NUMERIC NOT NULL,
+  plan_id TEXT NOT NULL,
+  plan_name TEXT NOT NULL,
+  payment_method TEXT DEFAULT 'card',
+  status TEXT DEFAULT 'SUCCESS',
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 8. USER FOLLOWS & RELATIONSHIPS TABLE
-create table if not exists public.user_follows (
-  id uuid primary key default gen_random_uuid(),
-  follower_id text not null,
-  following_id text not null,
-  created_at timestamptz default now(),
-  unique(follower_id, following_id)
+-- =============================================================================
+-- 8. User Subscriptions Table
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS public.user_subscriptions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  plan_id TEXT NOT NULL,
+  status TEXT DEFAULT 'ACTIVE' CHECK (status IN ('ACTIVE', 'EXPIRED', 'CANCELLED')),
+  starts_at TIMESTAMPTZ DEFAULT NOW(),
+  expires_at TIMESTAMPTZ NOT NULL,
+  auto_renew BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-create index if not exists idx_user_follows_follower on public.user_follows(follower_id);
-create index if not exists idx_user_follows_following on public.user_follows(following_id);
-
--- =========================================================================
--- ROW LEVEL SECURITY (RLS) POLICIES
--- =========================================================================
-alter table public.profiles enable row level security;
-alter table public.campus_requests enable row level security;
-alter table public.request_interests enable row level security;
-alter table public.conversations enable row level security;
-alter table public.messages enable row level security;
-alter table public.payment_transactions enable row level security;
-alter table public.subscriptions enable row level security;
-alter table public.user_follows enable row level security;
-
--- Allow public reads for student directory, feeds, and follow relationships
-create policy "Allow public read for profiles" on public.profiles for select using (true);
-create policy "Allow public read for campus_requests" on public.campus_requests for select using (true);
-create policy "Allow public read for request_interests" on public.request_interests for select using (true);
-create policy "Allow public read for conversations" on public.conversations for select using (true);
-create policy "Allow public read for messages" on public.messages for select using (true);
-create policy "Allow public read for user_follows" on public.user_follows for select using (true);
-
--- Allow public insert/updates/deletes for active app usage
-create policy "Allow insert for profiles" on public.profiles for insert with check (true);
-create policy "Allow update for profiles" on public.profiles for update using (true);
-create policy "Allow insert for campus_requests" on public.campus_requests for insert with check (true);
-create policy "Allow insert for request_interests" on public.request_interests for insert with check (true);
-create policy "Allow insert for messages" on public.messages for insert with check (true);
-create policy "Allow insert for payment_transactions" on public.payment_transactions for insert with check (true);
-create policy "Allow insert for user_follows" on public.user_follows for insert with check (true);
-create policy "Allow delete for user_follows" on public.user_follows for delete using (true);
-insert into public.profiles (id, name, age, occupation_type, college, degree, year, location, distance_km, distance_display, avatar, verified_college, student_id_verified, skills, interests, bio)
-values
-  ('stu_7', 'Tanya Sharma', 20, 'school_student', 'Delhi Public School', 'Badminton Doubles Champion', 'Class 12th', 'North Delhi Area', 0.8, '~Within 1 km', 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80', true, true, array['Badminton', 'Fitness', 'Running', 'Athletics'], array['Badminton Sparring', 'State Tournaments', 'Morning Drills'], 'Competitive badminton player looking for daily morning sparring partners on campus courts.'),
-  ('stu_8', 'Aarav Malhotra', 21, 'creator_freelancer', 'Fitness & Calisthenics Lab', 'Calisthenics Athlete & Trainer', 'Trainer', 'North Delhi Area', 0.9, '~Within 1 km', 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80', true, true, array['Calisthenics', 'Gym Training', 'Bodyweight Fitness', 'Weight Training'], array['Street Workout', 'Mobility', 'Muscle-up Clinics'], 'Calisthenics athlete and strength trainer. Open for group bodyweight workouts and muscle-up technique sessions.'),
-  ('stu_1', 'Aman Preet', 21, 'school_student', 'Delhi Public School', 'Folk Choreography & Bhangra', 'Class 12th', 'North Campus Area', 0.5, '~Within 1 km', 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=400&q=80', true, true, array['Bhangra', 'Dance', 'Fitness', 'Gym Training'], array['Folk Dance Competitions', 'Zonal Fests', 'Gym Workout'], 'Lead dancer and choreographer. Organizing folk choreography practice for upcoming inter-college cultural fest.'),
-  ('stu_3', 'Rohan Gupta', 22, 'working_professional', 'Sports Club Delhi', 'Football Striker & Athlete', 'Club Captain', 'North-West Delhi Area', 0.7, '~Within 1 km', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80', true, true, array['Football', 'Striker', 'FIFA', 'Running'], array['Football Tournaments', 'FPL', 'Turf Games'], 'Captain for football squad. Organizing casual 7v7 evening matches and weekend turf bookings.'),
-  ('stu_4', 'Ananya Roy', 21, 'creator_freelancer', 'Design Sprint Studio', 'Product Designer & Frontend', 'UI/UX Creator', 'West Delhi Area', 1.8, '~1-2 km away', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80', true, true, array['React / Web Dev', 'UI/UX Design', 'Figma', 'AI / ML', 'Hackathons'], array['Hackathons', 'Tech Startups', 'Open Source'], 'Frontend dev & product designer. Building smart web apps. Need backend and AI builders for hackathons.')
-on conflict (id) do nothing;
-
--- =========================================================================
--- SEED INITIAL CAMPUS REQUESTS
--- =========================================================================
-insert into public.campus_requests (id, title, category, need_type, date, time, location, college, distance_km, distance_display, people_needed, people_joined, required_skills, description, creator_id, creator_name, creator_avatar, is_urgent, likes_count)
-values
-  ('req_1', '⚽ Football Partner / Players Needed', 'Sports', 'Activity', 'Today', '6:00 PM', 'Campus Sports Ground', 'Delhi Technological University (DTU)', 0.4, 'Campus Grounds • Nearby (~500m)', 2, 4, array['Football', 'Active Running'], 'We have 10 players for a 6v6 friendly match on the main turf. Need 2 more players (any position welcome). Boots recommended, bibs provided!', 'stu_3', 'Rohan Gupta', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80', true, 14),
-  ('req_4', '💻 React & Tailwind Dev for Smart India Hackathon', 'Coding', 'Team', 'This Weekend', '10:00 AM', 'Tech Commons / Online Discord', 'NSUT Delhi', 3.2, 'West Delhi Area • ~3-4 km away', 1, 3, array['React / Web Dev', 'UI/UX Design', 'API Integration'], 'We have our backend (FastAPI + Postgres) and ML model ready for our AI campus navigation problem statement. Need 1 solid frontend builder in React to build clean dashboards.', 'stu_4', 'Ananya Roy', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80', true, 35)
-on conflict (id) do nothing;
-
--- =========================================================================
--- ENABLE REALTIME ON MESSAGES & REQUESTS
--- =========================================================================
-alter publication supabase_realtime add table public.messages;
-alter publication supabase_realtime add table public.campus_requests;
-alter publication supabase_realtime add table public.request_interests;
-
--- =========================================================================
--- AUTOMATIC PROFILE CREATION ON SUPABASE AUTH SIGN-UP
--- =========================================================================
-create or replace function public.handle_new_user()
-returns trigger as $$
-begin
-  insert into public.profiles (
+-- =============================================================================
+-- 9. Automatic Profile Creation on Signup (Trigger)
+-- =============================================================================
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.profiles (
     id,
     name,
     college,
-    degree,
-    year,
+    location,
+    location_zone,
     occupation_type,
-    avatar,
-    skills,
-    interests,
-    bio
+    avatar
   )
-  values (
-    new.id::text,
-    coalesce(new.raw_user_meta_data->>'name', split_part(new.email, '@', 1)),
-    coalesce(new.raw_user_meta_data->>'college', 'Delhi Technological University (DTU)'),
-    coalesce(new.raw_user_meta_data->>'degree', 'Student'),
-    coalesce(new.raw_user_meta_data->>'year', '3rd Year'),
-    coalesce(new.raw_user_meta_data->>'occupation_type', 'school_student'),
-    coalesce(new.raw_user_meta_data->>'avatar', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'),
-    array['Campus Activities', 'Meetups'],
-    array['Meetups', 'Activities'],
-    'Active student and campus member'
+  VALUES (
+    NEW.id,
+    COALESCE(NEW.raw_user_meta_data->>'name', split_part(NEW.email, '@', 1)),
+    COALESCE(NEW.raw_user_meta_data->>'college', NEW.raw_user_meta_data->>'location', 'Connaught Place, New Delhi'),
+    COALESCE(NEW.raw_user_meta_data->>'location', 'Connaught Place, New Delhi'),
+    COALESCE(NEW.raw_user_meta_data->>'location_zone', NEW.raw_user_meta_data->>'location', 'Connaught Place, New Delhi'),
+    COALESCE(NEW.raw_user_meta_data->>'occupation_type', 'school_student'),
+    COALESCE(NEW.raw_user_meta_data->>'avatar', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80')
   )
-  on conflict (id) do update set
-    name = coalesce(excluded.name, profiles.name),
-    avatar = coalesce(excluded.avatar, profiles.avatar);
-  return new;
-end;
-$$ language plpgsql security definer;
+  ON CONFLICT (id) DO UPDATE SET
+    name = EXCLUDED.name,
+    location = EXCLUDED.location,
+    location_zone = EXCLUDED.location_zone,
+    updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Trigger on auth.users table
-drop trigger if exists on_auth_user_created on auth.users;
-create trigger on_auth_user_created
-  after insert on auth.users
-  for each row execute procedure public.handle_new_user();
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
+-- =============================================================================
+-- 10. Row Level Security (RLS) Policies
+-- =============================================================================
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.campus_requests ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.request_interests ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_follows ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.conversations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.payment_transactions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_subscriptions ENABLE ROW LEVEL SECURITY;
+
+-- Profiles: Anyone can view public profiles, users can update their own
+CREATE POLICY "Public profiles are viewable by everyone" ON public.profiles
+  FOR SELECT USING (true);
+
+CREATE POLICY "Users can insert their own profile" ON public.profiles
+  FOR INSERT WITH CHECK (auth.uid() = id);
+
+CREATE POLICY "Users can update own profile" ON public.profiles
+  FOR UPDATE USING (auth.uid() = id);
+
+-- Campus Requests: Viewable by everyone, creators can insert/update/delete
+CREATE POLICY "Campus requests viewable by all" ON public.campus_requests
+  FOR SELECT USING (true);
+
+CREATE POLICY "Authenticated users can create requests" ON public.campus_requests
+  FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+
+CREATE POLICY "Creators can update their requests" ON public.campus_requests
+  FOR UPDATE USING (auth.uid() = creator_id);
+
+CREATE POLICY "Creators can delete their requests" ON public.campus_requests
+  FOR DELETE USING (auth.uid() = creator_id);
+
+-- User Follows: Viewable by everyone, authenticated users can follow/unfollow
+CREATE POLICY "Follows are viewable by all" ON public.user_follows
+  FOR SELECT USING (true);
+
+CREATE POLICY "Authenticated users can follow" ON public.user_follows
+  FOR INSERT WITH CHECK (auth.uid() = follower_id);
+
+CREATE POLICY "Users can unfollow" ON public.user_follows
+  FOR DELETE USING (auth.uid() = follower_id);
+
+-- Conversations & Messages: Participants only
+CREATE POLICY "Users can view conversations they participate in" ON public.conversations
+  FOR SELECT USING (auth.uid() = ANY(participant_ids));
+
+CREATE POLICY "Users can view messages in their conversations" ON public.messages
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM public.conversations
+      WHERE id = messages.conversation_id
+      AND auth.uid() = ANY(participant_ids)
+    )
+  );
+
+CREATE POLICY "Users can send messages" ON public.messages
+  FOR INSERT WITH CHECK (auth.uid() = sender_id);
+
+-- Payments: Users can view their own transactions
+CREATE POLICY "Users can view own transactions" ON public.payment_transactions
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert transactions" ON public.payment_transactions
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+-- =============================================================================
+-- 11. Storage Buckets (Avatars, Media, Covers)
+-- =============================================================================
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('avatars', 'avatars', true)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('covers', 'covers', true)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('attachments', 'attachments', true)
+ON CONFLICT (id) DO NOTHING;
