@@ -17,6 +17,7 @@ export interface SignUpData {
   email: string;
   password?: string;
   name: string;
+  location?: string;
   college?: string;
   degree?: string;
   year?: string;
@@ -29,17 +30,19 @@ export interface SignUpData {
  * Sign up a new campus user with Email and Password
  */
 export async function signUpWithEmail(data: SignUpData): Promise<AuthResponse> {
+  const userLoc = data.location || 'Connaught Place, New Delhi';
+
   if (!isSupabaseConfigured) {
     // Local demo / simulated registration
     const simulatedProfile: UserProfile = {
       id: `usr_${Date.now()}`,
       name: data.name,
       age: 21,
-      college: data.college || 'Delhi Technological University (DTU)',
+      college: data.college || userLoc || 'Delhi Technological University (DTU)',
       degree: data.degree || 'Student',
       year: data.year || '3rd Year',
-      location: 'Campus Area',
-      locationZone: 'Campus Area',
+      location: userLoc,
+      locationZone: userLoc,
       distanceKm: 0.5,
       distanceDisplay: 'Nearby (~500m)',
       avatar: data.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
@@ -49,7 +52,7 @@ export async function signUpWithEmail(data: SignUpData): Promise<AuthResponse> {
       interests: ['Campus Activities', 'Meetups'],
       activitiesCompleted: 0,
       requestsPosted: 0,
-      bio: `Student at ${data.college || 'DTU'}`,
+      bio: `Member at ${userLoc}`,
       onlineStatus: 'active_now'
     };
 
@@ -58,7 +61,7 @@ export async function signUpWithEmail(data: SignUpData): Promise<AuthResponse> {
       user: {
         id: simulatedProfile.id,
         email: data.email,
-        user_metadata: { name: data.name, college: data.college }
+        user_metadata: { name: data.name, location: userLoc, locationZone: userLoc, college: simulatedProfile.college }
       }
     };
   }
@@ -70,7 +73,9 @@ export async function signUpWithEmail(data: SignUpData): Promise<AuthResponse> {
       options: {
         data: {
           name: data.name,
-          college: data.college || 'Delhi Technological University (DTU)',
+          location: userLoc,
+          locationZone: userLoc,
+          college: data.college || userLoc || 'Delhi Technological University (DTU)',
           degree: data.degree || 'Student',
           year: data.year || '3rd Year',
           occupation_type: data.occupationType || 'working_professional',
@@ -97,7 +102,7 @@ export async function signUpWithEmail(data: SignUpData): Promise<AuthResponse> {
       user: {
         id: fallbackId,
         email: data.email,
-        user_metadata: { name: data.name, college: data.college }
+        user_metadata: { name: data.name, location: userLoc, locationZone: userLoc, college: data.college || userLoc }
       }
     };
   }

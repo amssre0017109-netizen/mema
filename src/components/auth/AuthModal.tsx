@@ -12,12 +12,12 @@ import {
   KeyRound,
   AlertCircle,
   Users,
-  Building,
+  MapPin,
   Eye,
   EyeOff
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
-import { CAMPUS_OPTIONS, MOCK_STUDENTS } from '../../data/mockData';
+import { MOCK_STUDENTS } from '../../data/mockData';
 import { isSupabaseConfigured } from '../../lib/supabaseClient';
 
 interface AuthModalProps {
@@ -44,7 +44,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
-  const [college, setCollege] = useState(CAMPUS_OPTIONS[0]);
+  const [location, setLocation] = useState('Connaught Place, New Delhi');
   const [occupationType, setOccupationType] = useState<'school_student' | 'creator_freelancer' | 'working_professional'>('school_student');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -93,7 +93,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               ...currentUser,
               id: data.user.id,
               name: data.user.user_metadata?.name || data.user.email?.split('@')[0] || 'Campus Student',
-              college: data.user.user_metadata?.college || college || 'Delhi Technological University (DTU)',
+              location: data.user.user_metadata?.location || currentUser.location || 'Connaught Place, New Delhi',
+              locationZone: data.user.user_metadata?.locationZone || data.user.user_metadata?.location || currentUser.locationZone || 'Connaught Place, New Delhi',
+              college: data.user.user_metadata?.college || data.user.user_metadata?.location || 'Delhi Technological University (DTU)',
               isGuest: false
             };
             setCurrentUser(profileData);
@@ -113,12 +115,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           const userObj = {
             id: matched.id,
             email: email.trim(),
-            user_metadata: { name: fullName || matched.name, college: college || matched.college }
+            user_metadata: { name: fullName || matched.name, location: location || matched.location, college: matched.college }
           };
           const profileObj = {
             ...matched,
             name: fullName || matched.name,
-            college: college || matched.college,
+            location: location || matched.location,
+            locationZone: location || matched.locationZone,
+            college: matched.college,
             isGuest: false
           };
           setCurrentUser(profileObj);
@@ -138,12 +142,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         const userObj = {
           id: matched.id,
           email: email.trim(),
-          user_metadata: { name: fullName || matched.name, college: college || matched.college }
+          user_metadata: { name: fullName || matched.name, location: location || matched.location, college: matched.college }
         };
         const profileObj = {
           ...matched,
           name: fullName || matched.name,
-          college: college || matched.college,
+          location: location || matched.location,
+          locationZone: location || matched.locationZone,
+          college: matched.college,
           isGuest: false
         };
         setCurrentUser(profileObj);
@@ -181,7 +187,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!email.trim() || !emailRegex.test(email.trim())) {
-        setErrorMessage('Please enter a valid email address (e.g. name@college.edu).');
+        setErrorMessage('Please enter a valid email address (e.g. name@domain.com).');
         setLoading(false);
         return;
       }
@@ -192,6 +198,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         return;
       }
 
+      const userLocation = location.trim() || 'Connaught Place, New Delhi';
+
       if (isSupabaseConfigured) {
         try {
           const { supabase } = await import('../../lib/supabaseClient');
@@ -201,7 +209,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             options: {
               data: {
                 name: fullName.trim(),
-                college: college,
+                location: userLocation,
+                locationZone: userLocation,
+                college: userLocation,
                 occupation_type: occupationType,
                 avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'
               }
@@ -220,7 +230,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               ...currentUser,
               id: data.user.id,
               name: fullName.trim(),
-              college: college,
+              location: userLocation,
+              locationZone: userLocation,
+              college: userLocation,
               occupationType: occupationType,
               isGuest: false
             };
@@ -237,13 +249,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           const userObj = {
             id: newId,
             email: email.trim(),
-            user_metadata: { name: fullName.trim(), college: college }
+            user_metadata: { name: fullName.trim(), location: userLocation, locationZone: userLocation, college: userLocation }
           };
           const newProfile = {
             ...MOCK_STUDENTS[0],
             id: newId,
             name: fullName.trim(),
-            college: college,
+            location: userLocation,
+            locationZone: userLocation,
+            college: userLocation,
             occupationType: occupationType,
             verifiedCollege: true,
             studentIdVerified: true,
@@ -269,13 +283,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         const userObj = {
           id: newId,
           email: email.trim(),
-          user_metadata: { name: fullName.trim(), college: college }
+          user_metadata: { name: fullName.trim(), location: userLocation, locationZone: userLocation, college: userLocation }
         };
         const newProfile = {
           ...MOCK_STUDENTS[0],
           id: newId,
           name: fullName.trim(),
-          college: college,
+          location: userLocation,
+          locationZone: userLocation,
+          college: userLocation,
           occupationType: occupationType,
           verifiedCollege: true,
           studentIdVerified: true,
@@ -495,19 +511,18 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
               <div>
                 <label className="block text-xs font-bold text-[#172033] dark:text-slate-200 mb-1.5">
-                  Campus / College
+                  Location / Area
                 </label>
                 <div className="relative">
-                  <Building className="w-4 h-4 text-[#64748B] dark:text-slate-400 absolute left-3.5 top-3.5" />
-                  <select
-                    value={college}
-                    onChange={e => setCollege(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-xs text-[#172033] dark:text-white focus:outline-none focus:border-[#2563EB] dark:focus:border-blue-500"
-                  >
-                    {CAMPUS_OPTIONS.map(c => (
-                      <option key={c} value={c} className="dark:bg-slate-800">{c}</option>
-                    ))}
-                  </select>
+                  <MapPin className="w-4 h-4 text-[#64748B] dark:text-slate-400 absolute left-3.5 top-3.5" />
+                  <input
+                    type="text"
+                    required
+                    value={location}
+                    onChange={e => setLocation(e.target.value)}
+                    placeholder="e.g. Connaught Place, New Delhi or Hauz Khas"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-xs text-[#172033] dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-[#2563EB] dark:focus:border-blue-500 focus:ring-1 focus:ring-[#2563EB]"
+                  />
                 </div>
               </div>
 
