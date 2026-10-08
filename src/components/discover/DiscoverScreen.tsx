@@ -207,10 +207,14 @@ export const DiscoverScreen: React.FC = () => {
                 <Search className="w-6 h-6" />
               </div>
               <h3 className="font-extrabold text-base text-[#172033] dark:text-white">
-                No exact talent matches found
+                {searchQuery
+                  ? `No people found for "${searchQuery}"`
+                  : 'No people found'}
               </h3>
               <p className="text-xs text-[#64748B] dark:text-slate-400 max-w-sm mx-auto">
-                Ask MEMA for a broader skill (e.g. "badminton players nearby" or "coding partner") or reset your filters.
+                {searchQuery
+                  ? `We couldn't find anyone matching "${searchQuery}". Try searching for a name, skill (e.g. Badminton, React, Gym), or clear your search.`
+                  : 'Try adjusting your distance or skill filters to discover more people nearby.'}
               </p>
               <button
                 type="button"
@@ -219,9 +223,9 @@ export const DiscoverScreen: React.FC = () => {
                   setSelectedSkillFilter('all');
                   setNearbyOnly(false);
                 }}
-                className="px-4 py-2 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-bold shadow-xs transition-colors"
+                className="px-5 py-2.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-bold shadow-xs transition-colors"
               >
-                Reset Search Filters
+                Clear Search & Show All People
               </button>
             </div>
           ) : (

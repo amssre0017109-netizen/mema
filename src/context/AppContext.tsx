@@ -388,6 +388,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
   }, []);
 
+  // 👥 Load live profiles and campus requests from database / Supabase if configured
+  useEffect(() => {
+    let isMounted = true;
+    if (isSupabaseConfigured) {
+      supabaseService.getProfiles().then(profiles => {
+        if (isMounted && Array.isArray(profiles) && profiles.length > 0) {
+          setAllStudents(profiles);
+        }
+      });
+      supabaseService.getCampusRequests().then(requests => {
+        if (isMounted && Array.isArray(requests) && requests.length > 0) {
+          setCampusRequests(requests);
+        }
+      });
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   // 👥 Synchronize follow relationships from database on user/session initialization
   useEffect(() => {
     if (!isAuthenticated || !authUser) {

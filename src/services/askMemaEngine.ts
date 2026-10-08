@@ -34,6 +34,104 @@ export interface RankedRequestResult {
 // =========================================================================
 // 1. CONTROLLED BACKEND TOOL: Parse Natural Language Intent
 // =========================================================================
+const STOP_WORDS = new Set([
+  'find', 'me', 'the', 'for', 'and', 'with', 'are', 'you', 'is', 'a', 'an',
+  'in', 'at', 'to', 'of', 'some', 'any', 'who', 'please', 'can', 'looking',
+  'look', 'needs', 'need', 'want', 'wants', 'partner', 'partners', 'buddy',
+  'buddies', 'person', 'people', 'player', 'players', 'near', 'nearby',
+  'close', 'around', 'about', 'someone', 'peers', 'two', 'three', 'four',
+  '1', '2', '3', '4', 'play', 'plays', 'playing'
+]);
+
+const SKILL_DICTIONARY: Array<{ name: string; icon: string; aliases: string[] }> = [
+  {
+    name: 'Badminton',
+    icon: '🏸',
+    aliases: ['badminton', 'shuttle', 'racket', 'racquet', 'court sparring', 'doubles partner', 'badminton player', 'badminton players', 'badminton partner']
+  },
+  {
+    name: 'Football',
+    icon: '⚽',
+    aliases: ['football', 'soccer', 'striker', 'midfielder', 'goalkeeper', 'turf', '7v7', '6v6', '11v11', 'fifa', 'football player', 'football players', 'footballer', 'footballers']
+  },
+  {
+    name: 'Cricket',
+    icon: '🏏',
+    aliases: ['cricket', 'bowler', 'batsman', 'batting', 'bowling', 'nets', 'box cricket', 'fast bowling', 'cricketer', 'cricketers']
+  },
+  {
+    name: 'React / Web Dev',
+    icon: '💻',
+    aliases: [
+      'react', 'web dev', 'web development', 'developer', 'developers', 'frontend', 'front-end',
+      'coding', 'coder', 'coders', 'code', 'javascript', 'typescript', 'software', 'api',
+      'fullstack', 'full-stack', 'html', 'css', 'python', 'nextjs', 'node', 'programmer', 'programmers'
+    ]
+  },
+  {
+    name: 'UI/UX Design',
+    icon: '🎨',
+    aliases: [
+      'ui/ux', 'ui', 'ux', 'figma', 'design', 'designer', 'designers', 'designing',
+      'product design', 'product designer', 'wireframe', 'prototyping', 'visual design', 'creative design'
+    ]
+  },
+  {
+    name: 'Gym Training',
+    icon: '🏋️',
+    aliases: [
+      'gym', 'gym training', 'spotter', 'workout', 'workouts', 'bench press', 'calisthenics',
+      'fitness', 'weight training', 'powerlifting', 'lifting', 'bodybuilding', 'bodyweight',
+      'handstand', 'trainer', 'trainers', 'gym buddy', 'gym partner'
+    ]
+  },
+  {
+    name: 'Guitar',
+    icon: '🎸',
+    aliases: ['guitar', 'acoustic', 'guitarist', 'guitarists', 'jamming', 'chords', 'fingerstyle', 'electric guitar', 'lead guitar']
+  },
+  {
+    name: 'Vocals / Singing',
+    icon: '🎤',
+    aliases: ['singing', 'singer', 'singers', 'vocals', 'vocalist', 'vocalists', 'music', 'band', 'song', 'songwriter', 'music producer', 'music production']
+  },
+  {
+    name: 'Bhangra',
+    icon: '💃',
+    aliases: ['bhangra', 'dance', 'dancer', 'dancers', 'dancing', 'folk dance', 'choreography', 'choreographer', 'fest performance']
+  },
+  {
+    name: 'Physics',
+    icon: '📚',
+    aliases: ['physics', 'electromagnetism', 'circuits', 'study partner', 'problem solving', 'math', 'mathematics', 'calculus', 'midsem', 'exam', 'study', 'academics', 'research', 'robotics']
+  },
+  {
+    name: 'AI / ML',
+    icon: '🤖',
+    aliases: ['ai', 'ml', 'machine learning', 'deep learning', 'model', 'data science', 'artificial intelligence', 'neural network']
+  },
+  {
+    name: 'Hackathons',
+    icon: '⚡',
+    aliases: ['hackathon', 'hackathons', 'sih', 'tech sprint', 'hackathon team', 'team builder']
+  },
+  {
+    name: 'Tennis',
+    icon: '🎾',
+    aliases: ['tennis', 'lawn tennis', 'tennis player', 'rallies']
+  },
+  {
+    name: 'Photography',
+    icon: '📸',
+    aliases: ['photography', 'photographer', 'photo', 'photos', 'film photography', 'camera', 'portrait']
+  },
+  {
+    name: 'Running',
+    icon: '🏃',
+    aliases: ['running', 'runner', 'runners', 'sprint', 'athletics', 'cardio']
+  }
+];
+
 export function tool_parse_intent(rawQuery: string): ParsedIntent {
   const q = (rawQuery || '').trim().toLowerCase();
 
@@ -66,70 +164,7 @@ export function tool_parse_intent(rawQuery: string): ParsedIntent {
   let activityOrSkill: string | null = null;
   let activityIcon = '✨';
 
-  const skillDictionary: Array<{ name: string; icon: string; aliases: string[] }> = [
-    {
-      name: 'Badminton',
-      icon: '🏸',
-      aliases: ['badminton', 'shuttle', 'racket', 'court sparring', 'doubles partner']
-    },
-    {
-      name: 'Football',
-      icon: '⚽',
-      aliases: ['football', 'soccer', 'striker', 'midfielder', 'goalkeeper', 'turf', '7v7', '6v6', 'fifa']
-    },
-    {
-      name: 'Cricket',
-      icon: '🏏',
-      aliases: ['cricket', 'bowler', 'batsman', 'batting', 'bowling', 'nets', 'box cricket', 'fast bowling']
-    },
-    {
-      name: 'React / Web Dev',
-      icon: '💻',
-      aliases: ['react', 'web dev', 'developer', 'frontend', 'coding', 'code', 'javascript', 'typescript', 'software', 'api', 'fullstack', 'html', 'css', 'python']
-    },
-    {
-      name: 'UI/UX Design',
-      icon: '🎨',
-      aliases: ['ui/ux', 'ui', 'ux', 'figma', 'design', 'designer', 'product design', 'wireframe']
-    },
-    {
-      name: 'Gym Training',
-      icon: '🏋️',
-      aliases: ['gym', 'spotter', 'workout', 'bench press', 'calisthenics', 'fitness', 'weight training', 'lifting', 'pr', 'bodybuilding']
-    },
-    {
-      name: 'Guitar',
-      icon: '🎸',
-      aliases: ['guitar', 'acoustic', 'guitarist', 'jamming', 'chords', 'fingerstyle']
-    },
-    {
-      name: 'Vocals / Singing',
-      icon: '🎤',
-      aliases: ['singing', 'singer', 'vocals', 'vocalist', 'music', 'band', 'song']
-    },
-    {
-      name: 'Bhangra',
-      icon: '💃',
-      aliases: ['bhangra', 'dance', 'dancer', 'folk dance', 'choreography', 'fest']
-    },
-    {
-      name: 'Physics',
-      icon: '📚',
-      aliases: ['physics', 'electromagnetism', 'circuits', 'study partner', 'problem solving', 'math', 'calculus', 'midsem', 'exam', 'study']
-    },
-    {
-      name: 'AI / ML',
-      icon: '🤖',
-      aliases: ['ai', 'ml', 'machine learning', 'deep learning', 'model', 'data science']
-    },
-    {
-      name: 'Hackathons',
-      icon: '⚡',
-      aliases: ['hackathon', 'sih', 'tech sprint', 'hackathon team', 'team builder']
-    }
-  ];
-
-  for (const s of skillDictionary) {
+  for (const s of SKILL_DICTIONARY) {
     if (s.aliases.some(alias => q.includes(alias))) {
       activityOrSkill = s.name;
       activityIcon = s.icon;
@@ -208,11 +243,14 @@ export function tool_parse_intent(rawQuery: string): ParsedIntent {
     timeOrUrgency = 'This Weekend';
   }
 
-  // 7. Keywords breakdown
-  const cleanTokens = q
+  // 7. Meaningful Keywords breakdown (filtering out stop words)
+  const allTokens = q
     .replace(/[^\w\s]/gi, ' ')
     .split(/\s+/)
-    .filter(t => t.length > 0 && !['find', 'me', 'the', 'for', 'and', 'with', 'are', 'you', 'is', 'a', 'in', 'at', 'to', 'of'].includes(t));
+    .filter(t => t.length > 0);
+
+  const cleanTokens = allTokens.filter(t => !STOP_WORDS.has(t));
+  const finalKeywords = cleanTokens.length > 0 ? cleanTokens : allTokens;
 
   // 8. Natural Summary Pill
   const summaryParts: string[] = [];
@@ -225,7 +263,7 @@ export function tool_parse_intent(rawQuery: string): ParsedIntent {
 
   const summaryText = summaryParts.length > 0
     ? summaryParts.join(' • ')
-    : (activityOrSkill || cleanTokens.slice(0, 3).join(', '));
+    : (activityOrSkill || finalKeywords.slice(0, 3).join(', '));
 
   return {
     originalQuery: rawQuery,
@@ -237,7 +275,7 @@ export function tool_parse_intent(rawQuery: string): ParsedIntent {
     locationZone,
     roleOrOccupation,
     timeOrUrgency,
-    keywords: cleanTokens,
+    keywords: finalKeywords,
     summaryText
   };
 }
@@ -265,6 +303,7 @@ export function tool_search_and_rank_users(
   }
 
   const results: RankedUserResult[] = [];
+  const searchTokens = intent.keywords;
 
   for (const student of allStudents) {
     if (currentUser && student.id === currentUser.id) continue;
@@ -274,89 +313,190 @@ export function tool_search_and_rank_users(
     const reasons: string[] = [];
 
     const studentName = student.name.toLowerCase();
+    const nameWords = studentName.split(/\s+/);
     const studentBio = (student.bio || '').toLowerCase();
     const studentDegree = (student.degree || '').toLowerCase();
     const studentCollege = (student.college || '').toLowerCase();
     const studentLocation = (student.location || '').toLowerCase();
+    const studentLocationZone = (student.locationZone || '').toLowerCase();
+    const studentSkillsLower = student.skills.map(s => s.toLowerCase());
+    const studentInterestsLower = (student.interests || []).map(i => i.toLowerCase());
 
-    // 1. Direct Whole Query Match (Highest priority)
-    if (studentName.includes(rawQ)) {
-      score += 100;
+    // -----------------------------------------------------------------------
+    // A. EXACT & PARTIAL NAME MATCHING (Top Priority: e.g. "Tanya", "tanya", "Tan")
+    // -----------------------------------------------------------------------
+    if (studentName === rawQ) {
+      score += 250;
       hasContentMatch = true;
-      reasons.push(`Name Match`);
-    } else if (student.skills.some(s => s.toLowerCase().includes(rawQ) || rawQ.includes(s.toLowerCase()))) {
-      score += 90;
+      reasons.push(`👤 ${student.name}`);
+    } else if (studentName.includes(rawQ)) {
+      score += 200;
       hasContentMatch = true;
-      const matchedSkill = student.skills.find(s => s.toLowerCase().includes(rawQ) || rawQ.includes(s.toLowerCase()));
-      reasons.push(`Skill: ${matchedSkill}`);
-    } else if (studentBio.includes(rawQ) || studentDegree.includes(rawQ) || studentCollege.includes(rawQ)) {
-      score += 70;
+      reasons.push(`👤 ${student.name}`);
+    } else if (nameWords.some(w => w.startsWith(rawQ))) {
+      score += 180;
       hasContentMatch = true;
-      reasons.push(`Profile Match`);
+      reasons.push(`👤 ${student.name}`);
     }
 
-    // 2. Semantic Activity / Skill Match from Intent
-    if (intent.activityOrSkill) {
-      const targetSkill = intent.activityOrSkill.toLowerCase();
-      const hasExactSkill = student.skills.some(
-        s => s.toLowerCase() === targetSkill || s.toLowerCase().includes(targetSkill) || targetSkill.includes(s.toLowerCase())
-      );
-      const hasInterest = student.interests.some(
-        i => i.toLowerCase().includes(targetSkill) || targetSkill.includes(i.toLowerCase())
-      );
-      const hasBioMatch = studentBio.includes(targetSkill) || studentDegree.includes(targetSkill);
-
-      if (hasExactSkill) {
-        score += 60;
-        hasContentMatch = true;
-        reasons.push(`${intent.activityIcon} Top Skill: ${intent.activityOrSkill}`);
-      } else if (hasInterest) {
-        score += 40;
-        hasContentMatch = true;
-        reasons.push(`Interested in ${intent.activityOrSkill}`);
-      } else if (hasBioMatch) {
-        score += 30;
-        hasContentMatch = true;
-        reasons.push(`Experience in ${intent.activityOrSkill}`);
-      }
-    }
-
-    // 3. Keyword Match
-    if (intent.keywords.length > 0) {
-      for (const kw of intent.keywords) {
-        if (studentName.includes(kw)) {
-          score += 40;
+    // Check each search token against name
+    for (const token of searchTokens) {
+      if (token.length >= 2) {
+        if (studentName.includes(token)) {
+          score += 120;
           hasContentMatch = true;
-        } else if (student.skills.some(s => s.toLowerCase().includes(kw))) {
-          score += 35;
+          if (!reasons.some(r => r.includes(student.name))) reasons.push(`👤 ${student.name}`);
+        } else if (nameWords.some(w => w.startsWith(token))) {
+          score += 100;
           hasContentMatch = true;
-          const sk = student.skills.find(s => s.toLowerCase().includes(kw));
-          if (!reasons.includes(`Skill: ${sk}`)) reasons.push(`Skill: ${sk}`);
-        } else if (student.interests.some(i => i.toLowerCase().includes(kw))) {
-          score += 25;
-          hasContentMatch = true;
-        } else if (studentBio.includes(kw) || studentDegree.includes(kw) || studentLocation.includes(kw) || studentCollege.includes(kw)) {
-          score += 20;
-          hasContentMatch = true;
+          if (!reasons.some(r => r.includes(student.name))) reasons.push(`👤 ${student.name}`);
         }
       }
     }
 
-    // 4. Role Preference
-    if (intent.roleOrOccupation && student.occupationType === intent.roleOrOccupation) {
-      score += 15;
-      if (hasContentMatch) reasons.push(`Matched Role`);
+    // -----------------------------------------------------------------------
+    // B. DIRECT SKILL & ALIAS MATCHING (e.g. "badminton", "football", "designer")
+    // -----------------------------------------------------------------------
+    const matchedDirectSkill = student.skills.find(s => {
+      const sLow = s.toLowerCase();
+      if (rawQ.length <= 3) {
+        return sLow.split(/[\s/]+/).some(w => w.startsWith(rawQ));
+      }
+      return sLow === rawQ || sLow.includes(rawQ) || rawQ.includes(sLow);
+    });
+
+    if (matchedDirectSkill) {
+      score += 150;
+      hasContentMatch = true;
+      reasons.push(`⚡ Skill: ${matchedDirectSkill}`);
     }
 
-    // 5. Proximity Boost (only added if student already matches the query)
-    if (hasContentMatch) {
+    // Check tokens against student skills
+    for (const token of searchTokens) {
+      if (token.length >= 2) {
+        const foundSkill = student.skills.find(s => {
+          const sLow = s.toLowerCase();
+          if (token.length <= 3) {
+            return sLow.split(/[\s/]+/).some(w => w.startsWith(token));
+          }
+          return sLow.includes(token) || sLow.split(/[\s/]+/).some(w => w.startsWith(token));
+        });
+        if (foundSkill) {
+          score += 100;
+          hasContentMatch = true;
+          const label = `⚡ Skill: ${foundSkill}`;
+          if (!reasons.includes(label)) reasons.push(label);
+        }
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // C. SEMANTIC SKILL / NLP ACTIVITY INTENT (e.g. "find me 2 badminton partners")
+    // -----------------------------------------------------------------------
+    if (intent.activityOrSkill) {
+      const targetSkill = intent.activityOrSkill.toLowerCase();
+      const hasExactSkill = studentSkillsLower.some(
+        s => s === targetSkill || s.includes(targetSkill) || targetSkill.includes(s)
+      );
+      const hasInterest = studentInterestsLower.some(
+        i => i.includes(targetSkill) || targetSkill.includes(i)
+      );
+      const hasDegreeOrBio = studentDegree.includes(targetSkill) || studentBio.includes(targetSkill);
+
+      if (hasExactSkill) {
+        score += 140;
+        hasContentMatch = true;
+        const pill = `${intent.activityIcon} Skill: ${intent.activityOrSkill}`;
+        if (!reasons.includes(pill)) reasons.push(pill);
+      } else if (hasInterest) {
+        score += 80;
+        hasContentMatch = true;
+        const pill = `✨ Interested in ${intent.activityOrSkill}`;
+        if (!reasons.includes(pill)) reasons.push(pill);
+      } else if (hasDegreeOrBio) {
+        score += 60;
+        hasContentMatch = true;
+        const pill = `🎓 ${intent.activityOrSkill} Background`;
+        if (!reasons.includes(pill)) reasons.push(pill);
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // D. DEGREE, PROFESSION & ROLE MATCHING (e.g. "Product Designer", "Striker")
+    // -----------------------------------------------------------------------
+    const degreeMatches = rawQ.length <= 3
+      ? studentDegree.split(/\s+/).some(w => w.startsWith(rawQ))
+      : studentDegree.includes(rawQ);
+
+    if (degreeMatches) {
+      score += 110;
+      hasContentMatch = true;
+      reasons.push(`🎓 ${student.degree}`);
+    } else {
+      for (const token of searchTokens) {
+        if (token.length >= 3 && studentDegree.includes(token)) {
+          score += 70;
+          hasContentMatch = true;
+          const label = `🎓 ${student.degree}`;
+          if (!reasons.includes(label)) reasons.push(label);
+          break;
+        }
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // E. INTERESTS MATCHING
+    // -----------------------------------------------------------------------
+    const matchedInterest = student.interests.find(i => {
+      const iLow = i.toLowerCase();
+      if (rawQ.length <= 3) {
+        return iLow.split(/\s+/).some(w => w.startsWith(rawQ));
+      }
+      return iLow.includes(rawQ) || (searchTokens.length > 0 && searchTokens.some(t => t.length >= 3 && iLow.includes(t)));
+    });
+    if (matchedInterest) {
+      score += 75;
+      hasContentMatch = true;
+      const label = `✨ ${matchedInterest}`;
+      if (!reasons.includes(label)) reasons.push(label);
+    }
+
+    // -----------------------------------------------------------------------
+    // F. BIO & LOCATION MATCHING
+    // -----------------------------------------------------------------------
+    if (rawQ.length > 3 && studentBio.includes(rawQ)) {
+      score += 60;
+      hasContentMatch = true;
+      reasons.push(`📝 Bio Match`);
+    }
+
+    if (intent.locationZone) {
+      const zLow = intent.locationZone.toLowerCase();
+      if (studentLocation.includes(zLow) || studentLocationZone.includes(zLow) || studentCollege.includes(zLow)) {
+        score += 50;
+        hasContentMatch = true;
+        reasons.push(`🏢 ${intent.locationZone}`);
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // G. ROLE / OCCUPATION FILTER BOOST
+    // -----------------------------------------------------------------------
+    if (intent.roleOrOccupation && student.occupationType === intent.roleOrOccupation) {
+      score += 20;
+    }
+
+    // -----------------------------------------------------------------------
+    // H. PROXIMITY BOOST (Only applied if the user already has a content match)
+    // -----------------------------------------------------------------------
+    if (hasContentMatch && score > 0) {
       const dist = student.distanceKm ?? 99;
       if (intent.proximity === 'nearby' || intent.proximity === 'within_1km') {
         if (dist <= 0.8) {
-          score += 25;
+          score += 35;
           reasons.push(`📍 Nearby (~${Math.round(dist * 1000)}m)`);
         } else if (dist <= 1.2) {
-          score += 15;
+          score += 20;
           reasons.push(`📍 Within 1 km`);
         }
       } else {
@@ -366,8 +506,10 @@ export function tool_search_and_rank_users(
       if (student.verifiedCollege) score += 5;
       if (student.onlineStatus === 'active_now') score += 5;
 
-      const matchPercentage = Math.min(99, Math.max(72, Math.round(65 + (score / 140) * 34)));
-      const matchReason = reasons.length > 0 ? reasons.slice(0, 2).join(' • ') : `📍 ${student.distanceDisplay || student.location || 'Nearby'}`;
+      const matchPercentage = Math.min(99, Math.max(75, Math.round(70 + (score / 280) * 29)));
+      const matchReason = reasons.length > 0
+        ? reasons.slice(0, 2).join(' • ')
+        : `📍 ${student.distanceDisplay || student.location || 'Nearby'}`;
 
       results.push({
         student,
@@ -379,16 +521,16 @@ export function tool_search_and_rank_users(
     }
   }
 
-  // Sort by score descending, then distance
+  // Sort strictly by relevance score descending, secondary by distance
   results.sort((a, b) => {
     if (b.score !== a.score) return b.score - a.score;
     return (a.student.distanceKm ?? 99) - (b.student.distanceKm ?? 99);
   });
 
-  // Flag top N choices if people count was requested
+  // Flag top N choices
   const targetCount = intent.peopleCount || (results.length > 0 ? 1 : 0);
   results.forEach((res, index) => {
-    if (index < targetCount && res.score >= 40) {
+    if (index < targetCount && res.score >= 50) {
       res.isTopChoice = true;
       res.choiceRank = index + 1;
     }
