@@ -165,8 +165,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       a: 'Tap the "+ Post Request" or "+ Post Need" button anywhere in the app. Select your category (Sports, Study, Music, Dance, Coding, etc.), specify your location spot, and write what you need.'
     },
     {
-      q: 'Who can see my stories and full profile file?',
-      a: 'Only peers you follow appear in your top story bar, and peers who follow you can view your stories. Anyone browsing nearby requests or Discover directory can inspect your full profile dossier and portfolio moodboards.'
+      q: 'Who can see my stories and full profile?',
+      a: 'Only peers you follow appear in your top story bar, and peers who follow you can view your stories. Anyone browsing nearby requests or Discover directory can view your full profile and activities.'
     },
     {
       q: 'How does MEMA guarantee safe public meetups?',
@@ -1195,7 +1195,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 space-y-1.5">
                   <h4 className="font-bold text-xs text-[#172033] dark:text-white">2. Privacy & Data Integrity</h4>
                   <p className="text-[11px] text-[#64748B] dark:text-slate-400 leading-relaxed">
-                    Your profile moodboards and personal data are stored with end-to-end security. We never sell your personal information.
+                    Your profile activities, messages, and personal data are stored with end-to-end security. We never sell your personal information.
                   </p>
                 </div>
 

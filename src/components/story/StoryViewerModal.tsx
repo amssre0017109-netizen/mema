@@ -3,7 +3,7 @@ import {
   X,
   UserPlus,
   UserCheck,
-  FileText,
+  User,
   Heart,
   Send,
   MapPin
@@ -264,13 +264,13 @@ export const StoryViewerModal: React.FC = () => {
             {story.caption}
           </p>
 
-          {/* Quick Open File Dossier CTA */}
+          {/* Quick View Profile CTA */}
           <button
             onClick={handleOpenProfileFile}
             className="w-full py-2.5 px-4 rounded-2xl bg-white/20 backdrop-blur-md hover:bg-white/30 border border-white/30 text-white font-extrabold text-xs flex items-center justify-center gap-2 transition-all active:scale-98 shadow-lg"
           >
-            <FileText className="w-4 h-4 text-blue-300" />
-            <span>Open {user.name.split(' ')[0]}'s Profile File ↗</span>
+            <User className="w-4 h-4 text-blue-300" />
+            <span>View {user.name.split(' ')[0]}'s Profile ↗</span>
           </button>
         </div>
 

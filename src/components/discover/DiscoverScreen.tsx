@@ -332,7 +332,7 @@ export const DiscoverScreen: React.FC = () => {
                         onClick={() => openUserProfileModal(student)}
                         className="px-3.5 py-1.5 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-xs rounded-full shadow-md shadow-blue-500/20 flex items-center gap-1 transition-all active:scale-95"
                       >
-                        <span>Open File</span>
+                        <span>View Profile</span>
                       </button>
                     </div>
                   </div>

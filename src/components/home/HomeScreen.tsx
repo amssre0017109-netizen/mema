@@ -217,7 +217,7 @@ export const HomeScreen: React.FC = () => {
                 key={student.id}
                 onClick={() => openStoryViewer(student)}
                 className="w-[76px] sm:w-[80px] flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group"
-                title={`View ${student.name}'s live story & file`}
+                title={`View ${student.name}'s story`}
               >
                 <div className="relative w-16 h-16 flex items-center justify-center">
                   <div className="w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr from-[#1D4ED8] via-[#2563EB] to-[#60A5FA] flex items-center justify-center group-hover:scale-105 transition-transform">
@@ -246,7 +246,7 @@ export const HomeScreen: React.FC = () => {
                 <div
                   onClick={() => openUserProfileModal(student)}
                   className="relative w-16 h-16 flex items-center justify-center cursor-pointer"
-                  title={`View ${student.name}'s Profile File`}
+                  title={`View ${student.name}'s Profile`}
                 >
                   <div className="w-16 h-16 rounded-full p-[2.5px] border-2 border-dashed border-[#DCE8F7] dark:border-slate-800 group-hover:border-[#2563EB] flex items-center justify-center group-hover:scale-105 transition-all bg-white dark:bg-slate-900">
                     <img
@@ -542,7 +542,7 @@ export const HomeScreen: React.FC = () => {
                   <div
                     onClick={() => openUserProfileModal(partnerProfile)}
                     className="flex items-center gap-3 cursor-pointer group/creator min-w-0 flex-1"
-                    title={`Open ${req.creator.name}'s Profile File`}
+                    title={`View ${req.creator.name}'s Profile`}
                   >
                     <img
                       src={req.creator.avatar}

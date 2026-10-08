@@ -36,7 +36,6 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { EditProfileStudioModal } from './EditProfileStudioModal';
-import { MoodboardPosterModal } from './MoodboardPosterModal';
 import { ProfileActivity } from '../../types';
 
 export const ProfileScreen: React.FC = () => {
@@ -53,45 +52,7 @@ export const ProfileScreen: React.FC = () => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isStudioOpen, setIsStudioOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'activities' | 'skills' | 'interests' | 'bio' | 'posters'>('activities');
-  const [activePoster, setActivePoster] = useState<{
-    id: string;
-    title: string;
-    subtitle?: string;
-    image: string;
-    tag?: string;
-  } | null>(null);
-
-  const moodboards = currentUser.moodboardGallery || [
-    {
-      id: 'mb_1',
-      title: 'red lips',
-      subtitle: 'SIGNAL ECHO DATA • TOUCH INTERRUPTED',
-      image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
-      tag: 'POSTER 01'
-    },
-    {
-      id: 'mb_2',
-      title: 'warm silhouette',
-      subtitle: 'CHROMA DATA • VISUAL IDENTITY',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80',
-      tag: 'EDITORIAL'
-    },
-    {
-      id: 'mb_3',
-      title: 'ethereal noise',
-      subtitle: 'CAMPUS ART DIRECTION',
-      image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80',
-      tag: 'MOODBOARD'
-    },
-    {
-      id: 'mb_4',
-      title: 'neon horizon',
-      subtitle: 'DIGITAL SCULPTING',
-      image: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=80',
-      tag: 'CONCEPT'
-    }
-  ];
+  const [activeTab, setActiveTab] = useState<'activities' | 'skills' | 'interests' | 'bio'>('activities');
 
   const occupationType = currentUser.occupationType === 'college_student' ? 'working_professional' : (currentUser.occupationType || 'working_professional');
 
@@ -327,7 +288,7 @@ export const ProfileScreen: React.FC = () => {
               </span>
             </div>
 
-            <div className="grid grid-cols-5 gap-1.5">
+            <div className="grid grid-cols-4 gap-1.5">
               <div className="p-2 rounded-2xl bg-white/60 dark:bg-slate-800/70 backdrop-blur-md border border-white/70 dark:border-slate-700 text-center">
                 <span className="text-[9px] text-[#64748B] dark:text-slate-400 block font-bold truncate">Sessions</span>
                 <span className="text-xs sm:text-sm font-black text-[#172033] dark:text-white block mt-0.5">
@@ -343,23 +304,16 @@ export const ProfileScreen: React.FC = () => {
               </div>
 
               <div className="p-2 rounded-2xl bg-white/60 dark:bg-slate-800/70 backdrop-blur-md border border-white/70 dark:border-slate-700 text-center">
-                <span className="text-[9px] text-[#64748B] dark:text-slate-400 block font-bold truncate">Works</span>
+                <span className="text-[9px] text-[#64748B] dark:text-slate-400 block font-bold truncate">Activities</span>
                 <span className="text-xs sm:text-sm font-black text-[#172033] dark:text-white block mt-0.5">
-                  {currentUser.worksCount || 751}
+                  {currentUser.activitiesCompleted || activities.length}
                 </span>
               </div>
 
               <div className="p-2 rounded-2xl bg-white/60 dark:bg-slate-800/70 backdrop-blur-md border border-white/70 dark:border-slate-700 text-center">
-                <span className="text-[9px] text-[#64748B] dark:text-slate-400 block font-bold truncate">Mood boards</span>
+                <span className="text-[9px] text-[#64748B] dark:text-slate-400 block font-bold truncate">Followers</span>
                 <span className="text-xs sm:text-sm font-black text-[#172033] dark:text-white block mt-0.5">
-                  {currentUser.moodboardsCount || 38}
-                </span>
-              </div>
-
-              <div className="p-2 rounded-2xl bg-white/60 dark:bg-slate-800/70 backdrop-blur-md border border-white/70 dark:border-slate-700 text-center">
-                <span className="text-[9px] text-[#64748B] dark:text-slate-400 block font-bold truncate">Prompts</span>
-                <span className="text-xs sm:text-sm font-black text-[#172033] dark:text-white block mt-0.5">
-                  {currentUser.promptsCount || 142}
+                  {(currentUser.followersCount || 21348).toLocaleString()}
                 </span>
               </div>
             </div>
@@ -368,7 +322,7 @@ export const ProfileScreen: React.FC = () => {
 
         {/* =========================================================================
             STRUCTURED PROFILE CONTENT TABS
-            (Activities, Skills, Interests, Bio, Posters)
+            (Activities, Skills, Interests, Bio)
            ========================================================================= */}
         <div className="space-y-4">
           {/* Tabs Selector */}
@@ -417,18 +371,6 @@ export const ProfileScreen: React.FC = () => {
             >
               <span>📝 Bio</span>
               {activeTab === 'bio' && (
-                <span className="absolute -bottom-2 left-0 right-0 h-0.5 bg-[#2563EB] dark:bg-blue-400 rounded-full" />
-              )}
-            </button>
-
-            <button
-              onClick={() => setActiveTab('posters')}
-              className={`pb-1 text-xs font-bold transition-all relative shrink-0 ${
-                activeTab === 'posters' ? 'text-[#2563EB] dark:text-blue-400' : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
-              }`}
-            >
-              <span>🖼️ Posters</span>
-              {activeTab === 'posters' && (
                 <span className="absolute -bottom-2 left-0 right-0 h-0.5 bg-[#2563EB] dark:bg-blue-400 rounded-full" />
               )}
             </button>
@@ -537,44 +479,6 @@ export const ProfileScreen: React.FC = () => {
               <div className="text-[11px] text-[#64748B] dark:text-slate-400 flex items-center gap-1.5">
                 <MapPin className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
                 <span>Base Location: {currentUser.location || currentUser.locationZone}</span>
-              </div>
-            </div>
-          )}
-
-          {/* Tab 5: Posters Gallery */}
-          {activeTab === 'posters' && (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between px-1">
-                <span className="text-xs font-bold text-[#64748B] dark:text-slate-400 uppercase tracking-wider">
-                  Editorial Posters & Moodboards
-                </span>
-                <span className="text-[11px] text-[#64748B] dark:text-slate-400">
-                  Tap to view poster
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                {moodboards.map(mb => (
-                  <div
-                    key={mb.id}
-                    onClick={() => setActivePoster(mb)}
-                    className="relative rounded-3xl overflow-hidden aspect-[3/4] bg-[#F0F6FF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-800 group cursor-pointer shadow-xs hover:scale-[1.02] transition-transform duration-300"
-                  >
-                    <img
-                      src={mb.image}
-                      alt={mb.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/20 to-transparent flex flex-col justify-end p-4">
-                      <span className="text-[9px] font-mono font-bold tracking-widest text-[#BFDBFE] uppercase">
-                        {mb.tag}
-                      </span>
-                      <h3 className="font-display text-lg font-black text-white uppercase leading-tight mt-0.5">
-                        {mb.title}
-                      </h3>
-                    </div>
-                  </div>
-                ))}
               </div>
             </div>
           )}
@@ -719,12 +623,6 @@ export const ProfileScreen: React.FC = () => {
       <EditProfileStudioModal
         isOpen={isStudioOpen}
         onClose={() => setIsStudioOpen(false)}
-      />
-
-      {/* Moodboard Poster Modal */}
-      <MoodboardPosterModal
-        poster={activePoster}
-        onClose={() => setActivePoster(null)}
       />
     </div>
   );

@@ -12,14 +12,12 @@ import {
   Sparkles,
   Calendar,
   Activity,
-  Image as ImageIcon,
   Tag,
   FileText,
   Clock,
   ShieldCheck
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
-import { MoodboardPosterModal } from './MoodboardPosterModal';
 import { ProfileActivity } from '../../types';
 
 export const OtherUserProfileModal: React.FC = () => {
@@ -35,50 +33,12 @@ export const OtherUserProfileModal: React.FC = () => {
     setNotificationToast
   } = useApp();
 
-  const [activeTab, setActiveTab] = useState<'files' | 'activities' | 'skills' | 'bio'>('files');
-  const [activePoster, setActivePoster] = useState<{
-    id: string;
-    title: string;
-    subtitle?: string;
-    image: string;
-    tag?: string;
-  } | null>(null);
+  const [activeTab, setActiveTab] = useState<'activities' | 'skills' | 'bio'>('activities');
 
   if (!viewingProfileUser) return null;
 
   const user = viewingProfileUser;
   const isFollowing = isFollowingUser(user.id);
-
-  const moodboards = user.moodboardGallery || [
-    {
-      id: 'mb_1',
-      title: 'Signal Echo',
-      subtitle: 'VISUAL IDENTITY • TOUCH INTERRUPTED',
-      image: user.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
-      tag: 'PORTFOLIO 01'
-    },
-    {
-      id: 'mb_2',
-      title: 'Warm Silhouette',
-      subtitle: 'CHROMA DATA • CREATIVE DESIGN',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80',
-      tag: 'EDITORIAL'
-    },
-    {
-      id: 'mb_3',
-      title: 'Ethereal Noise',
-      subtitle: 'DIGITAL SCULPTING • EXHIBITION',
-      image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80',
-      tag: 'MOODBOARD'
-    },
-    {
-      id: 'mb_4',
-      title: 'Horizon Sprint',
-      subtitle: 'TECH PROTOTYPE & DESIGN SYSTEM',
-      image: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=80',
-      tag: 'PROJECT'
-    }
-  ];
 
   const activities: ProfileActivity[] = user.recentActivities || [
     {
@@ -273,7 +233,7 @@ export const OtherUserProfileModal: React.FC = () => {
         </div>
 
         {/* Horizontal Metric Stats */}
-        <div className="grid grid-cols-4 gap-1.5 text-center">
+        <div className="grid grid-cols-3 gap-1.5 text-center">
           <div className="p-2 rounded-2xl bg-[#F8FBFF] dark:bg-slate-800/60 border border-[#DCE8F7] dark:border-slate-800">
             <span className="text-[9px] text-[#64748B] dark:text-slate-400 font-bold block">Sessions</span>
             <span className="text-xs font-black text-[#172033] dark:text-white block mt-0.5">
@@ -289,13 +249,6 @@ export const OtherUserProfileModal: React.FC = () => {
           </div>
 
           <div className="p-2 rounded-2xl bg-[#F8FBFF] dark:bg-slate-800/60 border border-[#DCE8F7] dark:border-slate-800">
-            <span className="text-[9px] text-[#64748B] dark:text-slate-400 font-bold block">Works</span>
-            <span className="text-xs font-black text-[#172033] dark:text-white block mt-0.5">
-              {(user.worksCount || 640).toLocaleString()}
-            </span>
-          </div>
-
-          <div className="p-2 rounded-2xl bg-[#F8FBFF] dark:bg-slate-800/60 border border-[#DCE8F7] dark:border-slate-800">
             <span className="text-[9px] text-[#64748B] dark:text-slate-400 font-bold block">Activities</span>
             <span className="text-xs font-black text-[#172033] dark:text-white block mt-0.5">
               {user.activitiesCompleted || 18}
@@ -304,15 +257,7 @@ export const OtherUserProfileModal: React.FC = () => {
         </div>
 
         {/* Tab Switcher */}
-        <div className="grid grid-cols-4 gap-1 p-1 bg-[#F8FBFF] dark:bg-slate-800/80 rounded-2xl border border-[#DCE8F7] dark:border-slate-800 text-[11px] font-bold">
-          <button
-            onClick={() => setActiveTab('files')}
-            className={`py-1.5 rounded-xl transition-all ${
-              activeTab === 'files' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
-            }`}
-          >
-            Portfolio & Files
-          </button>
+        <div className="grid grid-cols-3 gap-1 p-1 bg-[#F8FBFF] dark:bg-slate-800/80 rounded-2xl border border-[#DCE8F7] dark:border-slate-800 text-[11px] font-bold">
           <button
             onClick={() => setActiveTab('activities')}
             className={`py-1.5 rounded-xl transition-all ${
@@ -341,37 +286,7 @@ export const OtherUserProfileModal: React.FC = () => {
 
         {/* Tab Contents */}
         <div className="space-y-3 min-h-[140px]">
-          {/* 1. Portfolio Files / Moodboards */}
-          {activeTab === 'files' && (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-extrabold text-[#172033] dark:text-white">Uploaded Works & File Gallery</span>
-                <span className="text-[10px] text-[#64748B] dark:text-slate-400">{moodboards.length} items</span>
-              </div>
-              <div className="grid grid-cols-2 gap-2.5">
-                {moodboards.map(item => (
-                  <div
-                    key={item.id}
-                    onClick={() => setActivePoster(item)}
-                    className="relative aspect-3/4 rounded-2xl overflow-hidden border border-[#DCE8F7] dark:border-slate-800 shadow-xs cursor-pointer group transform hover:scale-102 transition-all bg-[#F0F6FF] dark:bg-slate-800"
-                  >
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-2.5 text-white">
-                      <span className="text-[8px] font-black uppercase tracking-wider text-[#BFDBFE]">{item.tag}</span>
-                      <h4 className="font-editorial text-sm font-bold uppercase truncate">{item.title}</h4>
-                      <span className="text-[9px] text-[#DCE8F7]">Tap to inspect file ↗</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* 2. Activities */}
+          {/* 1. Activities */}
           {activeTab === 'activities' && (
             <div className="space-y-2">
               {activities.map(act => (
@@ -391,7 +306,7 @@ export const OtherUserProfileModal: React.FC = () => {
             </div>
           )}
 
-          {/* 3. Skills & Interests */}
+          {/* 2. Skills & Interests */}
           {activeTab === 'skills' && (
             <div className="space-y-3">
               <div>
@@ -424,7 +339,7 @@ export const OtherUserProfileModal: React.FC = () => {
             </div>
           )}
 
-          {/* 4. Bio & About */}
+          {/* 3. Bio & About */}
           {activeTab === 'bio' && (
             <div className="p-4 rounded-2xl bg-[#F8FBFF] dark:bg-slate-800/80 border border-[#DCE8F7] dark:border-slate-700 space-y-2">
               <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#2563EB] dark:text-blue-400">About Statement</span>
@@ -441,18 +356,10 @@ export const OtherUserProfileModal: React.FC = () => {
             onClick={closeUserProfileModal}
             className="px-5 py-2 rounded-full bg-[#F8FBFF] dark:bg-slate-800 hover:bg-white dark:hover:bg-slate-700 text-[#64748B] dark:text-slate-300 hover:text-[#172033] dark:hover:text-white border border-[#DCE8F7] dark:border-slate-700 font-bold text-xs transition-colors"
           >
-            Close File
+            Close
           </button>
         </div>
       </div>
-
-      {/* Moodboard Poster Detail Modal when inspecting artwork/file */}
-      {activePoster && (
-        <MoodboardPosterModal
-          poster={activePoster}
-          onClose={() => setActivePoster(null)}
-        />
-      )}
     </div>
   );
 };
