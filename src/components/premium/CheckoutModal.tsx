@@ -7,7 +7,8 @@ import {
   CheckCircle2,
   Lock,
   CreditCard,
-  Smartphone
+  Smartphone,
+  Sparkles
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { PaymentMethodType } from '../../types/subscription';
@@ -28,11 +29,48 @@ export const CheckoutModal: React.FC = () => {
   const [upiId, setUpiId] = useState('samar@oksbi');
   const [cardNumber, setCardNumber] = useState('4242 •••• •••• 4242');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isSimulating, setIsSimulating] = useState(false);
 
   if (!isCheckoutModalOpen || !selectedPlanForCheckout) return null;
 
   const plan = selectedPlanForCheckout;
   const isTrial = plan.hasFreeTrial;
+
+  const handleInstantSimulateUpgrade = async () => {
+    setIsSimulating(true);
+    setIsProcessing(true);
+
+    const testPaymentId = `rzp_test_sim_${Date.now()}`;
+    const testOrderId = `order_sim_${Date.now()}`;
+
+    try {
+      await supabaseService.recordPaymentTransaction({
+        userId: currentUser.id,
+        razorpayPaymentId: testPaymentId,
+        razorpayOrderId: testOrderId,
+        amountInr: plan.priceInr,
+        planId: plan.id,
+        planName: plan.name,
+        paymentMethod: 'UPI'
+      });
+    } catch (e) {
+      console.warn('Simulation record note:', e);
+    }
+
+    setTimeout(() => {
+      setIsSimulating(false);
+      setIsProcessing(false);
+      activateSubscription(
+        plan,
+        'UPI',
+        `Simulated Test Mode (${testPaymentId.slice(0, 16)})`
+      );
+      setNotificationToast({
+        message: '⚡ VIP Plan Activated (Test Mode)!',
+        subtext: `Enjoy ${plan.name} features with ₹0 simulated checkout.`
+      });
+    }, 600);
+  };
 
   const handlePay = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -170,6 +208,31 @@ export const CheckoutModal: React.FC = () => {
               </span>
             </button>
           </div>
+        </div>
+
+        {/* Developer Sandbox / Instant Simulation Card */}
+        <div className="p-3.5 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/40 dark:to-orange-950/30 border border-amber-200/80 dark:border-amber-800/60 space-y-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5 text-xs font-black text-amber-900 dark:text-amber-300">
+              <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+              <span>Test Sandbox Mode</span>
+            </div>
+            <span className="px-2 py-0.5 rounded-full bg-amber-200 dark:bg-amber-900/60 text-amber-900 dark:text-amber-200 text-[10px] font-black uppercase">
+              ₹0 Demo
+            </span>
+          </div>
+          <p className="text-[11px] text-amber-900/80 dark:text-amber-200/80 leading-relaxed">
+            Test VIP features without real payment. Simulates an instant Razorpay transaction with ₹0 charged.
+          </p>
+          <button
+            type="button"
+            disabled={isProcessing}
+            onClick={handleInstantSimulateUpgrade}
+            className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-black text-xs shadow-xs flex items-center justify-center gap-1.5 transition-all active:scale-98 disabled:opacity-50 cursor-pointer"
+          >
+            <Zap className="w-3.5 h-3.5" />
+            <span>{isSimulating ? 'Simulating ₹0 Activation...' : '⚡ 1-Click Instant Test Upgrade (₹0)'}</span>
+          </button>
         </div>
 
         <form onSubmit={handlePay} className="pt-2 border-t border-[#DCE8F7] dark:border-slate-800 flex items-center justify-end gap-2">
