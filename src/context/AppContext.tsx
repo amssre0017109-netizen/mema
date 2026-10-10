@@ -322,6 +322,43 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setIsAuthModalOpen(false);
   };
 
+  // Helper to rehydrate/sync profile from Supabase or user metadata
+  const syncProfileFromAuthUser = async (user: any) => {
+    if (!user) return;
+    try {
+      // 1. Try to fetch existing profile from Supabase
+      const existingProfile = await supabaseService.getProfileById(user.id);
+      if (existingProfile) {
+        setCurrentUser(existingProfile);
+        try {
+          localStorage.setItem('mema_user_profile', JSON.stringify(existingProfile));
+        } catch {}
+        return;
+      }
+
+      // 2. Fallback: construct profile from session metadata
+      const profileData: UserProfile = {
+        ...CURRENT_USER,
+        id: user.id,
+        name: user.user_metadata?.name || user.email?.split('@')[0] || 'Campus Student',
+        college: user.user_metadata?.college || user.user_metadata?.location || 'Connaught Place, New Delhi',
+        location: user.user_metadata?.location || user.user_metadata?.college || 'Connaught Place, New Delhi',
+        locationZone: user.user_metadata?.location || user.user_metadata?.college || 'Connaught Place, New Delhi',
+        avatar: user.user_metadata?.avatar || CURRENT_USER.avatar,
+        isGuest: false
+      };
+      setCurrentUser(profileData);
+      try {
+        localStorage.setItem('mema_user_profile', JSON.stringify(profileData));
+      } catch {}
+
+      // Persist profile to Supabase database so future queries find it
+      await supabaseService.upsertProfile(profileData);
+    } catch (err) {
+      console.warn('Error syncing profile from auth user:', err);
+    }
+  };
+
   // Listen to Supabase Auth state changes
   useEffect(() => {
     if (!isSupabaseConfigured) return;
@@ -333,18 +370,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         try {
           localStorage.setItem('mema_auth_session', JSON.stringify(session.user));
         } catch {}
-        const profileData: UserProfile = {
-          ...CURRENT_USER,
-          id: session.user.id,
-          name: session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'Campus Student',
-          college: session.user.user_metadata?.college || 'Delhi Technological University (DTU)',
-          avatar: session.user.user_metadata?.avatar || CURRENT_USER.avatar,
-          isGuest: false
-        };
-        setCurrentUser(profileData);
-        try {
-          localStorage.setItem('mema_user_profile', JSON.stringify(profileData));
-        } catch {}
+        syncProfileFromAuthUser(session.user);
       } else {
         const localAuth = localStorage.getItem('mema_auth_session');
         if (!localAuth) {
@@ -354,25 +380,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
     });
 
-    // Subscribe to auth events (SIGN_IN, SIGN_OUT, TOKEN_REFRESHED)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    // Subscribe to auth events (SIGN_IN, SIGN_OUT, TOKEN_REFRESHED, USER_UPDATED)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session?.user) {
         setAuthUser(session.user);
         try {
           localStorage.setItem('mema_auth_session', JSON.stringify(session.user));
         } catch {}
-        const profileData: UserProfile = {
-          ...CURRENT_USER,
-          id: session.user.id,
-          name: session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'Campus Student',
-          college: session.user.user_metadata?.college || 'Delhi Technological University (DTU)',
-          avatar: session.user.user_metadata?.avatar || CURRENT_USER.avatar,
-          isGuest: false
-        };
-        setCurrentUser(profileData);
-        try {
-          localStorage.setItem('mema_user_profile', JSON.stringify(profileData));
-        } catch {}
+        if (event === 'SIGNED_IN' || event === 'USER_UPDATED' || event === 'TOKEN_REFRESHED') {
+          syncProfileFromAuthUser(session.user);
+        }
       } else if (event === 'SIGNED_OUT') {
         setAuthUser(null);
         setCurrentUser(GUEST_USER);

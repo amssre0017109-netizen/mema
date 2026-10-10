@@ -2,6 +2,32 @@ import { supabase, isSupabaseConfigured } from '../lib/supabaseClient';
 import { UserProfile, CampusRequest, Conversation, ChatMessage } from '../types';
 import { MOCK_STUDENTS, MOCK_CAMPUS_REQUESTS, MOCK_CONVERSATIONS } from '../data/mockData';
 
+function mapRowToProfile(row: any): UserProfile {
+  return {
+    id: row.id,
+    name: row.name || 'Member',
+    age: row.age || 21,
+    occupationType: row.occupation_type || 'working_professional',
+    college: row.college || row.location || 'Delhi Technological University (DTU)',
+    degree: row.degree || 'Student',
+    year: row.year || '3rd Year',
+    location: row.location || 'Nearby Area',
+    locationZone: row.location_zone || row.location || 'Nearby Area',
+    distanceKm: row.distance_km ?? 0.8,
+    distanceDisplay: row.distance_display || '~Within 1 km',
+    avatar: row.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+    coverImage: row.cover_image,
+    verifiedCollege: Boolean(row.verified_college ?? true),
+    studentIdVerified: Boolean(row.student_id_verified ?? true),
+    skills: Array.isArray(row.skills) ? row.skills : [],
+    interests: Array.isArray(row.interests) ? row.interests : [],
+    activitiesCompleted: row.activities_completed || 0,
+    requestsPosted: row.requests_posted || 0,
+    bio: row.bio || '',
+    onlineStatus: row.online_status || 'active_now'
+  };
+}
+
 export const supabaseService = {
   /**
    * Fetch all member profiles
@@ -22,32 +48,94 @@ export const supabaseService = {
         return MOCK_STUDENTS;
       }
 
-      return data.map((row: any) => ({
-        id: row.id,
-        name: row.name,
-        age: row.age || 21,
-        occupationType: row.occupation_type || 'working_professional',
-        college: row.college || 'Delhi Technological University (DTU)',
-        degree: row.degree || 'Student',
-        year: row.year || '3rd Year',
-        location: row.location || 'Nearby Area',
-        distanceKm: row.distance_km ?? 0.8,
-        distanceDisplay: row.distance_display || '~Within 1 km',
-        avatar: row.avatar,
-        coverImage: row.cover_image,
-        verifiedCollege: Boolean(row.verified_college),
-        studentIdVerified: Boolean(row.student_id_verified),
-        skills: Array.isArray(row.skills) ? row.skills : [],
-        interests: Array.isArray(row.interests) ? row.interests : [],
-        activitiesCompleted: row.activities_completed || 0,
-        requestsPosted: row.requests_posted || 0,
-        bio: row.bio || '',
-        locationZone: row.location_zone || row.location,
-        onlineStatus: row.online_status || 'active_now'
-      }));
+      return data.map(mapRowToProfile);
     } catch (err) {
       console.error('Error fetching Supabase profiles:', err);
       return MOCK_STUDENTS;
+    }
+  },
+
+  /**
+   * Fetch a single user profile by ID
+   */
+  async getProfileById(userId: string): Promise<UserProfile | null> {
+    if (!userId || userId === 'guest') return null;
+    if (!isSupabaseConfigured) {
+      return MOCK_STUDENTS.find(s => s.id === userId) || null;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .maybeSingle();
+
+      if (error) {
+        console.warn('Error fetching profile by ID from Supabase:', error.message);
+        return null;
+      }
+
+      if (!data) return null;
+      return mapRowToProfile(data);
+    } catch (err) {
+      console.error('Exception fetching profile by ID:', err);
+      return null;
+    }
+  },
+
+  /**
+   * Idempotently create or update a user profile in Supabase
+   */
+  async upsertProfile(profile: Partial<UserProfile> & { id: string; name: string }): Promise<{ success: boolean; data?: UserProfile; error?: string }> {
+    if (!profile.id || profile.id === 'guest') {
+      return { success: false, error: 'Invalid user ID' };
+    }
+
+    if (!isSupabaseConfigured) {
+      return { success: true };
+    }
+
+    try {
+      const payload: any = {
+        id: profile.id,
+        name: profile.name,
+        updated_at: new Date().toISOString()
+      };
+
+      if (profile.age !== undefined) payload.age = profile.age;
+      if (profile.occupationType !== undefined) payload.occupation_type = profile.occupationType;
+      if (profile.college !== undefined) payload.college = profile.college;
+      if (profile.degree !== undefined) payload.degree = profile.degree;
+      if (profile.year !== undefined) payload.year = profile.year;
+      if (profile.location !== undefined) {
+        payload.location = profile.location;
+        payload.location_zone = profile.locationZone || profile.location;
+      }
+      if (profile.avatar !== undefined) payload.avatar = profile.avatar;
+      if (profile.bio !== undefined) payload.bio = profile.bio;
+      if (profile.skills !== undefined) payload.skills = profile.skills;
+      if (profile.interests !== undefined) payload.interests = profile.interests;
+      if (profile.activitiesCompleted !== undefined) payload.activities_completed = profile.activitiesCompleted;
+      if (profile.requestsPosted !== undefined) payload.requests_posted = profile.requestsPosted;
+      if (profile.verifiedCollege !== undefined) payload.verified_college = profile.verifiedCollege;
+      if (profile.studentIdVerified !== undefined) payload.student_id_verified = profile.studentIdVerified;
+
+      const { data, error } = await supabase
+        .from('profiles')
+        .upsert(payload, { onConflict: 'id' })
+        .select()
+        .single();
+
+      if (error) {
+        console.warn('Supabase upsertProfile warning:', error.message);
+        return { success: false, error: error.message };
+      }
+
+      return { success: true, data: data ? mapRowToProfile(data) : undefined };
+    } catch (err: any) {
+      console.error('Exception in upsertProfile:', err);
+      return { success: false, error: err.message || 'Failed to save profile' };
     }
   },
 

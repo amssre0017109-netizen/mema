@@ -21,6 +21,7 @@ import {
 import { useApp } from '../../context/AppContext';
 import { OccupationType, ProfileActivity } from '../../types';
 import { CAMPUS_OPTIONS, SKILL_CATEGORIES } from '../../data/mockData';
+import { supabaseService } from '../../services/supabaseService';
 
 interface EditProfileStudioModalProps {
   isOpen: boolean;
@@ -191,8 +192,8 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    setCurrentUser(prev => ({
-      ...prev,
+    const updatedProfile = {
+      ...currentUser,
       name: name.trim() || 'Jamal Knox',
       avatar: avatar, // Custom photo from device
       age: Number(age) || 23,
@@ -213,7 +214,18 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
       moodboardsCount: Number(moodboardsCount) || 38,
       promptsCount: Number(promptsCount) || 142,
       roleTags: roleTags.length > 0 ? roleTags : ['Creative Designer', 'Visual Artist']
-    }));
+    };
+
+    setCurrentUser(updatedProfile);
+    try {
+      localStorage.setItem('mema_user_profile', JSON.stringify(updatedProfile));
+    } catch {}
+
+    if (updatedProfile.id && updatedProfile.id !== 'guest') {
+      supabaseService.upsertProfile(updatedProfile).catch(err => {
+        console.warn('Profile background sync failed:', err);
+      });
+    }
 
     setNotificationToast({
       message: '✓ Profile Picture & Info Saved!',

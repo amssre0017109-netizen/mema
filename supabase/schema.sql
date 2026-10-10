@@ -248,12 +248,42 @@ CREATE POLICY "Users can view messages in their conversations" ON public.message
 CREATE POLICY "Users can send messages" ON public.messages
   FOR INSERT WITH CHECK (auth.uid() = sender_id);
 
+-- Request Interests: Anyone can view, users can express interest, creators can update status
+CREATE POLICY "Interests viewable by all" ON public.request_interests
+  FOR SELECT USING (true);
+
+CREATE POLICY "Authenticated users can express interest" ON public.request_interests
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users and request creators can update interest status" ON public.request_interests
+  FOR UPDATE USING (
+    auth.uid() = user_id OR
+    EXISTS (
+      SELECT 1 FROM public.campus_requests
+      WHERE id = request_interests.request_id
+      AND creator_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "Users can withdraw interest" ON public.request_interests
+  FOR DELETE USING (auth.uid() = user_id);
+
 -- Payments: Users can view their own transactions
 CREATE POLICY "Users can view own transactions" ON public.payment_transactions
   FOR SELECT USING (auth.uid() = user_id);
 
 CREATE POLICY "Users can insert transactions" ON public.payment_transactions
   FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+-- Subscriptions: Users can view and manage their own subscriptions
+CREATE POLICY "Users can view own subscription" ON public.user_subscriptions
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own subscription" ON public.user_subscriptions
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own subscription" ON public.user_subscriptions
+  FOR UPDATE USING (auth.uid() = user_id);
 
 -- =============================================================================
 -- 11. Storage Buckets (Avatars, Media, Covers)

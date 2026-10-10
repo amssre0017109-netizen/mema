@@ -4,7 +4,6 @@ import {
   Mail,
   Lock,
   User,
-  GraduationCap,
   Sparkles,
   ArrowRight,
   ShieldCheck,
@@ -14,11 +13,21 @@ import {
   Users,
   MapPin,
   Eye,
-  EyeOff
+  EyeOff,
+  RefreshCw,
+  Send,
+  HelpCircle
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MOCK_STUDENTS } from '../../data/mockData';
 import { isSupabaseConfigured } from '../../lib/supabaseClient';
+import {
+  signInWithEmail,
+  signUpWithEmail,
+  resendVerificationEmail,
+  resetPasswordForEmail
+} from '../../services/authService';
+import { supabaseService } from '../../services/supabaseService';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -40,7 +49,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     setAuthUser
   } = useApp();
 
-  const [mode, setMode] = useState<'signin' | 'signup' | 'demo'>(initialMode);
+  const [mode, setMode] = useState<'signin' | 'signup' | 'demo' | 'verification_pending' | 'forgot_password'>(initialMode);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
@@ -48,14 +57,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [occupationType, setOccupationType] = useState<'school_student' | 'creator_freelancer' | 'working_professional'>('school_student');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [resendingEmail, setResendingEmail] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [magicLinkSent, setMagicLinkSent] = useState(false);
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
+    setInfoMessage(null);
     setLoading(true);
 
     try {
@@ -72,102 +83,51 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         return;
       }
 
-      // If connected to Supabase
-      if (isSupabaseConfigured) {
-        try {
-          const { supabase } = await import('../../lib/supabaseClient');
-          const { data, error } = await supabase.auth.signInWithPassword({
-            email: email.trim(),
-            password: password.trim()
-          });
+      const res = await signInWithEmail(email.trim(), password.trim());
 
-          if (error) {
-            setErrorMessage(error.message);
-            setLoading(false);
-            return;
-          }
-
-          if (data.user) {
-            setAuthUser(data.user);
-            const profileData = {
-              ...currentUser,
-              id: data.user.id,
-              name: data.user.user_metadata?.name || data.user.email?.split('@')[0] || 'Campus Student',
-              location: data.user.user_metadata?.location || currentUser.location || 'Connaught Place, New Delhi',
-              locationZone: data.user.user_metadata?.locationZone || data.user.user_metadata?.location || currentUser.locationZone || 'Connaught Place, New Delhi',
-              college: data.user.user_metadata?.college || data.user.user_metadata?.location || 'Delhi Technological University (DTU)',
-              isGuest: false
-            };
-            setCurrentUser(profileData);
-            try {
-              localStorage.setItem('mema_auth_session', JSON.stringify(data.user));
-              localStorage.setItem('mema_user_profile', JSON.stringify(profileData));
-            } catch {}
-            setNotificationToast({
-              message: '🎉 Welcome Back!',
-              subtext: `Signed in as ${data.user.email}`
-            });
-          }
-        } catch (networkErr: any) {
-          console.warn('Supabase sign in connection issue:', networkErr);
-          // Fallback to local demo session if remote backend is unreachable
-          const matched = MOCK_STUDENTS.find(s => s.name.toLowerCase().includes(email.split('@')[0].toLowerCase())) || MOCK_STUDENTS[0];
-          const userObj = {
-            id: matched.id,
-            email: email.trim(),
-            user_metadata: { name: fullName || matched.name, location: location || matched.location, college: matched.college }
-          };
-          const profileObj = {
-            ...matched,
-            name: fullName || matched.name,
-            location: location || matched.location,
-            locationZone: location || matched.locationZone,
-            college: matched.college,
-            isGuest: false
-          };
-          setCurrentUser(profileObj);
-          setAuthUser(userObj);
-          try {
-            localStorage.setItem('mema_auth_session', JSON.stringify(userObj));
-            localStorage.setItem('mema_user_profile', JSON.stringify(profileObj));
-          } catch {}
-          setNotificationToast({
-            message: '✓ Signed In (Local Session)',
-            subtext: `Active profile: ${profileObj.name}`
-          });
+      if (!res.success) {
+        if (res.error?.includes('not confirmed') || res.error?.includes('not verified')) {
+          setErrorMessage(res.error);
+          setMode('verification_pending');
+        } else {
+          setErrorMessage(res.error || 'Sign in failed. Please check your credentials.');
         }
-      } else {
-        // Fallback / Demo Session
-        const matched = MOCK_STUDENTS.find(s => s.name.toLowerCase().includes(email.split('@')[0].toLowerCase())) || MOCK_STUDENTS[0];
-        const userObj = {
-          id: matched.id,
-          email: email.trim(),
-          user_metadata: { name: fullName || matched.name, location: location || matched.location, college: matched.college }
-        };
-        const profileObj = {
-          ...matched,
-          name: fullName || matched.name,
-          location: location || matched.location,
-          locationZone: location || matched.locationZone,
-          college: matched.college,
-          isGuest: false
-        };
-        setCurrentUser(profileObj);
-        setAuthUser(userObj);
-        try {
-          localStorage.setItem('mema_auth_session', JSON.stringify(userObj));
-          localStorage.setItem('mema_user_profile', JSON.stringify(profileObj));
-        } catch {}
-        setNotificationToast({
-          message: '✓ Signed In (Demo Mode)',
-          subtext: `Active profile: ${profileObj.name}`
-        });
+        setLoading(false);
+        return;
       }
 
-      triggerMatchCelebration();
-      onClose();
+      if (res.user) {
+        setAuthUser(res.user);
+
+        // Fetch user profile from Supabase database
+        const dbProfile = await supabaseService.getProfileById(res.user.id);
+        const activeProfile = dbProfile || {
+          ...currentUser,
+          id: res.user.id,
+          name: res.user.user_metadata?.name || email.split('@')[0] || 'Member',
+          location: res.user.user_metadata?.location || 'Connaught Place, New Delhi',
+          locationZone: res.user.user_metadata?.locationZone || res.user.user_metadata?.location || 'Connaught Place, New Delhi',
+          college: res.user.user_metadata?.college || 'Delhi Technological University (DTU)',
+          isGuest: false
+        };
+
+        setCurrentUser(activeProfile);
+
+        try {
+          localStorage.setItem('mema_auth_session', JSON.stringify(res.user));
+          localStorage.setItem('mema_user_profile', JSON.stringify(activeProfile));
+        } catch {}
+
+        setNotificationToast({
+          message: '🎉 Welcome Back!',
+          subtext: `Signed in as ${activeProfile.name}`
+        });
+
+        triggerMatchCelebration();
+        onClose();
+      }
     } catch (err: any) {
-      setErrorMessage(err.message || 'An error occurred during sign in.');
+      setErrorMessage(err.message || 'An unexpected error occurred during sign in.');
     } finally {
       setLoading(false);
     }
@@ -176,6 +136,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
+    setInfoMessage(null);
     setLoading(true);
 
     try {
@@ -200,121 +161,115 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
       const userLocation = location.trim() || 'Connaught Place, New Delhi';
 
-      if (isSupabaseConfigured) {
-        try {
-          const { supabase } = await import('../../lib/supabaseClient');
-          const { data, error } = await supabase.auth.signUp({
-            email: email.trim(),
-            password: password.trim(),
-            options: {
-              data: {
-                name: fullName.trim(),
-                location: userLocation,
-                locationZone: userLocation,
-                college: userLocation,
-                occupation_type: occupationType,
-                avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'
-              }
-            }
-          });
+      const res = await signUpWithEmail({
+        name: fullName.trim(),
+        email: email.trim(),
+        password: password.trim(),
+        location: userLocation,
+        occupationType
+      });
 
-          if (error) {
-            setErrorMessage(error.message);
-            setLoading(false);
-            return;
-          }
+      if (!res.success) {
+        setErrorMessage(res.error || 'Failed to create account.');
+        setLoading(false);
+        return;
+      }
 
-          if (data.user) {
-            setAuthUser(data.user);
-            const profileData = {
-              ...currentUser,
-              id: data.user.id,
-              name: fullName.trim(),
-              location: userLocation,
-              locationZone: userLocation,
-              college: userLocation,
-              occupationType: occupationType,
-              isGuest: false
-            };
-            setCurrentUser(profileData);
-            try {
-              localStorage.setItem('mema_auth_session', JSON.stringify(data.user));
-              localStorage.setItem('mema_user_profile', JSON.stringify(profileData));
-            } catch {}
-          }
-        } catch (networkErr: any) {
-          console.warn('Supabase cloud signup connection issue:', networkErr);
-          // Seamless fallback into local session if remote backend is unreachable
-          const newId = `usr_${Date.now()}`;
-          const userObj = {
-            id: newId,
-            email: email.trim(),
-            user_metadata: { name: fullName.trim(), location: userLocation, locationZone: userLocation, college: userLocation }
-          };
-          const newProfile = {
-            ...MOCK_STUDENTS[0],
-            id: newId,
-            name: fullName.trim(),
-            location: userLocation,
-            locationZone: userLocation,
-            college: userLocation,
-            occupationType: occupationType,
-            verifiedCollege: true,
-            studentIdVerified: true,
-            isGuest: false
-          };
-          setCurrentUser(newProfile);
-          setAuthUser(userObj);
-          try {
-            localStorage.setItem('mema_auth_session', JSON.stringify(userObj));
-            localStorage.setItem('mema_user_profile', JSON.stringify(newProfile));
-          } catch {}
-          setNotificationToast({
-            message: '🚀 Account Created!',
-            subtext: `Welcome to MEMA, ${fullName.trim()}!`
-          });
-          triggerMatchCelebration();
-          onClose();
-          return;
-        }
-      } else {
-        // Fallback / Demo Profile Creation
-        const newId = `usr_${Date.now()}`;
-        const userObj = {
-          id: newId,
-          email: email.trim(),
-          user_metadata: { name: fullName.trim(), location: userLocation, locationZone: userLocation, college: userLocation }
-        };
+      if (res.requiresEmailConfirmation) {
+        // Supabase requires email verification
+        setMode('verification_pending');
+        setNotificationToast({
+          message: '📬 Confirmation Email Sent',
+          subtext: `Verification link sent to ${email.trim()}`
+        });
+        setLoading(false);
+        return;
+      }
+
+      if (res.user) {
+        setAuthUser(res.user);
+
         const newProfile = {
-          ...MOCK_STUDENTS[0],
-          id: newId,
+          ...currentUser,
+          id: res.user.id,
           name: fullName.trim(),
           location: userLocation,
           locationZone: userLocation,
           college: userLocation,
-          occupationType: occupationType,
+          occupationType,
           verifiedCollege: true,
           studentIdVerified: true,
           isGuest: false
         };
+
         setCurrentUser(newProfile);
-        setAuthUser(userObj);
+
         try {
-          localStorage.setItem('mema_auth_session', JSON.stringify(userObj));
+          localStorage.setItem('mema_auth_session', JSON.stringify(res.user));
           localStorage.setItem('mema_user_profile', JSON.stringify(newProfile));
         } catch {}
-      }
 
-      setNotificationToast({
-        message: '🚀 Account Created!',
-        subtext: `Welcome to MEMA, ${fullName.trim()}!`
-      });
-      triggerMatchCelebration();
-      onClose();
+        setNotificationToast({
+          message: '🚀 Account Created!',
+          subtext: `Welcome to MEMA, ${fullName.trim()}!`
+        });
+
+        triggerMatchCelebration();
+        onClose();
+      }
     } catch (err: any) {
       setErrorMessage(err.message || 'Failed to create account.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResendEmail = async () => {
+    if (!email.trim()) {
+      setErrorMessage('Please enter your email address above.');
+      return;
+    }
+
+    setResendingEmail(true);
+    setErrorMessage(null);
+    setInfoMessage(null);
+
+    const res = await resendVerificationEmail(email.trim());
+    setResendingEmail(false);
+
+    if (res.success) {
+      setInfoMessage(`Verification link resent to ${email.trim()}! Please check your spam/inbox folder.`);
+      setNotificationToast({
+        message: '✓ Email Resent',
+        subtext: `Verification link sent to ${email.trim()}`
+      });
+    } else {
+      setErrorMessage(res.error || 'Failed to resend confirmation email.');
+    }
+  };
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) {
+      setErrorMessage('Please enter your email address to reset password.');
+      return;
+    }
+
+    setLoading(true);
+    setErrorMessage(null);
+    setInfoMessage(null);
+
+    const res = await resetPasswordForEmail(email.trim());
+    setLoading(false);
+
+    if (res.success) {
+      setInfoMessage(`Password reset link sent to ${email.trim()}. Follow the instructions in your inbox.`);
+      setNotificationToast({
+        message: '🔑 Reset Link Sent',
+        subtext: `Password instructions sent to ${email.trim()}`
+      });
+    } else {
+      setErrorMessage(res.error || 'Failed to send password reset link.');
     }
   };
 
@@ -345,7 +300,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-[#DCE8F7] dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Top Header */}
-        <div className="p-6 bg-gradient-to-b from-[#F0F6FF] to-white dark:from-slate-850 dark:to-slate-900 border-b border-[#DCE8F7] dark:border-slate-800 flex items-center justify-between">
+        <div className="p-5 sm:p-6 bg-gradient-to-b from-[#F0F6FF] to-white dark:from-slate-850 dark:to-slate-900 border-b border-[#DCE8F7] dark:border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-10 h-10 rounded-2xl bg-[#2563EB] flex items-center justify-center text-white font-black text-lg shadow-md shadow-blue-500/20">
               M
@@ -360,7 +315,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 </span>
               </div>
               <p className="text-xs text-[#64748B] dark:text-slate-400">
-                Campus & Skill Network Authentication
+                Activity Partner & Skill Network
               </p>
             </div>
           </div>
@@ -374,54 +329,64 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         </div>
 
         {/* Tab Switcher */}
-        <div className="grid grid-cols-3 p-2 bg-[#F8FBFF] dark:bg-slate-850 border-b border-[#DCE8F7] dark:border-slate-800 gap-1">
-          <button
-            onClick={() => { setMode('signin'); setErrorMessage(null); }}
-            className={`py-2 rounded-xl text-xs font-bold transition-all ${
-              mode === 'signin'
-                ? 'bg-white dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 shadow-xs border border-[#DCE8F7] dark:border-slate-700'
-                : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
-            }`}
-          >
-            Sign In
-          </button>
-          <button
-            onClick={() => { setMode('signup'); setErrorMessage(null); }}
-            className={`py-2 rounded-xl text-xs font-bold transition-all ${
-              mode === 'signup'
-                ? 'bg-white dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 shadow-xs border border-[#DCE8F7] dark:border-slate-700'
-                : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
-            }`}
-          >
-            Sign Up
-          </button>
-          <button
-            onClick={() => { setMode('demo'); setErrorMessage(null); }}
-            className={`py-2 rounded-xl text-xs font-bold transition-all ${
-              mode === 'demo'
-                ? 'bg-white dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 shadow-xs border border-[#DCE8F7] dark:border-slate-700'
-                : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
-            }`}
-          >
-            Demo Users
-          </button>
-        </div>
+        {mode !== 'verification_pending' && mode !== 'forgot_password' && (
+          <div className="grid grid-cols-3 p-2 bg-[#F8FBFF] dark:bg-slate-850 border-b border-[#DCE8F7] dark:border-slate-800 gap-1">
+            <button
+              onClick={() => { setMode('signin'); setErrorMessage(null); setInfoMessage(null); }}
+              className={`py-2 rounded-xl text-xs font-bold transition-all ${
+                mode === 'signin'
+                  ? 'bg-white dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 shadow-xs border border-[#DCE8F7] dark:border-slate-700'
+                  : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
+              }`}
+            >
+              Sign In
+            </button>
+            <button
+              onClick={() => { setMode('signup'); setErrorMessage(null); setInfoMessage(null); }}
+              className={`py-2 rounded-xl text-xs font-bold transition-all ${
+                mode === 'signup'
+                  ? 'bg-white dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 shadow-xs border border-[#DCE8F7] dark:border-slate-700'
+                  : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
+              }`}
+            >
+              Sign Up
+            </button>
+            <button
+              onClick={() => { setMode('demo'); setErrorMessage(null); setInfoMessage(null); }}
+              className={`py-2 rounded-xl text-xs font-bold transition-all ${
+                mode === 'demo'
+                  ? 'bg-white dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 shadow-xs border border-[#DCE8F7] dark:border-slate-700'
+                  : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
+              }`}
+            >
+              Demo Users
+            </button>
+          </div>
+        )}
 
-        {/* Error Alert */}
+        {/* Error / Info Alerts */}
         {errorMessage && (
-          <div className="mx-6 mt-4 p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 rounded-xl flex items-center gap-2 text-xs text-red-700 dark:text-red-300">
+          <div className="mx-6 mt-4 p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 rounded-xl flex items-center gap-2 text-xs text-red-700 dark:text-red-300 animate-in fade-in duration-150">
             <AlertCircle className="w-4 h-4 shrink-0 text-red-600 dark:text-red-400" />
             <span>{errorMessage}</span>
           </div>
         )}
 
+        {infoMessage && (
+          <div className="mx-6 mt-4 p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-xl flex items-center gap-2 text-xs text-emerald-700 dark:text-emerald-300 animate-in fade-in duration-150">
+            <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+            <span>{infoMessage}</span>
+          </div>
+        )}
+
         {/* Modal Body */}
         <div className="p-6 overflow-y-auto space-y-4">
+          {/* 1. SIGN IN FORM */}
           {mode === 'signin' && (
             <form onSubmit={handleSignIn} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-[#172033] dark:text-slate-200 mb-1.5">
-                  Student / Campus Email
+                  Email Address
                 </label>
                 <div className="relative">
                   <Mail className="w-4 h-4 text-[#64748B] dark:text-slate-400 absolute left-3.5 top-3.5" />
@@ -430,7 +395,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     required
                     value={email}
                     onChange={e => setEmail(e.target.value)}
-                    placeholder="you@campus.ac.in or student@gmail.com"
+                    placeholder="you@domain.com or student@college.edu"
                     className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-xs text-[#172033] dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-[#2563EB] dark:focus:border-blue-500 focus:ring-1 focus:ring-[#2563EB]"
                   />
                 </div>
@@ -441,7 +406,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <label className="block text-xs font-bold text-[#172033] dark:text-slate-200">
                     Password
                   </label>
-                  <span className="text-[10px] text-[#64748B] dark:text-slate-400">Min 6 characters</span>
+                  <button
+                    type="button"
+                    onClick={() => { setMode('forgot_password'); setErrorMessage(null); setInfoMessage(null); }}
+                    className="text-[11px] text-[#2563EB] dark:text-blue-400 hover:underline font-semibold"
+                  >
+                    Forgot Password?
+                  </button>
                 </div>
                 <div className="relative">
                   <Lock className="w-4 h-4 text-[#64748B] dark:text-slate-400 absolute left-3.5 top-3.5" />
@@ -466,10 +437,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-xs shadow-md shadow-blue-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                className="w-full py-3 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-xs shadow-md shadow-blue-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer active:scale-98"
               >
                 {loading ? (
-                  <span>Signing In...</span>
+                  <span className="flex items-center gap-2">
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    Signing In...
+                  </span>
                 ) : (
                   <>
                     <span>Sign In to MEMA</span>
@@ -478,18 +452,20 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 )}
               </button>
 
-              <div className="pt-2 text-center">
+              <div className="pt-2 flex items-center justify-between text-xs text-[#64748B] dark:text-slate-400">
+                <span>New to MEMA?</span>
                 <button
                   type="button"
-                  onClick={() => setMode('demo')}
-                  className="text-xs font-semibold text-[#2563EB] dark:text-blue-400 hover:underline"
+                  onClick={() => { setMode('signup'); setErrorMessage(null); setInfoMessage(null); }}
+                  className="font-bold text-[#2563EB] dark:text-blue-400 hover:underline"
                 >
-                  ⚡ Want to test without sign-in? Switch to Demo Persona
+                  Create an account →
                 </button>
               </div>
             </form>
           )}
 
+          {/* 2. SIGN UP FORM */}
           {mode === 'signup' && (
             <form onSubmit={handleSignUp} className="space-y-4">
               <div>
@@ -528,7 +504,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
               <div>
                 <label className="block text-xs font-bold text-[#172033] dark:text-slate-200 mb-1.5">
-                  Campus Role / Category
+                  Role / Profile Category
                 </label>
                 <div className="grid grid-cols-3 gap-1.5">
                   {[
@@ -570,9 +546,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#172033] dark:text-slate-200 mb-1.5">
-                  Create Password
-                </label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs font-bold text-[#172033] dark:text-slate-200">
+                    Create Password
+                  </label>
+                  <span className="text-[10px] text-[#64748B] dark:text-slate-400">Min 6 characters</span>
+                </div>
                 <div className="relative">
                   <Lock className="w-4 h-4 text-[#64748B] dark:text-slate-400 absolute left-3.5 top-3.5" />
                   <input
@@ -596,20 +575,143 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-xs shadow-md shadow-blue-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                className="w-full py-3 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-xs shadow-md shadow-blue-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer active:scale-98"
               >
                 {loading ? (
-                  <span>Creating Account...</span>
+                  <span className="flex items-center gap-2">
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    Creating Account...
+                  </span>
                 ) : (
                   <>
-                    <span>Create Free Student Account</span>
+                    <span>Create Free Account</span>
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}
               </button>
+
+              <div className="pt-2 flex items-center justify-between text-xs text-[#64748B] dark:text-slate-400">
+                <span>Already have an account?</span>
+                <button
+                  type="button"
+                  onClick={() => { setMode('signin'); setErrorMessage(null); setInfoMessage(null); }}
+                  className="font-bold text-[#2563EB] dark:text-blue-400 hover:underline"
+                >
+                  Sign in here →
+                </button>
+              </div>
             </form>
           )}
 
+          {/* 3. EMAIL VERIFICATION PENDING */}
+          {mode === 'verification_pending' && (
+            <div className="space-y-4 text-center py-2">
+              <div className="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-[#2563EB] dark:text-blue-400 mx-auto flex items-center justify-center">
+                <Mail className="w-7 h-7" />
+              </div>
+
+              <div className="space-y-1.5">
+                <h3 className="text-base font-extrabold text-[#172033] dark:text-white">
+                  Verify Your Email Address
+                </h3>
+                <p className="text-xs text-[#64748B] dark:text-slate-300 leading-relaxed max-w-xs mx-auto">
+                  We've sent a verification link to <strong className="text-[#172033] dark:text-white">{email || 'your email'}</strong>. Please click the link to confirm your account.
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-[#F8FBFF] dark:bg-slate-800/80 border border-[#DCE8F7] dark:border-slate-700 text-left text-xs space-y-1 text-[#64748B] dark:text-slate-300">
+                <div className="flex items-center gap-1.5 font-bold text-[#172033] dark:text-white">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                  <span>Next Steps:</span>
+                </div>
+                <p className="text-[11px] leading-relaxed">
+                  1. Open the email and click the confirmation link.<br />
+                  2. Return here and sign in with your password.
+                </p>
+              </div>
+
+              <div className="space-y-2 pt-2">
+                <button
+                  type="button"
+                  disabled={resendingEmail}
+                  onClick={handleResendEmail}
+                  className="w-full py-2.5 px-4 rounded-xl bg-white dark:bg-slate-800 hover:bg-[#F0F6FF] dark:hover:bg-slate-750 text-[#2563EB] dark:text-blue-400 font-bold text-xs border border-[#DCE8F7] dark:border-slate-700 transition-all flex items-center justify-center gap-1.5 disabled:opacity-50"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${resendingEmail ? 'animate-spin' : ''}`} />
+                  <span>{resendingEmail ? 'Resending Link...' : 'Resend Verification Email'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => { setMode('signin'); setErrorMessage(null); setInfoMessage(null); }}
+                  className="w-full py-2.5 px-4 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-xs shadow-md shadow-blue-500/20 transition-all"
+                >
+                  Back to Sign In
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* 4. FORGOT PASSWORD FORM */}
+          {mode === 'forgot_password' && (
+            <form onSubmit={handleForgotPassword} className="space-y-4">
+              <div className="space-y-1">
+                <h3 className="text-sm font-extrabold text-[#172033] dark:text-white">
+                  Reset Account Password
+                </h3>
+                <p className="text-xs text-[#64748B] dark:text-slate-400">
+                  Enter your registered email address to receive password reset instructions.
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#172033] dark:text-slate-200 mb-1.5">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <Mail className="w-4 h-4 text-[#64748B] dark:text-slate-400 absolute left-3.5 top-3.5" />
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="student@college.edu or you@gmail.com"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-xs text-[#172033] dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-[#2563EB] dark:focus:border-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2 pt-1">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-3 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-xs shadow-md shadow-blue-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {loading ? (
+                    <span className="flex items-center gap-2">
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      Sending Link...
+                    </span>
+                  ) : (
+                    <>
+                      <Send className="w-3.5 h-3.5" />
+                      <span>Send Password Reset Link</span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => { setMode('signin'); setErrorMessage(null); setInfoMessage(null); }}
+                  className="w-full py-2.5 text-xs text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white font-bold"
+                >
+                  ← Return to Sign In
+                </button>
+              </div>
+            </form>
+          )}
+
+          {/* 5. DEMO PERSONAS */}
           {mode === 'demo' && (
             <div className="space-y-3">
               <p className="text-xs text-[#64748B] dark:text-slate-400">
@@ -621,7 +723,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <button
                     key={student.id}
                     onClick={() => handleSelectDemoPersona(student)}
-                    className="w-full p-3 rounded-2xl border border-[#DCE8F7] dark:border-slate-800 hover:border-[#2563EB] dark:hover:border-blue-500 bg-[#F8FBFF] dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-800 transition-all text-left flex items-center justify-between group"
+                    className="w-full p-3 rounded-2xl border border-[#DCE8F7] dark:border-slate-800 hover:border-[#2563EB] dark:hover:border-blue-500 bg-[#F8FBFF] dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-800 transition-all text-left flex items-center justify-between group cursor-pointer"
                   >
                     <div className="flex items-center gap-3">
                       <img
@@ -663,3 +765,4 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     </div>
   );
 };
+
