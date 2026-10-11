@@ -1,7 +1,22 @@
 import { createClient } from '@supabase/supabase-js';
 
-const rawUrl = (import.meta.env.VITE_SUPABASE_URL || '').trim();
-const rawKey = (import.meta.env.VITE_SUPABASE_ANON_KEY || '').trim();
+// Default Supabase project endpoints provided for MEMA production
+const DEFAULT_SUPABASE_URL = 'https://ovlmmitgcmptigzegzef.supabase.co';
+const DEFAULT_SUPABASE_ANON_KEY = 'sb_publishable_sBSxO79bgqLkVXGAAl8LnQ_Tqo2CfDZ';
+
+const rawUrl = (
+  import.meta.env.VITE_SUPABASE_URL ||
+  import.meta.env.SUPABASE_URL ||
+  DEFAULT_SUPABASE_URL
+).trim();
+
+const rawKey = (
+  import.meta.env.VITE_SUPABASE_ANON_KEY ||
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  import.meta.env.SUPABASE_PUBLISHABLE_KEY ||
+  import.meta.env.SUPABASE_ANON_KEY ||
+  DEFAULT_SUPABASE_ANON_KEY
+).trim();
 
 const isInvalidOrPlaceholderUrl = (url: string) => {
   if (!url) return true;
@@ -36,8 +51,8 @@ export const isSupabaseConfigured = Boolean(
   !isInvalidOrPlaceholderKey(rawKey)
 );
 
-const supabaseUrl = isSupabaseConfigured ? rawUrl : 'https://placeholder-mema-project.supabase.co';
-const supabaseAnonKey = isSupabaseConfigured ? rawKey : 'placeholder-anon-key';
+const supabaseUrl = isSupabaseConfigured ? rawUrl : DEFAULT_SUPABASE_URL;
+const supabaseAnonKey = isSupabaseConfigured ? rawKey : DEFAULT_SUPABASE_ANON_KEY;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
