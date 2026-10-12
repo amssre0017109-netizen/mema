@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   X,
   Mail,
@@ -60,6 +60,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [resendingEmail, setResendingEmail] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [infoMessage, setInfoMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      setMode(initialMode);
+      setErrorMessage(null);
+      setInfoMessage(null);
+    }
+  }, [isOpen, initialMode]);
 
   if (!isOpen) return null;
 

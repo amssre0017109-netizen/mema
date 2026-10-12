@@ -37,7 +37,34 @@ import { supabase, isSupabaseConfigured } from '../lib/supabaseClient';
 import { supabaseService } from '../services/supabaseService';
 
 
-export type AppView = 'home' | 'discover' | 'activities' | 'messages' | 'profile' | 'admin';
+export type AppView = 'home' | 'discover' | 'activities' | 'messages' | 'profile' | 'admin' | 'signup' | 'login';
+
+export const getViewFromPath = (pathname: string): AppView => {
+  const clean = pathname.toLowerCase().replace(/\/+$/, '') || '/';
+  if (clean === '/signup' || clean === '/register') return 'signup';
+  if (clean === '/login' || clean === '/signin') return 'login';
+  if (clean === '/discover') return 'discover';
+  if (clean === '/activities') return 'activities';
+  if (clean === '/messages') return 'messages';
+  if (clean === '/profile') return 'profile';
+  if (clean === '/admin') return 'admin';
+  return 'home';
+};
+
+export const getPathFromView = (view: AppView): string => {
+  switch (view) {
+    case 'signup': return '/signup';
+    case 'login': return '/login';
+    case 'discover': return '/discover';
+    case 'activities': return '/activities';
+    case 'messages': return '/messages';
+    case 'profile': return '/profile';
+    case 'admin': return '/admin';
+    case 'home':
+    default:
+      return '/';
+  }
+};
 
 interface ReportModalData {
   isOpen: boolean;
@@ -217,7 +244,33 @@ const getInitialCurrentUser = (): UserProfile => {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentView, setCurrentView] = useState<AppView>('home');
+  const [currentView, setCurrentViewState] = useState<AppView>(() => {
+    if (typeof window !== 'undefined') {
+      return getViewFromPath(window.location.pathname);
+    }
+    return 'home';
+  });
+
+  const setCurrentView = (view: AppView) => {
+    setCurrentViewState(view);
+    if (typeof window !== 'undefined') {
+      const targetPath = getPathFromView(view);
+      if (window.location.pathname !== targetPath) {
+        window.history.pushState({ view }, '', targetPath);
+      }
+    }
+  };
+
+  // Sync with browser Back/Forward (popstate)
+  useEffect(() => {
+    const handlePopState = () => {
+      const view = getViewFromPath(window.location.pathname);
+      setCurrentViewState(view);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
   const [authUser, setAuthUser] = useState<any>(getInitialAuthUser);
   const [currentUser, setCurrentUser] = useState<UserProfile>(getInitialCurrentUser);
   const [allStudents, setAllStudents] = useState<UserProfile[]>(MOCK_STUDENTS);

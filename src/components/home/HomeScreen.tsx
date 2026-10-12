@@ -57,7 +57,7 @@ export const HomeScreen: React.FC = () => {
 
   const handleCreateRequestClick = () => {
     if (!isAuthenticated) {
-      openAuthModal('signin');
+      setCurrentView('signup');
       return;
     }
     setIsCreateRequestModalOpen(true);
@@ -132,6 +132,39 @@ export const HomeScreen: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#F0F6FF] dark:bg-[#0A0F1D] text-[#172033] dark:text-slate-100 pb-36 pt-3 sm:pt-5 transition-colors">
       <div className="max-w-xl mx-auto px-4 space-y-5">
+        {/* Guest Welcome & Onboarding Banner */}
+        {!isAuthenticated && (
+          <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/15 relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="space-y-1 z-10">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/20 text-[10px] font-black uppercase tracking-wider">
+                <Sparkles className="w-3 h-3" />
+                <span>Join MEMA Community</span>
+              </div>
+              <h2 className="text-base sm:text-lg font-black tracking-tight leading-snug">
+                Find Activity & Study Partners Nearby
+              </h2>
+              <p className="text-xs text-blue-100 max-w-sm">
+                Connect with verified students, athletes, coders and creatives around your campus.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2 w-full sm:w-auto z-10 shrink-0">
+              <button
+                onClick={() => setCurrentView('signup')}
+                className="flex-1 sm:flex-none px-4 py-2.5 rounded-full bg-white text-[#2563EB] text-xs font-black hover:bg-blue-50 transition-all shadow-xs active:scale-95 text-center cursor-pointer"
+              >
+                Create Account
+              </button>
+              <button
+                onClick={() => setCurrentView('login')}
+                className="flex-1 sm:flex-none px-3.5 py-2.5 rounded-full bg-blue-700/60 hover:bg-blue-700 text-white text-xs font-bold border border-white/20 transition-all active:scale-95 text-center cursor-pointer"
+              >
+                Sign In
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* =========================================================================
             1. INTELLIGENT 'ASK MEMA' SEARCH BAR
            ========================================================================= */}

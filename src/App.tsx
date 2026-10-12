@@ -19,6 +19,8 @@ import { OtherUserProfileModal } from './components/profile/OtherUserProfileModa
 import { StoryViewerModal } from './components/story/StoryViewerModal';
 import { SettingsModal } from './components/settings/SettingsModal';
 import { AuthModal } from './components/auth/AuthModal';
+import { SignUpScreen } from './components/auth/SignUpScreen';
+import { LoginScreen } from './components/auth/LoginScreen';
 import { Toast } from './components/ui/Toast';
 import { LoadingSplashScreen } from './components/ui/LoadingSplashScreen';
 
@@ -44,6 +46,8 @@ const AppContent: React.FC = () => {
       <main className="flex-1">
         {currentView === 'home' && <HomeScreen />}
         {currentView === 'discover' && <DiscoverScreen />}
+        {currentView === 'signup' && <SignUpScreen />}
+        {currentView === 'login' && <LoginScreen />}
         {currentView === 'activities' && (
           <AuthGuard
             title="My Plans & Activities"
@@ -96,6 +100,7 @@ const AppContent: React.FC = () => {
         initialTab={settingsInitialTab}
       />
       <AuthModal
+        key={`auth_modal_${authModalMode}_${isAuthModalOpen}`}
         isOpen={isAuthModalOpen}
         onClose={closeAuthModal}
         initialMode={authModalMode}

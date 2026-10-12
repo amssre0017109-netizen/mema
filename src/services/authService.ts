@@ -18,7 +18,8 @@ export interface AuthResponse {
 export interface SignUpData {
   email: string;
   password?: string;
-  name: string;
+  name?: string;
+  fullName?: string;
   location?: string;
   college?: string;
   degree?: string;
@@ -61,7 +62,7 @@ export async function signUpWithEmail(data: SignUpData): Promise<AuthResponse> {
   const userLoc = data.location?.trim() || 'Connaught Place, New Delhi';
   const trimmedEmail = data.email.trim();
   const trimmedPassword = data.password?.trim() || 'MemaStudent2026!';
-  const trimmedName = data.name.trim();
+  const trimmedName = (data.name || data.fullName || '').trim() || 'New Member';
 
   if (!isSupabaseConfigured) {
     // Local demo / simulated registration
