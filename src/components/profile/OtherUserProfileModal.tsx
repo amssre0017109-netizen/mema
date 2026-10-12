@@ -40,32 +40,7 @@ export const OtherUserProfileModal: React.FC = () => {
   const user = viewingProfileUser;
   const isFollowing = isFollowingUser(user.id);
 
-  const activities: ProfileActivity[] = user.recentActivities || [
-    {
-      id: 'act_1',
-      title: '⚽ 6v6 Football Match',
-      category: 'Sports',
-      date: 'Yesterday • 6:00 PM',
-      location: user.location || 'Sports Ground',
-      status: 'completed'
-    },
-    {
-      id: 'act_2',
-      title: '💃 Zonal Cultural Fest Rehearsal',
-      category: 'Dance',
-      date: '2 days ago • 4:00 PM',
-      location: 'Auditorium Green Room',
-      status: 'completed'
-    },
-    {
-      id: 'act_3',
-      title: '💻 Hackathon UI/UX Design Sprint',
-      category: 'Coding',
-      date: 'Last Weekend',
-      location: 'Tech Hub',
-      status: 'completed'
-    }
-  ];
+  const activities: ProfileActivity[] = user.recentActivities || [];
 
   const renderOccupationBadge = () => {
     if (user.occupationType === 'school_student') {
@@ -159,7 +134,7 @@ export const OtherUserProfileModal: React.FC = () => {
               {user.name}
             </h2>
             <p className="text-xs font-semibold text-[#172033] dark:text-slate-200">
-              {((user.followersCount || 1240) + (isFollowing ? 1 : 0)).toLocaleString()} <span className="font-medium text-[#64748B] dark:text-slate-400">Followers</span>
+              {((user.followersCount || 0) + (isFollowing ? 1 : 0)).toLocaleString()} <span className="font-medium text-[#64748B] dark:text-slate-400">Followers</span>
             </p>
           </div>
 
@@ -289,20 +264,26 @@ export const OtherUserProfileModal: React.FC = () => {
           {/* 1. Activities */}
           {activeTab === 'activities' && (
             <div className="space-y-2">
-              {activities.map(act => (
-                <div
-                  key={act.id}
-                  className="p-3 rounded-2xl bg-white dark:bg-slate-800/80 border border-[#DCE8F7] dark:border-slate-700 shadow-xs flex items-center justify-between"
-                >
-                  <div className="space-y-0.5">
-                    <h4 className="font-extrabold text-xs text-[#172033] dark:text-white">{act.title}</h4>
-                    <p className="text-[10px] text-[#64748B] dark:text-slate-400">{act.location} • {act.date}</p>
+              {activities.length > 0 ? (
+                activities.map(act => (
+                  <div
+                    key={act.id}
+                    className="p-3 rounded-2xl bg-white dark:bg-slate-800/80 border border-[#DCE8F7] dark:border-slate-700 shadow-xs flex items-center justify-between"
+                  >
+                    <div className="space-y-0.5">
+                      <h4 className="font-extrabold text-xs text-[#172033] dark:text-white">{act.title}</h4>
+                      <p className="text-[10px] text-[#64748B] dark:text-slate-400">{act.location} • {act.date}</p>
+                    </div>
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 text-[9px] font-extrabold uppercase">
+                      {act.status}
+                    </span>
                   </div>
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 text-[9px] font-extrabold uppercase">
-                    {act.status}
-                  </span>
+                ))
+              ) : (
+                <div className="p-6 rounded-2xl bg-[#F8FBFF] dark:bg-slate-800/50 border border-[#DCE8F7] dark:border-slate-700/60 text-center">
+                  <p className="text-xs font-semibold text-[#64748B] dark:text-slate-400">No activities logged yet by this member.</p>
                 </div>
-              ))}
+              )}
             </div>
           )}
 
@@ -311,30 +292,38 @@ export const OtherUserProfileModal: React.FC = () => {
             <div className="space-y-3">
               <div>
                 <span className="text-xs font-bold text-[#172033] dark:text-slate-200 block mb-1.5">Skills & Talents:</span>
-                <div className="flex flex-wrap gap-1.5">
-                  {user.skills.map(sk => (
-                    <span
-                      key={sk}
-                      className="px-2.5 py-1 rounded-full bg-[#F0F6FF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-[#2563EB] dark:text-blue-400 text-xs font-bold"
-                    >
-                      #{sk}
-                    </span>
-                  ))}
-                </div>
+                {user.skills && user.skills.length > 0 ? (
+                  <div className="flex flex-wrap gap-1.5">
+                    {user.skills.map(sk => (
+                      <span
+                        key={sk}
+                        className="px-2.5 py-1 rounded-full bg-[#F0F6FF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-[#2563EB] dark:text-blue-400 text-xs font-bold"
+                      >
+                        #{sk}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-[#64748B] dark:text-slate-400">No skills listed yet.</p>
+                )}
               </div>
 
               <div>
                 <span className="text-xs font-bold text-[#172033] dark:text-slate-200 block mb-1.5">Interests & Hobbies:</span>
-                <div className="flex flex-wrap gap-1.5">
-                  {user.interests.map(intr => (
-                    <span
-                      key={intr}
-                      className="px-2.5 py-1 rounded-full bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-[#172033] dark:text-slate-200 text-xs font-bold"
-                    >
-                      {intr}
-                    </span>
-                  ))}
-                </div>
+                {user.interests && user.interests.length > 0 ? (
+                  <div className="flex flex-wrap gap-1.5">
+                    {user.interests.map(intr => (
+                      <span
+                        key={intr}
+                        className="px-2.5 py-1 rounded-full bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-[#172033] dark:text-slate-200 text-xs font-bold"
+                      >
+                        {intr}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-[#64748B] dark:text-slate-400">No interests listed yet.</p>
+                )}
               </div>
             </div>
           )}
@@ -344,7 +333,7 @@ export const OtherUserProfileModal: React.FC = () => {
             <div className="p-4 rounded-2xl bg-[#F8FBFF] dark:bg-slate-800/80 border border-[#DCE8F7] dark:border-slate-700 space-y-2">
               <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#2563EB] dark:text-blue-400">About Statement</span>
               <p className="text-xs text-[#172033] dark:text-slate-200 leading-relaxed italic">
-                "{user.bio || 'Active member on MEMA finding partners for sports, skills, and creative plans.'}"
+                "{user.bio || 'New member on MEMA.'}"
               </p>
             </div>
           )}

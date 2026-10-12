@@ -1,6 +1,6 @@
 import { supabase, isSupabaseConfigured } from '../lib/supabaseClient';
 import { UserProfile, CampusRequest, Conversation, ChatMessage } from '../types';
-import { MOCK_STUDENTS, MOCK_CAMPUS_REQUESTS, MOCK_CONVERSATIONS } from '../data/mockData';
+import { MOCK_CAMPUS_REQUESTS, MOCK_CONVERSATIONS } from '../data/mockData';
 
 function mapRowToProfile(row: any): UserProfile {
   return {
@@ -34,7 +34,7 @@ export const supabaseService = {
    */
   async getProfiles(): Promise<UserProfile[]> {
     if (!isSupabaseConfigured) {
-      return MOCK_STUDENTS;
+      return [];
     }
 
     try {
@@ -44,14 +44,16 @@ export const supabaseService = {
         .order('created_at', { ascending: false });
 
       if (error || !data || data.length === 0) {
-        console.warn('Using local fallback for profiles:', error?.message);
-        return MOCK_STUDENTS;
+        if (error) {
+          console.warn('Supabase profiles query notice:', error.message);
+        }
+        return [];
       }
 
       return data.map(mapRowToProfile);
     } catch (err) {
       console.error('Error fetching Supabase profiles:', err);
-      return MOCK_STUDENTS;
+      return [];
     }
   },
 
@@ -61,7 +63,7 @@ export const supabaseService = {
   async getProfileById(userId: string): Promise<UserProfile | null> {
     if (!userId || userId === 'guest') return null;
     if (!isSupabaseConfigured) {
-      return MOCK_STUDENTS.find(s => s.id === userId) || null;
+      return null;
     }
 
     try {

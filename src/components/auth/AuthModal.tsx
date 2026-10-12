@@ -19,7 +19,6 @@ import {
   HelpCircle
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
-import { MOCK_STUDENTS } from '../../data/mockData';
 import { isSupabaseConfigured } from '../../lib/supabaseClient';
 import {
   signInWithEmail,
@@ -28,11 +27,12 @@ import {
   resetPasswordForEmail
 } from '../../services/authService';
 import { supabaseService } from '../../services/supabaseService';
+import { UserProfile } from '../../types';
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  initialMode?: 'signin' | 'signup' | 'demo';
+  initialMode?: 'signin' | 'signup';
 }
 
 export const AuthModal: React.FC<AuthModalProps> = ({
@@ -49,7 +49,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     setAuthUser
   } = useApp();
 
-  const [mode, setMode] = useState<'signin' | 'signup' | 'demo' | 'verification_pending' | 'forgot_password'>(initialMode);
+  const [mode, setMode] = useState<'signin' | 'signup' | 'verification_pending' | 'forgot_password'>(initialMode);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
@@ -197,16 +197,36 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       if (res.user) {
         setAuthUser(res.user);
 
-        const newProfile = {
-          ...currentUser,
+        const newProfile: UserProfile = {
           id: res.user.id,
           name: fullName.trim(),
+          age: 21,
+          occupationType,
+          college: userLocation,
+          degree: 'Student',
+          year: '1st Year',
           location: userLocation,
           locationZone: userLocation,
-          college: userLocation,
-          occupationType,
+          distanceKm: 0.5,
+          distanceDisplay: 'Nearby',
+          avatar: res.user.user_metadata?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+          coverImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=80',
           verifiedCollege: true,
           studentIdVerified: true,
+          skills: [],
+          interests: [],
+          activitiesCompleted: 0,
+          requestsPosted: 0,
+          recentActivities: [],
+          bio: `Active on MEMA in ${userLocation}`,
+          onlineStatus: 'active_now',
+          roleTags: [],
+          followersCount: 0,
+          sessionsCount: 0,
+          worksCount: 0,
+          moodboardsCount: 0,
+          promptsCount: 0,
+          moodboardGallery: [],
           isGuest: false
         };
 
@@ -281,29 +301,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }
   };
 
-  const handleSelectDemoPersona = (student: typeof MOCK_STUDENTS[0]) => {
-    const personaProfile = {
-      ...student,
-      isGuest: false
-    };
-    const userObj = {
-      id: student.id,
-      email: `${student.name.toLowerCase().replace(/\s+/g, '')}@campus.mema.in`,
-      user_metadata: { name: student.name, college: student.college }
-    };
-    setCurrentUser(personaProfile);
-    setAuthUser(userObj);
-    try {
-      localStorage.setItem('mema_auth_session', JSON.stringify(userObj));
-      localStorage.setItem('mema_user_profile', JSON.stringify(personaProfile));
-    } catch {}
-    setNotificationToast({
-      message: `👤 Switched Profile: ${student.name}`,
-      subtext: `Role: ${student.degree} • ${student.college}`
-    });
-    onClose();
-  };
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-[#DCE8F7] dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
@@ -319,7 +316,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   MEMA Auth
                 </span>
                 <span className="px-2 py-0.5 rounded-full bg-[#F0F6FF] dark:bg-blue-950/60 border border-[#DCE8F7] dark:border-blue-900 text-[#2563EB] dark:text-blue-400 font-bold text-[10px]">
-                  {isSupabaseConfigured ? 'Supabase Live' : 'Demo Mode'}
+                  {isSupabaseConfigured ? 'Supabase Live' : 'Cloud Auth'}
                 </span>
               </div>
               <p className="text-xs text-[#64748B] dark:text-slate-400">
@@ -338,7 +335,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
         {/* Tab Switcher */}
         {mode !== 'verification_pending' && mode !== 'forgot_password' && (
-          <div className="grid grid-cols-3 p-2 bg-[#F8FBFF] dark:bg-slate-850 border-b border-[#DCE8F7] dark:border-slate-800 gap-1">
+          <div className="grid grid-cols-2 p-2 bg-[#F8FBFF] dark:bg-slate-850 border-b border-[#DCE8F7] dark:border-slate-800 gap-1">
             <button
               onClick={() => { setMode('signin'); setErrorMessage(null); setInfoMessage(null); }}
               className={`py-2 rounded-xl text-xs font-bold transition-all ${
@@ -358,16 +355,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               }`}
             >
               Sign Up
-            </button>
-            <button
-              onClick={() => { setMode('demo'); setErrorMessage(null); setInfoMessage(null); }}
-              className={`py-2 rounded-xl text-xs font-bold transition-all ${
-                mode === 'demo'
-                  ? 'bg-white dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 shadow-xs border border-[#DCE8F7] dark:border-slate-700'
-                  : 'text-[#64748B] dark:text-slate-400 hover:text-[#172033] dark:hover:text-white'
-              }`}
-            >
-              Demo Users
             </button>
           </div>
         )}
@@ -717,50 +704,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 </button>
               </div>
             </form>
-          )}
-
-          {/* 5. DEMO PERSONAS */}
-          {mode === 'demo' && (
-            <div className="space-y-3">
-              <p className="text-xs text-[#64748B] dark:text-slate-400">
-                Click any campus profile to instantly log in as that student without needing credentials:
-              </p>
-
-              <div className="space-y-2">
-                {MOCK_STUDENTS.map(student => (
-                  <button
-                    key={student.id}
-                    onClick={() => handleSelectDemoPersona(student)}
-                    className="w-full p-3 rounded-2xl border border-[#DCE8F7] dark:border-slate-800 hover:border-[#2563EB] dark:hover:border-blue-500 bg-[#F8FBFF] dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-800 transition-all text-left flex items-center justify-between group cursor-pointer"
-                  >
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={student.avatar}
-                        alt={student.name}
-                        className="w-10 h-10 rounded-full object-cover ring-2 ring-[#DCE8F7] dark:ring-slate-700 group-hover:ring-[#2563EB] dark:group-hover:ring-blue-500"
-                      />
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="font-extrabold text-xs text-[#172033] dark:text-white">
-                            {student.name}
-                          </span>
-                          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#F0F6FF] dark:bg-blue-950/60 text-[#2563EB] dark:text-blue-400 font-bold border border-transparent dark:border-blue-900">
-                            {student.degree}
-                          </span>
-                        </div>
-                        <p className="text-[10px] text-[#64748B] dark:text-slate-400 truncate max-w-[200px]">
-                          {student.college} • {student.skills.slice(0, 2).join(', ')}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="px-3 py-1 rounded-full bg-white dark:bg-slate-700 border border-[#DCE8F7] dark:border-slate-600 text-[10px] font-extrabold text-[#2563EB] dark:text-blue-400 group-hover:bg-[#2563EB] dark:group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                      Switch
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
           )}
         </div>
 

@@ -5,7 +5,6 @@
 import { supabase, isSupabaseConfigured } from '../lib/supabaseClient';
 import { supabaseService } from './supabaseService';
 import { UserProfile } from '../types';
-import { CURRENT_USER, MOCK_STUDENTS } from '../data/mockData';
 
 export interface AuthResponse {
   success: boolean;
@@ -65,44 +64,9 @@ export async function signUpWithEmail(data: SignUpData): Promise<AuthResponse> {
   const trimmedName = (data.name || data.fullName || '').trim() || 'New Member';
 
   if (!isSupabaseConfigured) {
-    // Local demo / simulated registration
-    const simulatedProfile: UserProfile = {
-      id: `usr_${Date.now()}`,
-      name: trimmedName,
-      age: 21,
-      college: data.college || userLoc || 'Delhi Technological University (DTU)',
-      degree: data.degree || 'Student',
-      year: data.year || '3rd Year',
-      location: userLoc,
-      locationZone: userLoc,
-      distanceKm: 0.5,
-      distanceDisplay: 'Nearby (~500m)',
-      avatar: data.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-      verifiedCollege: true,
-      studentIdVerified: true,
-      skills: data.skills || ['Sports', 'Coding', 'Design'],
-      interests: ['Campus Activities', 'Meetups'],
-      activitiesCompleted: 0,
-      requestsPosted: 0,
-      bio: `Member at ${userLoc}`,
-      onlineStatus: 'active_now'
-    };
-
     return {
-      success: true,
-      user: {
-        id: simulatedProfile.id,
-        email: trimmedEmail,
-        user_metadata: {
-          name: trimmedName,
-          location: userLoc,
-          locationZone: userLoc,
-          college: simulatedProfile.college,
-          occupation_type: data.occupationType || 'school_student',
-          avatar: simulatedProfile.avatar
-        }
-      },
-      requiresEmailConfirmation: false
+      success: false,
+      error: 'Supabase Authentication is not configured.'
     };
   }
 
@@ -176,15 +140,9 @@ export async function signInWithEmail(email: string, password?: string): Promise
   const trimmedPassword = password?.trim() || '';
 
   if (!isSupabaseConfigured) {
-    // Local demo login check
-    const matched = MOCK_STUDENTS.find(s => s.name.toLowerCase().includes(trimmedEmail.split('@')[0].toLowerCase())) || CURRENT_USER;
     return {
-      success: true,
-      user: {
-        id: matched.id,
-        email: trimmedEmail,
-        user_metadata: { name: matched.name, college: matched.college, location: matched.location }
-      }
+      success: false,
+      error: 'Supabase Authentication is not configured.'
     };
   }
 

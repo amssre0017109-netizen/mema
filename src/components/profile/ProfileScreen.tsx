@@ -81,40 +81,7 @@ export const ProfileScreen: React.FC = () => {
     );
   };
 
-  const activities: ProfileActivity[] = currentUser.recentActivities || [
-    {
-      id: 'act_1',
-      title: '⚽ 6v6 Football Match',
-      category: 'Sports',
-      date: 'Yesterday • 6:00 PM',
-      location: 'DTU Main Football Ground',
-      status: 'completed'
-    },
-    {
-      id: 'act_2',
-      title: '💃 Zonal Fest Bhangra Rehearsal',
-      category: 'Dance',
-      date: '2 days ago • 4:00 PM',
-      location: 'Main Auditorium Green Room',
-      status: 'completed'
-    },
-    {
-      id: 'act_3',
-      title: '💻 AI Hackathon UI/UX Design Sprint',
-      category: 'Coding',
-      date: 'Last Weekend',
-      location: 'Tech Commons Block B',
-      status: 'completed'
-    },
-    {
-      id: 'act_4',
-      title: '📚 Physics & Circuits Midsem Study Group',
-      category: 'Study',
-      date: 'Ongoing this week',
-      location: 'Central Library 2nd Floor',
-      status: 'ongoing'
-    }
-  ];
+  const activities: ProfileActivity[] = currentUser.recentActivities || [];
 
   const handleDeviceImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -244,7 +211,7 @@ export const ProfileScreen: React.FC = () => {
             {/* Followers Count */}
             <div>
               <p className="text-xs font-bold text-[#172033] dark:text-slate-200 tracking-wide">
-                {(currentUser.followersCount || 21348).toLocaleString()} <span className="font-medium text-[#64748B] dark:text-slate-400">Followers</span>
+                {(currentUser.followersCount || 0).toLocaleString()} <span className="font-medium text-[#64748B] dark:text-slate-400">Followers</span>
               </p>
             </div>
 
@@ -267,17 +234,19 @@ export const ProfileScreen: React.FC = () => {
             </div>
 
             {/* 6. Role Badges (✺) */}
-            <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1 max-w-xs mx-auto">
-              {(currentUser.roleTags || ['Creative Designer', 'Visual Artist', 'Life Coach']).map((tag, idx) => (
-                <div
-                  key={idx}
-                  className="px-3 py-1 rounded-full bg-white/60 dark:bg-slate-800/70 backdrop-blur-md border border-white/80 dark:border-slate-700 text-[#172033] dark:text-slate-200 text-[11px] font-bold flex items-center gap-1 shadow-xs"
-                >
-                  <span className="text-[#2563EB] dark:text-blue-400">✺</span>
-                  <span>{tag}</span>
-                </div>
-              ))}
-            </div>
+            {currentUser.roleTags && currentUser.roleTags.length > 0 && (
+              <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1 max-w-xs mx-auto">
+                {currentUser.roleTags.map((tag, idx) => (
+                  <div
+                    key={idx}
+                    className="px-3 py-1 rounded-full bg-white/60 dark:bg-slate-800/70 backdrop-blur-md border border-white/80 dark:border-slate-700 text-[#172033] dark:text-slate-200 text-[11px] font-bold flex items-center gap-1 shadow-xs"
+                  >
+                    <span className="text-[#2563EB] dark:text-blue-400">✺</span>
+                    <span>{tag}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* 7. Horizontal Threads Stats Row */}
@@ -292,14 +261,14 @@ export const ProfileScreen: React.FC = () => {
               <div className="p-2 rounded-2xl bg-white/60 dark:bg-slate-800/70 backdrop-blur-md border border-white/70 dark:border-slate-700 text-center">
                 <span className="text-[9px] text-[#64748B] dark:text-slate-400 block font-bold truncate">Sessions</span>
                 <span className="text-xs sm:text-sm font-black text-[#172033] dark:text-white block mt-0.5">
-                  {(currentUser.sessionsCount || 5983).toLocaleString()}
+                  {(currentUser.sessionsCount || 0).toLocaleString()}
                 </span>
               </div>
 
               <div className="p-2 rounded-2xl bg-white/60 dark:bg-slate-800/70 backdrop-blur-md border border-white/70 dark:border-slate-700 text-center">
                 <span className="text-[9px] text-[#64748B] dark:text-slate-400 block font-bold truncate">Age</span>
                 <span className="text-xs sm:text-sm font-black text-[#172033] dark:text-white block mt-0.5">
-                  {currentUser.age || 23} y.o
+                  {currentUser.age || 21} y.o
                 </span>
               </div>
 
@@ -313,7 +282,7 @@ export const ProfileScreen: React.FC = () => {
               <div className="p-2 rounded-2xl bg-white/60 dark:bg-slate-800/70 backdrop-blur-md border border-white/70 dark:border-slate-700 text-center">
                 <span className="text-[9px] text-[#64748B] dark:text-slate-400 block font-bold truncate">Followers</span>
                 <span className="text-xs sm:text-sm font-black text-[#172033] dark:text-white block mt-0.5">
-                  {(currentUser.followersCount || 21348).toLocaleString()}
+                  {(currentUser.followersCount || 0).toLocaleString()}
                 </span>
               </div>
             </div>
@@ -389,40 +358,47 @@ export const ProfileScreen: React.FC = () => {
               </div>
 
               <div className="space-y-2.5">
-                {activities.map(act => (
-                  <div
-                    key={act.id}
-                    className="bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-2xl p-4 shadow-xs flex items-center justify-between gap-3"
-                  >
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#F8FBFF] dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-700 uppercase">
-                          {act.category}
-                        </span>
-                        <h4 className="font-extrabold text-sm text-[#172033] dark:text-white">{act.title}</h4>
+                {activities.length > 0 ? (
+                  activities.map(act => (
+                    <div
+                      key={act.id}
+                      className="bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-2xl p-4 shadow-xs flex items-center justify-between gap-3"
+                    >
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#F8FBFF] dark:bg-slate-800 text-[#2563EB] dark:text-blue-400 border border-[#DCE8F7] dark:border-slate-700 uppercase">
+                            {act.category}
+                          </span>
+                          <h4 className="font-extrabold text-sm text-[#172033] dark:text-white">{act.title}</h4>
+                        </div>
+                        <div className="flex items-center gap-3 text-xs text-[#64748B] dark:text-slate-400">
+                          <span className="flex items-center gap-1">
+                            <Clock className="w-3 h-3 text-[#2563EB] dark:text-blue-400" />
+                            <span>{act.date}</span>
+                          </span>
+                          <span>•</span>
+                          <span className="flex items-center gap-1">
+                            <MapPin className="w-3 h-3 text-[#2563EB] dark:text-blue-400" />
+                            <span>{act.location}</span>
+                          </span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-3 text-xs text-[#64748B] dark:text-slate-400">
-                        <span className="flex items-center gap-1">
-                          <Clock className="w-3 h-3 text-[#2563EB] dark:text-blue-400" />
-                          <span>{act.date}</span>
-                        </span>
-                        <span>•</span>
-                        <span className="flex items-center gap-1">
-                          <MapPin className="w-3 h-3 text-[#2563EB] dark:text-blue-400" />
-                          <span>{act.location}</span>
-                        </span>
-                      </div>
-                    </div>
 
-                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase shrink-0 ${
-                      act.status === 'completed'
-                        ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800'
-                        : 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800'
-                    }`}>
-                      {act.status === 'completed' ? '✓ Completed' : '⚡ Ongoing'}
-                    </span>
+                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase shrink-0 ${
+                        act.status === 'completed'
+                          ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800'
+                          : 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800'
+                      }`}>
+                        {act.status === 'completed' ? '✓ Completed' : '⚡ Ongoing'}
+                      </span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-2xl p-6 text-center space-y-1.5 text-xs text-[#64748B] dark:text-slate-400">
+                    <p className="font-bold text-[#172033] dark:text-white">No campus activities logged yet</p>
+                    <p>Join or post campus activities on MEMA to track them here.</p>
                   </div>
-                ))}
+                )}
               </div>
             </div>
           )}
@@ -434,16 +410,20 @@ export const ProfileScreen: React.FC = () => {
                 <span className="text-xs font-bold text-[#64748B] dark:text-slate-400 uppercase tracking-wider">
                   Verified Skills & Talents
                 </span>
-                <div className="flex flex-wrap gap-2">
-                  {currentUser.skills.map(sk => (
-                    <span
-                      key={sk}
-                      className="px-3.5 py-1.5 rounded-full bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-[#2563EB] dark:text-blue-400 text-xs font-extrabold shadow-xs"
-                    >
-                      #{sk}
-                    </span>
-                  ))}
-                </div>
+                {currentUser.skills && currentUser.skills.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {currentUser.skills.map(sk => (
+                      <span
+                        key={sk}
+                        className="px-3.5 py-1.5 rounded-full bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 text-[#2563EB] dark:text-blue-400 text-xs font-extrabold shadow-xs"
+                      >
+                        #{sk}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-[#64748B] dark:text-slate-400">No skills added yet. Tap "Edit profile" to add your skills.</p>
+                )}
               </div>
             </div>
           )}

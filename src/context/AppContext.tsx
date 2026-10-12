@@ -19,8 +19,6 @@ import {
 } from '../types/subscription';
 import {
   MOCK_CAMPUS_REQUESTS,
-  MOCK_STUDENTS,
-  CURRENT_USER,
   GUEST_USER,
   MOCK_NOTIFICATIONS,
   MOCK_CONVERSATIONS,
@@ -191,8 +189,8 @@ interface AppContextType {
   isAuthenticated: boolean;
   isAuthModalOpen: boolean;
   setIsAuthModalOpen: (open: boolean) => void;
-  authModalMode: 'signin' | 'signup' | 'demo';
-  openAuthModal: (mode?: 'signin' | 'signup' | 'demo') => void;
+  authModalMode: 'signin' | 'signup';
+  openAuthModal: (mode?: 'signin' | 'signup') => void;
   closeAuthModal: () => void;
 
   // ⚙️ Settings Modal
@@ -229,10 +227,33 @@ const getInitialCurrentUser = (): UserProfile => {
       const parsedSession = JSON.parse(sessionStr);
       if (parsedSession && parsedSession.id) {
         return {
-          ...CURRENT_USER,
           id: parsedSession.id,
-          name: parsedSession.user_metadata?.name || parsedSession.email?.split('@')[0] || 'Campus Student',
-          college: parsedSession.user_metadata?.college || 'Delhi Technological University (DTU)',
+          name: parsedSession.user_metadata?.name || parsedSession.email?.split('@')[0] || 'Member',
+          age: 21,
+          occupationType: parsedSession.user_metadata?.occupation_type || 'working_professional',
+          college: parsedSession.user_metadata?.college || parsedSession.user_metadata?.location || 'Connaught Place, New Delhi',
+          degree: 'Student',
+          year: '1st Year',
+          location: parsedSession.user_metadata?.location || 'Connaught Place, New Delhi',
+          locationZone: parsedSession.user_metadata?.location_zone || parsedSession.user_metadata?.location || 'Connaught Place, New Delhi',
+          avatar: parsedSession.user_metadata?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+          coverImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=80',
+          verifiedCollege: true,
+          studentIdVerified: true,
+          skills: parsedSession.user_metadata?.skills || [],
+          interests: [],
+          activitiesCompleted: 0,
+          requestsPosted: 0,
+          recentActivities: [],
+          bio: '',
+          onlineStatus: 'active_now',
+          roleTags: [],
+          followersCount: 0,
+          sessionsCount: 0,
+          worksCount: 0,
+          moodboardsCount: 0,
+          promptsCount: 0,
+          moodboardGallery: [],
           isGuest: false
         };
       }
@@ -273,7 +294,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
   const [authUser, setAuthUser] = useState<any>(getInitialAuthUser);
   const [currentUser, setCurrentUser] = useState<UserProfile>(getInitialCurrentUser);
-  const [allStudents, setAllStudents] = useState<UserProfile[]>(MOCK_STUDENTS);
+  const [allStudents, setAllStudents] = useState<UserProfile[]>([]);
   const [campusRequests, setCampusRequests] = useState<CampusRequest[]>(MOCK_CAMPUS_REQUESTS);
   const [conversations, setConversations] = useState<Conversation[]>(MOCK_CONVERSATIONS);
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
@@ -364,9 +385,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // 🔐 Authentication & Session Modal States
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [authModalMode, setAuthModalMode] = useState<'signin' | 'signup' | 'demo'>('signin');
+  const [authModalMode, setAuthModalMode] = useState<'signin' | 'signup'>('signin');
 
-  const openAuthModal = (mode: 'signin' | 'signup' | 'demo' = 'signin') => {
+  const openAuthModal = (mode: 'signin' | 'signup' = 'signin') => {
     setAuthModalMode(mode);
     setIsAuthModalOpen(true);
   };
@@ -391,13 +412,33 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       // 2. Fallback: construct profile from session metadata
       const profileData: UserProfile = {
-        ...CURRENT_USER,
         id: user.id,
-        name: user.user_metadata?.name || user.email?.split('@')[0] || 'Campus Student',
+        name: user.user_metadata?.name || user.email?.split('@')[0] || 'Member',
+        age: 21,
+        occupationType: user.user_metadata?.occupation_type || 'working_professional',
         college: user.user_metadata?.college || user.user_metadata?.location || 'Connaught Place, New Delhi',
-        location: user.user_metadata?.location || user.user_metadata?.college || 'Connaught Place, New Delhi',
-        locationZone: user.user_metadata?.location || user.user_metadata?.college || 'Connaught Place, New Delhi',
-        avatar: user.user_metadata?.avatar || CURRENT_USER.avatar,
+        degree: 'Student',
+        year: '1st Year',
+        location: user.user_metadata?.location || 'Connaught Place, New Delhi',
+        locationZone: user.user_metadata?.location_zone || user.user_metadata?.location || 'Connaught Place, New Delhi',
+        avatar: user.user_metadata?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+        coverImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=80',
+        verifiedCollege: true,
+        studentIdVerified: true,
+        skills: user.user_metadata?.skills || [],
+        interests: [],
+        activitiesCompleted: 0,
+        requestsPosted: 0,
+        recentActivities: [],
+        bio: '',
+        onlineStatus: 'active_now',
+        roleTags: [],
+        followersCount: 0,
+        sessionsCount: 0,
+        worksCount: 0,
+        moodboardsCount: 0,
+        promptsCount: 0,
+        moodboardGallery: [],
         isGuest: false
       };
       setCurrentUser(profileData);
@@ -463,8 +504,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     let isMounted = true;
     if (isSupabaseConfigured) {
       supabaseService.getProfiles().then(profiles => {
-        if (isMounted && Array.isArray(profiles) && profiles.length > 0) {
-          setAllStudents(profiles);
+        if (isMounted) {
+          setAllStudents(Array.isArray(profiles) ? profiles : []);
         }
       });
       supabaseService.getCampusRequests().then(requests => {

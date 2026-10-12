@@ -65,14 +65,7 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
             <span>Create Student Account</span>
           </button>
 
-          <div className="pt-2 flex items-center justify-center gap-3">
-            <button
-              onClick={() => openAuthModal('demo')}
-              className="text-[11px] font-bold text-[#64748B] hover:text-[#2563EB] dark:hover:text-blue-400 underline underline-offset-4 transition-colors"
-            >
-              Explore Demo Personas
-            </button>
-            <span className="text-slate-300 dark:text-slate-700">•</span>
+          <div className="pt-2 flex items-center justify-center">
             <button
               onClick={() => setCurrentView('home')}
               className="text-[11px] font-bold text-[#64748B] hover:text-[#172033] dark:hover:text-white flex items-center gap-1 transition-colors"

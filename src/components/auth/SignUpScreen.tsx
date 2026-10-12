@@ -23,7 +23,6 @@ import {
   resendVerificationEmail
 } from '../../services/authService';
 import { supabaseService } from '../../services/supabaseService';
-import { CURRENT_USER } from '../../data/mockData';
 import { UserProfile } from '../../types';
 
 export const SignUpScreen: React.FC = () => {
@@ -103,17 +102,36 @@ export const SignUpScreen: React.FC = () => {
       // Successful auto-confirmed registration or active session
       const newUserId = res.user?.id || `user_${Date.now()}`;
       const newProfile: UserProfile = {
-        ...CURRENT_USER,
         id: newUserId,
         name: fullName.trim(),
+        age: 21,
+        occupationType,
         college: location.trim(),
+        degree: 'Student',
+        year: '1st Year',
         location: location.trim(),
         locationZone: location.trim(),
-        occupationType,
+        distanceKm: 0.5,
+        distanceDisplay: 'Nearby',
         avatar: `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80`,
-        isGuest: false,
+        coverImage: `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=80`,
+        verifiedCollege: true,
+        studentIdVerified: true,
         skills: ['Casual Meetups', 'Campus Activities'],
-        interests: ['Sports', 'Study', 'Creative Projects']
+        interests: ['Sports', 'Study', 'Creative Projects'],
+        activitiesCompleted: 0,
+        requestsPosted: 0,
+        recentActivities: [],
+        bio: `Active on MEMA in ${location.trim()}`,
+        onlineStatus: 'active_now',
+        roleTags: [],
+        followersCount: 0,
+        sessionsCount: 0,
+        worksCount: 0,
+        moodboardsCount: 0,
+        promptsCount: 0,
+        moodboardGallery: [],
+        isGuest: false
       };
 
       setAuthUser(res.user || { id: newUserId, email: email.trim() });

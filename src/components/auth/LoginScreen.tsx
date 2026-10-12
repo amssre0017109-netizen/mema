@@ -14,7 +14,6 @@ import {
   Send
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
-import { MOCK_STUDENTS } from '../../data/mockData';
 import { isSupabaseConfigured } from '../../lib/supabaseClient';
 import {
   signInWithEmail,
@@ -90,23 +89,32 @@ export const LoginScreen: React.FC = () => {
             id: res.user.id,
             name: res.user.user_metadata?.name || email.split('@')[0],
             age: 21,
-            occupationType: res.user.user_metadata?.occupation_type || 'school_student',
+            occupationType: res.user.user_metadata?.occupation_type || 'working_professional',
             college: res.user.user_metadata?.location || 'Connaught Place, New Delhi',
             degree: 'Student',
-            year: '3rd Year',
+            year: '1st Year',
             location: res.user.user_metadata?.location || 'Connaught Place, New Delhi',
             locationZone: res.user.user_metadata?.location || 'Connaught Place, New Delhi',
             distanceKm: 0.5,
             distanceDisplay: 'Nearby',
             avatar: res.user.user_metadata?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+            coverImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=80',
             verifiedCollege: true,
             studentIdVerified: true,
-            skills: ['Casual Meetups', 'Campus Activities'],
-            interests: ['Sports', 'Study', 'Creative Projects'],
-            activitiesCompleted: 3,
-            requestsPosted: 1,
-            bio: 'Verified MEMA Member',
+            skills: res.user.user_metadata?.skills || [],
+            interests: [],
+            activitiesCompleted: 0,
+            requestsPosted: 0,
+            recentActivities: [],
+            bio: res.user.user_metadata?.bio || 'Verified MEMA Member',
             onlineStatus: 'active_now',
+            roleTags: [],
+            followersCount: 0,
+            sessionsCount: 0,
+            worksCount: 0,
+            moodboardsCount: 0,
+            promptsCount: 0,
+            moodboardGallery: [],
             isGuest: false
           };
         }
@@ -130,37 +138,6 @@ export const LoginScreen: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleQuickDemoLogin = (persona: UserProfile) => {
-    const demoUser = {
-      id: persona.id,
-      email: `${persona.name.toLowerCase().replace(/\s+/g, '.')}@mema.campus`,
-      user_metadata: {
-        name: persona.name,
-        college: persona.college,
-        avatar: persona.avatar
-      }
-    };
-
-    setAuthUser(demoUser);
-    setCurrentUser({
-      ...persona,
-      isGuest: false
-    });
-
-    try {
-      localStorage.setItem('mema_auth_session', JSON.stringify(demoUser));
-      localStorage.setItem('mema_user_profile', JSON.stringify({ ...persona, isGuest: false }));
-    } catch {}
-
-    setNotificationToast({
-      message: `⚡ Signed in as ${persona.name}`,
-      subtext: 'Demo persona session active.'
-    });
-
-    triggerMatchCelebration();
-    setCurrentView('home');
   };
 
   const handlePasswordReset = async (e: React.FormEvent) => {
@@ -372,39 +349,6 @@ export const LoginScreen: React.FC = () => {
               </div>
             </form>
           )}
-
-          {/* Quick Demo Personas Testing */}
-          <div className="pt-4 border-t border-[#F0F6FF] dark:border-slate-800 space-y-2.5">
-            <div className="flex items-center gap-1 text-[11px] font-bold text-[#64748B] dark:text-slate-400">
-              <Users className="w-3.5 h-3.5 text-[#2563EB] dark:text-blue-400" />
-              <span>Instant Test Personas (1-Click Evaluation):</span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2">
-              {MOCK_STUDENTS.slice(0, 2).map(persona => (
-                <button
-                  key={persona.id}
-                  type="button"
-                  onClick={() => handleQuickDemoLogin(persona)}
-                  className="p-2 rounded-xl bg-[#F8FBFF] dark:bg-slate-800/80 hover:bg-blue-50 dark:hover:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 flex items-center gap-2 text-left transition-colors cursor-pointer group"
-                >
-                  <img
-                    src={persona.avatar}
-                    alt={persona.name}
-                    className="w-7 h-7 rounded-full object-cover shrink-0 ring-1 ring-blue-500/20"
-                  />
-                  <div className="min-w-0">
-                    <p className="text-xs font-bold text-[#172033] dark:text-white truncate group-hover:text-[#2563EB] dark:group-hover:text-blue-400">
-                      {persona.name.split(' ')[0]}
-                    </p>
-                    <p className="text-[10px] text-[#64748B] dark:text-slate-400 truncate">
-                      {persona.degree || 'Student'}
-                    </p>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </div>

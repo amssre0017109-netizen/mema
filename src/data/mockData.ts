@@ -51,274 +51,35 @@ export const GUEST_USER: UserProfile = {
 
 export const CURRENT_USER: UserProfile = {
   id: 'me',
-  name: 'Jamal Knox',
-  age: 23,
+  name: 'Member',
+  age: 21,
   occupationType: 'working_professional',
-  college: 'Creative Tech Studio',
-  degree: 'Creative Design & Tech',
-  year: 'Lead Designer',
-  location: 'North Delhi Area',
-  locationZone: 'North Delhi Area • Design Studio Block',
-  avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
+  college: 'Connaught Place, New Delhi',
+  degree: 'Member',
+  year: '1st Year',
+  location: 'Connaught Place, New Delhi',
+  locationZone: 'Connaught Place, New Delhi',
+  avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
   coverImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=80',
   verifiedCollege: true,
   studentIdVerified: true,
-  skills: ['Creative Designer', 'Visual Artist', 'Life Coach', 'Bhangra', 'React / Web Dev', 'Football'],
-  interests: ['Editorial Art', 'Design Sprints', 'Photography', 'Fest Competitions', 'Acoustic Jamming'],
-  activitiesCompleted: 24,
-  requestsPosted: 8,
-  recentActivities: [
-    {
-      id: 'act_1',
-      title: '⚽ 6v6 Football Match',
-      category: 'Sports',
-      date: 'Yesterday • 6:00 PM',
-      location: 'DTU Main Football Ground',
-      status: 'completed'
-    },
-    {
-      id: 'act_2',
-      title: '💃 Zonal Fest Bhangra Rehearsal',
-      category: 'Dance',
-      date: '2 days ago • 4:00 PM',
-      location: 'Main Auditorium Green Room',
-      status: 'completed'
-    },
-    {
-      id: 'act_3',
-      title: '💻 AI Hackathon UI/UX Design Sprint',
-      category: 'Coding',
-      date: 'Last Weekend',
-      location: 'Tech Commons Block B',
-      status: 'completed'
-    },
-    {
-      id: 'act_4',
-      title: '📚 Physics & Circuits Midsem Study Group',
-      category: 'Study',
-      date: 'Ongoing this week',
-      location: 'Central Library 2nd Floor',
-      status: 'ongoing'
-    }
-  ],
-  bio: 'Visual artist & creative designer. Building aesthetic digital experiences, campus fest visual identities, and interactive spaces.',
+  skills: [],
+  interests: [],
+  activitiesCompleted: 0,
+  requestsPosted: 0,
+  recentActivities: [],
+  bio: '',
   onlineStatus: 'active_now',
-  roleTags: ['Creative Designer', 'Visual Artist', 'Life Coach'],
-  followersCount: 21348,
-  sessionsCount: 5983,
-  worksCount: 751,
-  moodboardsCount: 38,
-  promptsCount: 142,
-  moodboardGallery: [
-    {
-      id: 'mb_1',
-      title: 'red lips',
-      subtitle: 'SIGNAL ECHO DATA • TOUCH INTERRUPTED',
-      image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
-      tag: 'POSTER 01'
-    },
-    {
-      id: 'mb_2',
-      title: 'warm silhouette',
-      subtitle: 'CHROMA DATA • VISUAL IDENTITY',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80',
-      tag: 'EDITORIAL'
-    },
-    {
-      id: 'mb_3',
-      title: 'ethereal noise',
-      subtitle: 'CAMPUS ART DIRECTION',
-      image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80',
-      tag: 'MOODBOARD'
-    },
-    {
-      id: 'mb_4',
-      title: 'neon horizon',
-      subtitle: 'DIGITAL SCULPTING',
-      image: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=80',
-      tag: 'CONCEPT'
-    }
-  ]
+  roleTags: [],
+  followersCount: 0,
+  sessionsCount: 0,
+  worksCount: 0,
+  moodboardsCount: 0,
+  promptsCount: 0,
+  moodboardGallery: []
 };
 
-export const MOCK_STUDENTS: UserProfile[] = [
-  {
-    id: 'stu_7',
-    name: 'Tanya Sharma',
-    age: 21,
-    occupationType: 'college_student',
-    college: 'Delhi University',
-    degree: 'Badminton Player & UI Designer',
-    year: '3rd Year',
-    location: 'North Delhi Area',
-    distanceKm: 0.3,
-    distanceDisplay: 'Nearby (~500m)',
-    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80',
-    verifiedCollege: true,
-    studentIdVerified: true,
-    skills: ['Badminton', 'UI/UX Design', 'Figma', 'Tennis', 'Photography'],
-    interests: ['Badminton Rallies', 'Design Meetups', 'Weekend Tennis', 'Specialty Coffee'],
-    activitiesCompleted: 27,
-    requestsPosted: 10,
-    bio: 'Badminton doubles player and product design student. Looking for morning/evening court sparring partners.',
-    locationZone: 'North Delhi Area • Sports Complex',
-    onlineStatus: 'active_now'
-  },
-  {
-    id: 'stu_1',
-    name: 'Aman Preet',
-    age: 21,
-    occupationType: 'working_professional',
-    college: 'Performers Studio',
-    degree: 'Folk Dancer & Fitness Coach',
-    year: 'Lead Performer',
-    location: 'North Delhi Area',
-    distanceKm: 0.4,
-    distanceDisplay: 'Nearby (~500m)',
-    avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=400&q=80',
-    verifiedCollege: true,
-    studentIdVerified: true,
-    skills: ['Bhangra', 'Folk Dance', 'Gym Training', 'Stage Performance'],
-    interests: ['Cultural Fests', 'Powerlifting', 'Punjabi Folk', 'Volleyball'],
-    activitiesCompleted: 22,
-    requestsPosted: 7,
-    bio: 'Lead dancer for Bhangra Troupe. Prepping for cultural fest. Need dancers and practice partners!',
-    locationZone: 'North Delhi Area • Cultural Center',
-    onlineStatus: 'active_now'
-  },
-  {
-    id: 'stu_8',
-    name: 'Dev Kapoor',
-    age: 22,
-    occupationType: 'working_professional',
-    college: 'Calisthenics Delhi',
-    degree: 'Strength & Bodyweight Coach',
-    year: 'Athlete',
-    location: 'North Delhi Area',
-    distanceKm: 0.5,
-    distanceDisplay: 'Nearby (~500m)',
-    avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80',
-    verifiedCollege: true,
-    studentIdVerified: true,
-    skills: ['Gym Training', 'Calisthenics', 'Running', 'Handstand', 'Powerlifting'],
-    interests: ['Outdoor Workouts', 'Park Calisthenics', 'Sprint Training', 'Nutrition'],
-    activitiesCompleted: 35,
-    requestsPosted: 14,
-    bio: 'Calisthenics & bodyweight workout trainer. Organizing outdoor bar sessions and gym workout meetups.',
-    locationZone: 'North Delhi Area • Open Fitness Park',
-    onlineStatus: 'active_now'
-  },
-  {
-    id: 'stu_3',
-    name: 'Rohan Gupta',
-    age: 22,
-    occupationType: 'working_professional',
-    college: 'Sports Club Delhi',
-    degree: 'Football Striker & Athlete',
-    year: 'Club Captain',
-    location: 'North-West Delhi Area',
-    distanceKm: 0.7,
-    distanceDisplay: '~Within 1 km',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
-    verifiedCollege: true,
-    studentIdVerified: true,
-    skills: ['Football', 'Striker', 'FIFA', 'Running', 'Fitness'],
-    interests: ['Football Tournaments', 'FPL', 'Evening Running', 'Turf Games'],
-    activitiesCompleted: 31,
-    requestsPosted: 12,
-    bio: 'Captain for football squad. Organizing casual 7v7 evening matches and weekend turf bookings.',
-    locationZone: 'North-West Delhi Area • Sports Hub',
-    onlineStatus: 'active_now'
-  },
-  {
-    id: 'stu_6',
-    name: 'Siddharth Mehra',
-    age: 20,
-    occupationType: 'creator_freelancer',
-    college: 'Acoustic Collective',
-    degree: 'Vocalist & Indie Artist',
-    year: 'Songwriter',
-    location: 'North Campus Area',
-    distanceKm: 0.9,
-    distanceDisplay: '~Within 1 km',
-    avatar: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=400&q=80',
-    verifiedCollege: true,
-    studentIdVerified: true,
-    skills: ['Guitar', 'Vocals / Singing', 'Keyboard / Piano', 'Photography'],
-    interests: ['Band Performances', 'Acoustic Sessions', 'Film Photography'],
-    activitiesCompleted: 15,
-    requestsPosted: 4,
-    bio: 'Acoustic guitarist and vocalist looking for cajon/drummer and bass player for live music gigs.',
-    locationZone: 'North Campus Area • Arts Commons',
-    onlineStatus: 'active_now'
-  },
-  {
-    id: 'stu_2',
-    name: 'Priya Nair',
-    age: 20,
-    occupationType: 'creator_freelancer',
-    college: 'Physics & Audio Lab',
-    degree: 'Robotics & Audio Research',
-    year: 'Researcher',
-    location: 'South Delhi Area',
-    distanceKm: 1.2,
-    distanceDisplay: '~1-2 km away',
-    avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80',
-    verifiedCollege: true,
-    studentIdVerified: true,
-    skills: ['Physics', 'Electromagnetism', 'Calculus / Math', 'Python', 'Guitar'],
-    interests: ['Robotics', 'Indie Music', 'Library Co-Work', 'Chess'],
-    activitiesCompleted: 18,
-    requestsPosted: 6,
-    bio: 'Physics & circuits enthusiast. Organizing group problem-solving sprints for midsem exams at Central Library.',
-    locationZone: 'South Delhi Area • Academic Commons',
-    onlineStatus: 'active_now'
-  },
-  {
-    id: 'stu_4',
-    name: 'Ananya Roy',
-    age: 21,
-    occupationType: 'creator_freelancer',
-    college: 'Design Sprint Studio',
-    degree: 'Product Designer & Frontend',
-    year: 'UI/UX Creator',
-    location: 'West Delhi Area',
-    distanceKm: 1.8,
-    distanceDisplay: '~1-2 km away',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-    verifiedCollege: true,
-    studentIdVerified: true,
-    skills: ['React / Web Dev', 'UI/UX Design', 'Figma', 'AI / ML', 'Hackathons'],
-    interests: ['Hackathons', 'Tech Startups', 'Open Source', 'Matcha Cafe'],
-    activitiesCompleted: 16,
-    requestsPosted: 9,
-    bio: 'Frontend dev & product designer. Building smart web apps. Need backend and AI builders for hackathons.',
-    locationZone: 'West Delhi Area • Tech Incubator',
-    onlineStatus: 'active_today'
-  },
-  {
-    id: 'stu_5',
-    name: 'Kabir Varma',
-    age: 21,
-    occupationType: 'school_student',
-    college: 'Delhi Public School',
-    degree: 'Cricket Athlete & Music Producer',
-    year: 'Class 12th',
-    location: 'NCR Region',
-    distanceKm: 2.3,
-    distanceDisplay: '~2-3 km away',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80',
-    verifiedCollege: true,
-    studentIdVerified: true,
-    skills: ['Cricket', 'Fast Bowling', 'Gym Training', 'Music Production'],
-    interests: ['Cricket Leagues', 'Drumming', 'Audio Engineering', 'Badminton'],
-    activitiesCompleted: 24,
-    requestsPosted: 8,
-    bio: 'Cricket fast bowler and music producer. Always ready for evening net sessions or jamming.',
-    locationZone: 'NCR Region • Sports Ground',
-    onlineStatus: 'active_today'
-  }
-];
+export const MOCK_STUDENTS: UserProfile[] = [];
 
 export const MOCK_CAMPUS_REQUESTS: CampusRequest[] = [
   {
@@ -520,124 +281,6 @@ export const MOCK_CAMPUS_REQUESTS: CampusRequest[] = [
   }
 ];
 
-export const MOCK_NOTIFICATIONS: CampusNotification[] = [
-  {
-    id: 'notif_1',
-    type: 'skill_match',
-    title: '⚡ Skill Match: Bhangra',
-    message: 'Aman Preet posted: "💃 Bhangra Performer Needed for Fest" matching your profile skill.',
-    time: '25m ago',
-    read: false,
-    targetRequestId: 'req_2',
-    sender: {
-      name: 'Aman Preet',
-      avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=400&q=80',
-      college: 'DTU'
-    }
-  },
-  {
-    id: 'notif_2',
-    type: 'nearby_need',
-    title: '🔔 Nearby Activity Need',
-    message: 'Rohan Gupta needs 2 players for 6:00 PM Football at DTU Sports Ground.',
-    time: '1h ago',
-    read: false,
-    targetRequestId: 'req_1',
-    sender: {
-      name: 'Rohan Gupta',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
-      college: 'DTU'
-    }
-  },
-  {
-    id: 'notif_3',
-    type: 'skill_match',
-    title: '⚡ Skill Match: Physics',
-    message: 'Priya Nair at IIT Delhi is looking for a Physics & Electromagnetism study partner.',
-    time: '2h ago',
-    read: true,
-    targetRequestId: 'req_3',
-    sender: {
-      name: 'Priya Nair',
-      avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80',
-      college: 'IIT Delhi'
-    }
-  }
-];
+export const MOCK_NOTIFICATIONS: CampusNotification[] = [];
 
-export const MOCK_CONVERSATIONS: Conversation[] = [
-  {
-    id: 'conv_1',
-    partner: MOCK_STUDENTS[0], // Aman
-    lastMessage: 'Awesome! Can you come by Auditorium stage at 4:30 PM for the Bhangra setup?',
-    lastMessageTime: '15m ago',
-    unreadCount: 1,
-    activityContext: {
-      requestTitle: '💃 Bhangra Performer Needed',
-      matchedDate: 'Today'
-    },
-    messages: [
-      {
-        id: 'msg_1',
-        senderId: 'stu_1',
-        text: 'Hey Samar! Saw you have Bhangra and folk dance listed in your skills.',
-        timestamp: '3:10 PM',
-        isMine: false,
-        isIcebreaker: true
-      },
-      {
-        id: 'msg_2',
-        senderId: 'me',
-        text: 'Hey Aman! Yes, was part of our school troupe and done zonal fests.',
-        timestamp: '3:15 PM',
-        isMine: true
-      },
-      {
-        id: 'msg_3',
-        senderId: 'stu_1',
-        text: 'Awesome! Can you come by Auditorium stage at 4:30 PM for the Bhangra setup?',
-        timestamp: '3:18 PM',
-        isMine: false,
-        safeMeetupProposal: {
-          locationName: 'DTU Main Auditorium Green Room',
-          time: 'Tomorrow @ 4:30 PM',
-          status: 'proposed'
-        }
-      }
-    ]
-  },
-  {
-    id: 'conv_2',
-    partner: MOCK_STUDENTS[2], // Rohan
-    lastMessage: 'Perfect! See you at the football ground near the bleachers at 5:55 PM.',
-    lastMessageTime: '1h ago',
-    unreadCount: 0,
-    activityContext: {
-      requestTitle: '⚽ Football Partner Needed',
-      matchedDate: 'Today'
-    },
-    messages: [
-      {
-        id: 'msg_101',
-        senderId: 'stu_3',
-        text: 'Hey! Bringing bibs and 2 match balls. Need you in central midfield!',
-        timestamp: '2:15 PM',
-        isMine: false
-      },
-      {
-        id: 'msg_102',
-        senderId: 'me',
-        text: 'Sounds great Rohan, I will warm up by 5:50 PM.',
-        timestamp: '2:20 PM',
-        isMine: true
-      },
-      {
-        id: 'msg_103',
-        senderId: 'stu_3',
-        text: 'Perfect! See you at the football ground near the bleachers at 5:55 PM.',
-        timestamp: '2:25 PM',
-        isMine: false
-      }
-    ]
-  }
-];
+export const MOCK_CONVERSATIONS: Conversation[] = [];

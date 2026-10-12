@@ -65,7 +65,7 @@ export const DiscoverScreen: React.FC = () => {
   const samplePrompts = [
     { label: '🏸 2 badminton partners near me', query: 'find me 2 badminton partners near me' },
     { label: '💻 React dev for hackathon', query: 'looking for react dev for weekend hackathon' },
-    { label: '🏋️ Gym spotter today', query: 'need a gym spotter at DTU today' },
+    { label: '🏋️ Gym spotter today', query: 'need a gym spotter nearby today' },
     { label: '🎸 Acoustic guitarist in North Campus', query: 'acoustic guitarist in North Campus' },
     { label: '📚 Physics study buddy', query: 'physics study partner at Central Library' }
   ];
@@ -207,26 +207,32 @@ export const DiscoverScreen: React.FC = () => {
                 <Search className="w-6 h-6" />
               </div>
               <h3 className="font-extrabold text-base text-[#172033] dark:text-white">
-                {searchQuery
+                {allStudents.length === 0
+                  ? 'No registered members found yet'
+                  : searchQuery
                   ? `No people found for "${searchQuery}"`
                   : 'No people found'}
               </h3>
               <p className="text-xs text-[#64748B] dark:text-slate-400 max-w-sm mx-auto">
-                {searchQuery
+                {allStudents.length === 0
+                  ? 'As new users sign up on MEMA, they will appear here in the Talent & Activity Directory.'
+                  : searchQuery
                   ? `We couldn't find anyone matching "${searchQuery}". Try searching for a name, skill (e.g. Badminton, React, Gym), or clear your search.`
                   : 'Try adjusting your distance or skill filters to discover more people nearby.'}
               </p>
-              <button
-                type="button"
-                onClick={() => {
-                  setSearchQuery('');
-                  setSelectedSkillFilter('all');
-                  setNearbyOnly(false);
-                }}
-                className="px-5 py-2.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-bold shadow-xs transition-colors"
-              >
-                Clear Search & Show All People
-              </button>
+              {allStudents.length > 0 && searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery('');
+                    setSelectedSkillFilter('all');
+                    setNearbyOnly(false);
+                  }}
+                  className="px-5 py-2.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-bold shadow-xs transition-colors"
+                >
+                  Clear Search & Show All People
+                </button>
+              )}
             </div>
           ) : (
             rankedResults.map(({ student, matchPercentage, matchReason, isTopChoice, choiceRank }) => {

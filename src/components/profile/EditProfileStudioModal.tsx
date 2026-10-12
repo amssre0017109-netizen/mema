@@ -35,75 +35,48 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
 
   // 0. Custom Profile Picture from Personal Device
   const [avatar, setAvatar] = useState<string>(
-    currentUser.avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80'
+    currentUser.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'
   );
 
   // 1. Name & Age
-  const [name, setName] = useState(currentUser.name || 'Jamal Knox');
-  const [age, setAge] = useState(currentUser.age || 23);
+  const [name, setName] = useState(currentUser.name || 'Member');
+  const [age, setAge] = useState(currentUser.age || 20);
 
   // 2. Location
-  const [location, setLocation] = useState(currentUser.location || 'North Delhi Area');
+  const [location, setLocation] = useState(currentUser.location || 'Connaught Place, New Delhi');
 
   // 3. Occupation Type (School / Work / Creator)
   const [occupationType, setOccupationType] = useState<OccupationType>(
     currentUser.occupationType === 'college_student' ? 'working_professional' : (currentUser.occupationType || 'working_professional')
   );
-  const [collegeOrOrg, setCollegeOrOrg] = useState(currentUser.college === 'Delhi Technological University (DTU)' ? 'Creative Tech Studio' : (currentUser.college || 'Creative Studio'));
-  const [degreeOrRole, setDegreeOrRole] = useState(currentUser.degree || 'Creative Design & Tech');
-  const [yearOrLevel, setYearOrLevel] = useState(currentUser.year || 'Senior Designer');
+  const [collegeOrOrg, setCollegeOrOrg] = useState(currentUser.college || '');
+  const [degreeOrRole, setDegreeOrRole] = useState(currentUser.degree || '');
+  const [yearOrLevel, setYearOrLevel] = useState(currentUser.year || '');
 
   // 4. Bio
-  const [bio, setBio] = useState(
-    currentUser.bio || 'Visual artist & creative designer. Building aesthetic digital experiences, campus fest visual identities, and interactive spaces.'
-  );
+  const [bio, setBio] = useState(currentUser.bio || '');
 
   // 5. Skills
-  const [skills, setSkills] = useState<string[]>(
-    currentUser.skills || ['Creative Designer', 'Visual Artist', 'Life Coach', 'Bhangra', 'React / Web Dev', 'Football']
-  );
+  const [skills, setSkills] = useState<string[]>(currentUser.skills || []);
   const [newSkillInput, setNewSkillInput] = useState('');
 
   // 6. Interests
-  const [interests, setInterests] = useState<string[]>(
-    currentUser.interests || ['Editorial Art', 'Design Sprints', 'Photography', 'Fest Competitions', 'Acoustic Jamming']
-  );
+  const [interests, setInterests] = useState<string[]>(currentUser.interests || []);
   const [newInterestInput, setNewInterestInput] = useState('');
 
   // 7. Activities
-  const [activities, setActivities] = useState<ProfileActivity[]>(
-    currentUser.recentActivities || [
-      {
-        id: 'act_1',
-        title: '⚽ 6v6 Football Match',
-        category: 'Sports',
-        date: 'Yesterday • 6:00 PM',
-        location: 'DTU Main Football Ground',
-        status: 'completed'
-      },
-      {
-        id: 'act_2',
-        title: '💃 Zonal Fest Bhangra Rehearsal',
-        category: 'Dance',
-        date: '2 days ago • 4:00 PM',
-        location: 'Main Auditorium Green Room',
-        status: 'completed'
-      }
-    ]
-  );
+  const [activities, setActivities] = useState<ProfileActivity[]>(currentUser.recentActivities || []);
   const [newActTitle, setNewActTitle] = useState('');
   const [newActCategory, setNewActCategory] = useState('Sports');
   const [newActLocation, setNewActLocation] = useState('Campus Ground');
 
   // 8. Stats & Role Tags
-  const [followersCount, setFollowersCount] = useState(currentUser.followersCount || 21348);
-  const [sessionsCount, setSessionsCount] = useState(currentUser.sessionsCount || 5983);
-  const [worksCount, setWorksCount] = useState(currentUser.worksCount || 751);
-  const [moodboardsCount, setMoodboardsCount] = useState(currentUser.moodboardsCount || 38);
-  const [promptsCount, setPromptsCount] = useState(currentUser.promptsCount || 142);
-  const [roleTags, setRoleTags] = useState<string[]>(
-    currentUser.roleTags || ['Creative Designer', 'Visual Artist', 'Life Coach']
-  );
+  const [followersCount, setFollowersCount] = useState(currentUser.followersCount || 0);
+  const [sessionsCount, setSessionsCount] = useState(currentUser.sessionsCount || 0);
+  const [worksCount, setWorksCount] = useState(currentUser.worksCount || 0);
+  const [moodboardsCount, setMoodboardsCount] = useState(currentUser.moodboardsCount || 0);
+  const [promptsCount, setPromptsCount] = useState(currentUser.promptsCount || 0);
+  const [roleTags, setRoleTags] = useState<string[]>(currentUser.roleTags || []);
   const [newTagInput, setNewTagInput] = useState('');
 
   if (!isOpen) return null;
@@ -194,26 +167,26 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
     e.preventDefault();
     const updatedProfile = {
       ...currentUser,
-      name: name.trim() || 'Jamal Knox',
+      name: name.trim() || currentUser.name || 'Member',
       avatar: avatar, // Custom photo from device
-      age: Number(age) || 23,
-      location: location.trim() || 'North Delhi Area',
-      locationZone: location.trim() || 'North Delhi Area',
+      age: Number(age) || currentUser.age || 20,
+      location: location.trim() || currentUser.location || 'Connaught Place, New Delhi',
+      locationZone: location.trim() || currentUser.location || 'Connaught Place, New Delhi',
       occupationType,
-      college: collegeOrOrg.trim() || 'Delhi Technological University (DTU)',
-      degree: degreeOrRole.trim() || 'Creative Design & Tech',
-      year: yearOrLevel.trim() || '4th Year',
+      college: collegeOrOrg.trim() || currentUser.college || '',
+      degree: degreeOrRole.trim() || currentUser.degree || '',
+      year: yearOrLevel.trim() || currentUser.year || '',
       bio: bio.trim(),
-      skills: skills.length > 0 ? skills : ['Creative Designer', 'Football'],
-      interests: interests.length > 0 ? interests : ['Editorial Art', 'Sports'],
+      skills: skills,
+      interests: interests,
       recentActivities: activities,
       activitiesCompleted: activities.length,
-      followersCount: Number(followersCount) || 21348,
-      sessionsCount: Number(sessionsCount) || 5983,
-      worksCount: Number(worksCount) || 751,
-      moodboardsCount: Number(moodboardsCount) || 38,
-      promptsCount: Number(promptsCount) || 142,
-      roleTags: roleTags.length > 0 ? roleTags : ['Creative Designer', 'Visual Artist']
+      followersCount: Number(followersCount) || 0,
+      sessionsCount: Number(sessionsCount) || 0,
+      worksCount: Number(worksCount) || 0,
+      moodboardsCount: Number(moodboardsCount) || 0,
+      promptsCount: Number(promptsCount) || 0,
+      roleTags: roleTags
     };
 
     setCurrentUser(updatedProfile);
@@ -328,7 +301,7 @@ export const EditProfileStudioModal: React.FC<EditProfileStudioModalProps> = ({ 
                 required
                 value={name}
                 onChange={e => setName(e.target.value)}
-                placeholder="e.g. Jamal Knox"
+                placeholder="e.g. Your Name"
                 className="w-full bg-[#F8FBFF] dark:bg-slate-800 border border-[#DCE8F7] dark:border-slate-700 focus:border-[#2563EB] dark:focus:border-blue-400 rounded-2xl p-2.5 text-xs text-[#172033] dark:text-white focus:outline-none shadow-xs"
               />
             </div>

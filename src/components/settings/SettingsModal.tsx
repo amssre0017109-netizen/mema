@@ -1238,7 +1238,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     MEMA Authentication
                   </span>
                   <span className="text-[11px] text-[#64748B] dark:text-slate-400">
-                    Sign in, register student account, or switch demo personas
+                    Sign in or register student account
                   </span>
                 </div>
               </div>
@@ -1246,7 +1246,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               <div className="flex items-center gap-2.5">
                 {isAuthenticated ? (
                   <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
-                    <CheckCircle2 className="w-3 h-3" />
+                    <CheckCircle2 className="w-3" />
                     <span>Signed In</span>
                   </span>
                 ) : (
@@ -1329,19 +1329,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     <span>Create New Student Account</span>
                   </button>
                 </div>
-
-                {/* Quick Persona Switcher */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    onClose();
-                    openAuthModal('demo');
-                  }}
-                  className="w-full py-3 px-4 rounded-2xl bg-[#F0F6FF] dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-700 text-[#172033] dark:text-slate-200 font-bold text-xs flex items-center justify-center gap-2 border border-[#DCE8F7] dark:border-slate-700 transition-all active:scale-98"
-                >
-                  <Sparkles className="w-4 h-4 text-amber-500" />
-                  <span>Switch Demo Persona (Aman, Rohan, Tanya, etc.)</span>
-                </button>
 
                 {/* Security Guarantee Note */}
                 <div className="p-3.5 bg-white dark:bg-slate-900 border border-[#DCE8F7] dark:border-slate-800 rounded-2xl text-[11px] text-[#64748B] dark:text-slate-400 space-y-1">
