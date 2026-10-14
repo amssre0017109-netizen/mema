@@ -26,8 +26,8 @@ export const CheckoutModal: React.FC = () => {
   } = useApp();
 
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethodType>('UPI');
-  const [upiId, setUpiId] = useState('samar@oksbi');
-  const [cardNumber, setCardNumber] = useState('4242 •••• •••• 4242');
+  const [upiId, setUpiId] = useState('');
+  const [cardNumber, setCardNumber] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSimulating, setIsSimulating] = useState(false);
 

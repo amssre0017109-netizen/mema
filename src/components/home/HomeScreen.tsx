@@ -119,14 +119,18 @@ export const HomeScreen: React.FC = () => {
     });
   };
 
-  // High quality realistic imagery for request cards
-  const requestImages: Record<string, string> = {
-    req_1: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80', // Football
-    req_2: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80', // Dance / Fest
-    req_3: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80', // Library / Physics
-    req_4: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=80', // Coding / Laptop
-    req_5: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80', // Gym
-    req_6: 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=800&q=80'  // Cricket
+  // High quality imagery dynamically selected by category
+  const getRequestImage = (category: string) => {
+    switch (category) {
+      case 'Sports': return 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80';
+      case 'Dance': return 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80';
+      case 'Study': return 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80';
+      case 'Coding': return 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=80';
+      case 'Gym': return 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80';
+      case 'Gaming': return 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80';
+      case 'Music': return 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80';
+      default: return 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80';
+    }
   };
 
   return (
@@ -515,10 +519,12 @@ export const HomeScreen: React.FC = () => {
                 <Search className="w-6 h-6" />
               </div>
               <h3 className="font-extrabold text-base text-[#172033] dark:text-white">
-                {searchQuery ? `No needs found for "${searchQuery}"` : 'No campus needs found'}
+                {searchQuery ? `No needs found for "${searchQuery}"` : 'No campus needs posted yet'}
               </h3>
               <p className="text-xs text-[#64748B] dark:text-slate-400 max-w-sm mx-auto">
-                Try searching for activities like "football", "badminton", "dance", "physics", "gym", or reset your filters.
+                {searchQuery
+                  ? 'Try searching for activities like "football", "badminton", "dance", or reset your filters.'
+                  : 'Be the first to post an activity need, sports match, or project meetup in your community!'}
               </p>
               <button
                 type="button"
@@ -543,7 +549,7 @@ export const HomeScreen: React.FC = () => {
               req.requiredSkills.some(r => r.toLowerCase().includes(sk.toLowerCase()) || sk.toLowerCase().includes(r.toLowerCase()))
             );
 
-            const cardImage = requestImages[req.id] || 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80';
+            const cardImage = getRequestImage(req.category);
 
             const partnerProfile = allStudents.find(s => s.id === req.creator.id) || {
               id: req.creator.id,
@@ -558,7 +564,7 @@ export const HomeScreen: React.FC = () => {
               studentIdVerified: true,
               skills: req.requiredSkills,
               interests: req.requiredSkills,
-              activitiesCompleted: 12,
+              activitiesCompleted: 0,
               requestsPosted: 4,
               bio: `Active organizer in ${req.location}`,
               locationZone: req.location,

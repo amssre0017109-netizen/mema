@@ -18,7 +18,6 @@ import {
   PaymentMethodType
 } from '../types/subscription';
 import {
-  MOCK_CAMPUS_REQUESTS,
   GUEST_USER,
   MOCK_NOTIFICATIONS,
   MOCK_CONVERSATIONS,
@@ -295,7 +294,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [authUser, setAuthUser] = useState<any>(getInitialAuthUser);
   const [currentUser, setCurrentUser] = useState<UserProfile>(getInitialCurrentUser);
   const [allStudents, setAllStudents] = useState<UserProfile[]>([]);
-  const [campusRequests, setCampusRequests] = useState<CampusRequest[]>(MOCK_CAMPUS_REQUESTS);
+  const [campusRequests, setCampusRequests] = useState<CampusRequest[]>([]);
   const [conversations, setConversations] = useState<Conversation[]>(MOCK_CONVERSATIONS);
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
   const [notifications, setNotifications] = useState<CampusNotification[]>(MOCK_NOTIFICATIONS);
@@ -683,6 +682,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       ...prev,
       requestsPosted: (prev.requestsPosted || 0) + 1
     }));
+
+    // Background sync to Supabase database
+    supabaseService.createCampusRequest(newReq).catch(err => {
+      console.warn('Campus request background sync failed:', err);
+    });
 
     setNotificationToast({
       message: '🚀 Request Posted!',

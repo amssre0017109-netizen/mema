@@ -63,54 +63,16 @@ export const StoryViewerModal: React.FC = () => {
   const user = activeStoryUser;
   const isFollowing = isFollowingUser(user.id);
 
-  // Story updates based on user
-  const storyData: Record<string, { image: string; caption: string; tag: string }> = {
-    stu_1: {
-      image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80',
-      caption: '💃 Rehearsing our folk choreography for the upcoming fest! Need 1 more dancer.',
-      tag: 'CULTURAL FEST'
-    },
-    stu_2: {
-      image: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80',
-      caption: '📚 Late night problem solving sprint at Central Library. Anyone working on circuits?',
-      tag: 'STUDY SPRINT'
-    },
-    stu_3: {
-      image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80',
-      caption: '⚽ 7v7 match today at 6 PM! Need a solid goalkeeper & 1 striker.',
-      tag: 'SPORTS'
-    },
-    stu_4: {
-      image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=80',
-      caption: '💻 Building a real-time UI design system for the upcoming weekend hackathon.',
-      tag: 'TECH SPRINT'
-    },
-    stu_5: {
-      image: 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=800&q=80',
-      caption: '🏏 Evening nets practice under the floodlights. Join in for batting practice!',
-      tag: 'CRICKET NETS'
-    },
-    stu_6: {
-      image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80',
-      caption: '🎸 Jamming acoustic covers tonight. Looking for a cajon / percussion player.',
-      tag: 'MUSIC SESSION'
-    },
-    stu_7: {
-      image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80',
-      caption: '🏸 Morning badminton sparring session at North Delhi Sports Arena! Looking for a doubles partner.',
-      tag: 'BADMINTON'
-    },
-    stu_8: {
-      image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80',
-      caption: '💪 Calisthenics bodyweight workout session this evening at North Delhi Fitness Park. Come join!',
-      tag: 'CALISTHENICS'
-    }
-  };
+  // Dynamic story content based on the real user's profile and activities
+  const firstSkill = user.skills && user.skills.length > 0 ? user.skills[0] : null;
+  const latestActivity = user.recentActivities && user.recentActivities.length > 0 ? user.recentActivities[0] : null;
 
-  const story = storyData[user.id] || {
+  const story = {
     image: user.avatar,
-    caption: `🔥 Active update from ${user.name} — looking for activity partners nearby!`,
-    tag: 'ACTIVE STORY'
+    caption: latestActivity
+      ? `${latestActivity.title} • ${latestActivity.location || user.location || 'Nearby'}`
+      : user.bio || `Active member on MEMA in ${user.location || 'nearby community'} looking for activity partners!`,
+    tag: firstSkill ? firstSkill.toUpperCase() : 'COMMUNITY STORY'
   };
 
   const handleSendReply = (e: React.FormEvent) => {

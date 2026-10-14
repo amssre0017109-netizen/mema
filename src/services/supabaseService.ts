@@ -1,6 +1,6 @@
 import { supabase, isSupabaseConfigured } from '../lib/supabaseClient';
 import { UserProfile, CampusRequest, Conversation, ChatMessage } from '../types';
-import { MOCK_CAMPUS_REQUESTS, MOCK_CONVERSATIONS } from '../data/mockData';
+import { MOCK_CONVERSATIONS } from '../data/mockData';
 
 function mapRowToProfile(row: any): UserProfile {
   return {
@@ -146,7 +146,7 @@ export const supabaseService = {
    */
   async getCampusRequests(): Promise<CampusRequest[]> {
     if (!isSupabaseConfigured) {
-      return MOCK_CAMPUS_REQUESTS;
+      return [];
     }
 
     try {
@@ -159,8 +159,7 @@ export const supabaseService = {
         .order('created_at', { ascending: false });
 
       if (error || !data || data.length === 0) {
-        console.warn('Using local fallback for campus requests:', error?.message);
-        return MOCK_CAMPUS_REQUESTS;
+        return [];
       }
 
       return data.map((row: any) => ({
@@ -204,8 +203,56 @@ export const supabaseService = {
         commentsCount: row.comments_count || 0
       }));
     } catch (err) {
-      console.error('Error fetching Supabase requests:', err);
-      return MOCK_CAMPUS_REQUESTS;
+      console.warn('Error fetching Supabase requests:', err);
+      return [];
+    }
+  },
+
+  /**
+   * Save a real user's campus request to Supabase
+   */
+  async createCampusRequest(request: CampusRequest): Promise<{ success: boolean; data?: any; error?: any }> {
+    if (!isSupabaseConfigured) {
+      return { success: true };
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('campus_requests')
+        .insert({
+          id: request.id,
+          creator_id: request.creator.id,
+          creator_name: request.creator.name,
+          creator_avatar: request.creator.avatar,
+          creator_degree: request.creator.degree,
+          creator_year: request.creator.year,
+          creator_verified: request.creator.verifiedCollege,
+          title: request.title,
+          category: request.category,
+          need_type: request.needType,
+          date: request.date,
+          time: request.time,
+          location: request.location,
+          college: request.college,
+          distance_km: request.distanceKm,
+          distance_display: request.distanceDisplay,
+          people_needed: request.peopleNeeded,
+          people_joined: request.peopleJoined,
+          required_skills: request.requiredSkills,
+          description: request.description,
+          is_urgent: request.isUrgent
+        })
+        .select()
+        .single();
+
+      if (error) {
+        console.warn('Could not save campus_request to Supabase:', error.message);
+        return { success: false, error: error.message };
+      }
+      return { success: true, data };
+    } catch (err: any) {
+      console.warn('Error saving campus request to Supabase:', err);
+      return { success: false, error: err?.message };
     }
   },
 

@@ -227,148 +227,20 @@ export const INITIAL_USER_SUBSCRIPTION: UserSubscription = {
   amountPaidInr: 0
 };
 
-export const INITIAL_INCOMING_REQUESTS: IncomingRequest[] = [
-  {
-    id: 'req_1',
-    sender: {
-      id: 'stu_inc_1',
-      name: 'Riddhi',
-      age: 23,
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-      verified: true,
-      distanceDisplay: '0.6 km away',
-      moodName: 'Study & Co-Work',
-      moodIcon: '📚',
-      intention: 'Looking for someone to co-work with at the local cafe this afternoon!',
-      sentAt: '20 mins ago'
-    },
-    note: 'Hey! Saw your profile on the nearby radar. Up for a co-working session today?',
-    status: 'PENDING'
-  },
-  {
-    id: 'req_2',
-    sender: {
-      id: 'stu_inc_2',
-      name: 'Yash',
-      age: 24,
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
-      verified: true,
-      distanceDisplay: '1.4 km away',
-      moodName: 'Gym Partner',
-      moodIcon: '🏋️',
-      intention: 'Hitting shoulder press and deadlifts at 5:30 PM. Need a spotter!',
-      sentAt: '1 hour ago'
-    },
-    note: 'Hey, saw you are into lifting. Let us train together at the gym!',
-    status: 'PENDING'
-  },
-  {
-    id: 'req_3',
-    sender: {
-      id: 'stu_inc_3',
-      name: 'Kavya',
-      age: 22,
-      avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80',
-      verified: true,
-      distanceDisplay: '0.9 km away',
-      moodName: 'Coffee & Chill',
-      moodIcon: '☕',
-      intention: 'Free between 3 PM and 5 PM for iced coffee and banter at the cafe.',
-      sentAt: '3 hours ago'
-    },
-    note: 'Hey! You have great taste in indie music. Let us grab coffee sometime!',
-    status: 'PENDING'
-  }
-];
+export const INITIAL_INCOMING_REQUESTS: IncomingRequest[] = [];
 
-export const INITIAL_TRANSACTIONS: PaymentTransaction[] = [
-  {
-    id: 'txn_109281',
-    subscriptionId: 'sub_901',
-    userId: 'stu_1',
-    userName: 'Aman',
-    userAvatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=400&q=80',
-    planName: '3-Month Plan (₹199)',
-    amountInr: 199,
-    currency: 'INR',
-    paymentMethod: 'UPI',
-    paymentMethodDetails: 'Google Pay • aman@okhdfcbank',
-    status: 'SUCCESS',
-    gatewayTxnId: 'pay_MEMA_92817264',
-    createdAt: 'Today, 2:45 PM'
-  },
-  {
-    id: 'txn_109280',
-    subscriptionId: 'sub_902',
-    userId: 'stu_2',
-    userName: 'Priya',
-    userAvatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80',
-    planName: 'Monthly Plan (Trial ₹0)',
-    amountInr: 0,
-    currency: 'INR',
-    paymentMethod: 'UPI',
-    paymentMethodDetails: 'PhonePe • priya@ybl (1-Mo Trial Auth)',
-    status: 'SUCCESS',
-    gatewayTxnId: 'pay_MEMA_83719283',
-    createdAt: 'Today, 1:12 PM'
-  },
-  {
-    id: 'txn_109279',
-    subscriptionId: 'sub_903',
-    userId: 'stu_3',
-    userName: 'Rohan',
-    userAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
-    planName: 'Monthly Plan (₹89)',
-    amountInr: 89,
-    currency: 'INR',
-    paymentMethod: 'CARD',
-    paymentMethodDetails: 'HDFC Mastercard ending •••• 5821',
-    status: 'SUCCESS',
-    gatewayTxnId: 'pay_MEMA_74829104',
-    createdAt: 'Today, 11:30 AM'
-  },
-  {
-    id: 'txn_109278',
-    subscriptionId: 'sub_904',
-    userId: 'stu_4',
-    userName: 'Ananya',
-    userAvatar: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80',
-    planName: '3-Month Plan (₹199)',
-    amountInr: 199,
-    currency: 'INR',
-    paymentMethod: 'NETBANKING',
-    paymentMethodDetails: 'ICICI Bank Net Banking',
-    status: 'SUCCESS',
-    gatewayTxnId: 'pay_MEMA_63910283',
-    createdAt: 'Yesterday, 8:15 PM'
-  },
-  {
-    id: 'txn_109277',
-    subscriptionId: 'sub_905',
-    userId: 'stu_7',
-    userName: 'Dev',
-    userAvatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80',
-    planName: 'Monthly Plan (₹89)',
-    amountInr: 89,
-    currency: 'INR',
-    paymentMethod: 'UPI',
-    paymentMethodDetails: 'Paytm UPI • dev@paytm',
-    status: 'FAILED',
-    gatewayTxnId: 'pay_MEMA_55102938',
-    createdAt: 'Yesterday, 4:20 PM'
-  }
-];
+export const INITIAL_TRANSACTIONS: PaymentTransaction[] = [];
 
 export const INITIAL_ADMIN_METRICS: AdminAnalyticsMetrics = {
-  totalPremiumUsers: 482,
-  activeSubscriptions: 428,
-  freeTrialUsers: 184,
-  monthlySubscribers: 156,
-  quarterlySubscribers: 142,
-  totalRevenueInr: 58240,
-  monthlyRecurringRevenueInr: 23280,
-  failedPaymentsCount: 14,
-  cancelledSubscriptionsCount: 19,
-  trialConversionRatePercent: 68.4,
-  renewalRatePercent: 88.2
+  totalPremiumUsers: 0,
+  activeSubscriptions: 0,
+  freeTrialUsers: 0,
+  monthlySubscribers: 0,
+  quarterlySubscribers: 0,
+  totalRevenueInr: 0,
+  monthlyRecurringRevenueInr: 0,
+  failedPaymentsCount: 0,
+  cancelledSubscriptionsCount: 0,
+  trialConversionRatePercent: 0,
+  renewalRatePercent: 0
 };

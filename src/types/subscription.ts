@@ -44,7 +44,7 @@ export interface PaymentTransaction {
   amountInr: number;
   currency: string;
   paymentMethod: PaymentMethodType;
-  paymentMethodDetails?: string; // e.g. "UPI ID: samar@okhdfcbank" or "Visa ending in •••• 4242"
+  paymentMethodDetails?: string; // e.g. "UPI ID: user@okhdfcbank" or "Visa ending in •••• 4242"
   status: 'SUCCESS' | 'PENDING' | 'FAILED';
   gatewayTxnId: string;
   createdAt: string;
